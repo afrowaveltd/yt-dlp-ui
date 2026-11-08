@@ -32,6 +32,9 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         _settingsStore = new SettingsStore();
         Settings = _settingsStore.Load();
         SimpleLocalizer.Instance.SetLanguage(Settings.Language);
+        AvailableLanguages = SimpleLocalizer.Instance.AvailableLanguages;
+        _selectedLanguage = AvailableLanguages.FirstOrDefault(item =>
+            string.Equals(item.Code, SimpleLocalizer.Instance.Language, StringComparison.OrdinalIgnoreCase));
 
         Options = (Settings.RememberOptions
                       ? SettingsStore.RestoreOptions(Settings.LastOptionsJson)
@@ -92,6 +95,38 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     /// <summary>yt-dlp / ffmpeg detection and installation.</summary>
     public ToolchainViewModel Toolchain { get; }
+
+    private LanguageOption? _selectedLanguage;
+
+    /// <summary>Languages discovered from JSON files in Locales (no hard-coded list).</summary>
+    public IReadOnlyList<LanguageOption> AvailableLanguages { get; private set; }
+
+    /// <summary>The language selected in the header; changing it updates the saved setting.</summary>
+    public LanguageOption? SelectedLanguage
+    {
+        get => _selectedLanguage;
+        set
+        {
+            if (SetProperty(ref _selectedLanguage, value) && value is not null &&
+                !string.Equals(Settings.Language, value.Code, StringComparison.OrdinalIgnoreCase))
+            {
+                Settings.Language = value.Code;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Re-scan Locales whenever the header dropdown opens. New JSON dictionaries become
+    /// selectable immediately, including those added while the application is running.
+    /// </summary>
+    public void RefreshLanguages()
+    {
+        SimpleLocalizer.Instance.RefreshLanguages();
+        AvailableLanguages = SimpleLocalizer.Instance.AvailableLanguages;
+        OnPropertyChanged(nameof(AvailableLanguages));
+        SelectedLanguage = AvailableLanguages.FirstOrDefault(item =>
+            string.Equals(item.Code, SimpleLocalizer.Instance.Language, StringComparison.OrdinalIgnoreCase));
+    }
 
     /// <summary>Pending and finished downloads.</summary>
     public ObservableCollection<DownloadItemViewModel> Queue { get; } = new();
@@ -971,14 +1006,6 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ScheduleAutosave();
     }
 
-    /// <summary>Switch to English without restarting the application.</summary>
-    [RelayCommand]
-    private void UseEnglish() => Settings.Language = "en";
-
-    /// <summary>Switch to Czech without restarting the application.</summary>
-    [RelayCommand]
-    private void UseCzech() => Settings.Language = "cs";
-
     private void OnSettingsChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(AppSettings.DarkTheme))
@@ -989,6 +1016,8 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         if (e.PropertyName == nameof(AppSettings.Language))
         {
             SimpleLocalizer.Instance.SetLanguage(Settings.Language);
+            SelectedLanguage = AvailableLanguages.FirstOrDefault(item =>
+                string.Equals(item.Code, SimpleLocalizer.Instance.Language, StringComparison.OrdinalIgnoreCase));
         }
 
         ScheduleAutosave();
