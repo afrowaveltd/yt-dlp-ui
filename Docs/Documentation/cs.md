@@ -2,7 +2,7 @@
 
 **Jazyk:** [English](en.md) · Česky · [README repozitáře](../../README.md)
 
-Rozcestník popisuje veřejnou **komunitní opravnou předběžnou verzi 0.1.1** a odděluje hotové funkce, ověřené sestavení a ruční testy, které ještě zbývají. Každé téma má v `Docs/<Téma>/` soubory `en.md` a `cs.md`.
+Rozcestník popisuje veřejnou **komunitní opravnou předběžnou verzi 0.1.2** a odděluje hotové funkce, ověřené sestavení a ruční testy, které ještě zbývají. Každé téma má v `Docs/<Téma>/` soubory `en.md` a `cs.md`.
 
 ## Pro uživatele
 
@@ -18,8 +18,9 @@ Rozcestník popisuje veřejnou **komunitní opravnou předběžnou verzi 0.1.1**
 7. [Vývoj a ověřování](../Development-and-Verification/cs.md) — .NET 10, projekty, smoke testy a CI.
 8. [Verzování a vydávání](../Versioning/cs.md) — PATCH opravy, MINOR preview, stabilní 1.x, tagy a pravidla vydávání.
 9. [Android prototyp](../Android/cs.md) — vlastní mobilní rozhraní, sdílené jádro, přímé HTTPS soubory; není součástí v0.1.0.
-10. [Opravy ve verzi 0.1.1](../Release-0.1.1/cs.md) — aktuální desktopový PATCH, testy a známá omezení.
-11. [Stav vydání 0.1.0](../Release-0.1.0/cs.md) — **[zveřejněný pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, známé nedodělky a kontrolní seznam.
+10. [Opravy ve verzi 0.1.2](../Release-0.1.2/cs.md) — UAC a společné nástroje Windows.
+11. [Opravy ve verzi 0.1.1](../Release-0.1.1/cs.md) — aktuální desktopový PATCH, testy a známá omezení.
+12. [Stav vydání 0.1.0](../Release-0.1.0/cs.md) — **[zveřejněný pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, známé nedodělky a kontrolní seznam.
 
 ## README v obou jazycích
 

@@ -13,7 +13,8 @@ Předvolby aplikace jsou v souboru JSON, odděleně od binárek yt-dlp a FFmpeg.
 | Cache aplikace | `~/.cache/yt-dlp-ui/` nebo `$XDG_CACHE_HOME/yt-dlp-ui/` | `%LOCALAPPDATA%\yt-dlp-ui\` |
 | yt-dlp spravované aplikací | `~/.local/bin/yt-dlp` | `%LOCALAPPDATA%\yt-dlp-ui\tools\yt-dlp.exe` |
 | FFmpeg spravovaný aplikací | Zpravidla instalovaný distribucí | `%LOCALAPPDATA%\yt-dlp-ui\tools\ffmpeg\ffmpeg.exe` a `ffprobe.exe` |
-| Log Windows instalátoru | Nevztahuje se na DEB/RPM | `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log` |
+| Sdílené nástroje ze setupu | Nevztahuje se | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe`, `tools\ffmpeg\ffmpeg.exe` a `ffprobe.exe` |
+| Log Windows instalátoru | Nevztahuje se na DEB/RPM | `%ProgramData%\yt-dlp-ui\logs\dependency-install.log` |
 
 **Cílová složka stahování** je uživatelsky nastavitelná. Na Linuxu se nejdřív hledá `user-dirs.dirs`, jinak `~/Downloads` nebo domovský adresář. Ne všichni uživatelé proto budou stahovat do stejné složky.
 
@@ -30,8 +31,8 @@ Na kartě **Nástroje** lze nastavit vlastní cesty pro programy mimo běžné s
 - Podporovaná pole hesel a 2FA se před uložením **posledních voleb stahování** odstraní. Nejde ale o šifrovaný trezor hesel.
 - Cookies, příkazové argumenty, externí procesy a logy mohou přesto obsahovat citlivé údaje. Zkontroluj, co sdílíš, zejména u podrobného logu a náhledu příkazu.
 - GUI záměrně neobsahuje reklamu ani telemetrii. Připojuje se však k internetu kvůli metadatům/stahování a může komunikovat kvůli aktualizacím či instalaci nástrojů.
-- Balíčky DEB/RPM používají doporučené závislosti, nikoliv automatické stahování po instalaci. Windows průvodce má výslovné zaškrtávací volby a ověřování SHA-256 od vydavatele.
-- Odinstalace GUI ve Windows automaticky nemaže uživatelsky nainstalované externí nástroje.
+- Balíčky DEB/RPM používají doporučené závislosti, nikoliv automatické stahování po instalaci. Windows průvodce žádá UAC, má samostatné volby a používá SHA-256 od vydavatele pro společné nástroje.
+- Odinstalace GUI ve Windows automaticky nemaže samostatně nainstalované uživatelské ani sdílené nástroje.
 
 ## Bezpečná změna konfigurace
 

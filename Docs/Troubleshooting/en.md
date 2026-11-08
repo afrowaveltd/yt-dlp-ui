@@ -10,14 +10,14 @@ Windows setup has a selectable **Install yt-dlp** task; a failed optional downlo
 
 ## FFmpeg is missing or conversion fails
 
-Check `ffmpeg -version` and, for relevant operations, `ffprobe -version`. Windows x64 can install a per-user verified FFmpeg/FFprobe pair from the **Tools** tab or the setup wizard; Linux installations normally use system packages. If necessary, set the FFmpeg path on **Tools**, then recheck detection. A download that only copies an existing stream might work without FFmpeg, while merging or converting may not.
+Check `ffmpeg -version` and, for relevant operations, `ffprobe -version`. Windows setup installs machine-wide verified FFmpeg/FFprobe with UAC; the **Tools** tab can install a separate per-user pair; Linux installations normally use system packages. If necessary, set the FFmpeg path on **Tools**, then recheck detection. A download that only copies an existing stream might work without FFmpeg, while merging or converting may not.
 
 ## Windows installer couldn't download tools
 
 - Confirm network/DNS access to the upstream publisher, GitHub releases for yt-dlp and the FFmpeg archive host.
-- Look in `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log` for the error.
+- Look in `%ProgramData%\yt-dlp-ui\logs\dependency-install.log` for the error.
 - Publisher checksum files must be available. A SHA-256 mismatch should stop dependency installation rather than run a corrupted executable.
-- Finish installing the GUI and retry from the **Tools** tab or install upstream tools manually.
+- Rerun Windows **setup with UAC** to retry shared tool installation, or use the **Tools** tab for a per-user copy. Old per-user GUI installations may need removal to avoid duplicate shortcuts.
 
 ## A video cannot be analyzed or downloaded
 
