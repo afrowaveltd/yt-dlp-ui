@@ -25,7 +25,7 @@ public partial class MobileApp : Avalonia.Application
         {
             activities.MainViewFactory = () =>
             {
-                var vm = new MobileViewModel(new AndroidDirectDownloadService());
+                var vm = new MobileViewModel(new AndroidDirectDownloadService(), new AndroidYtDlpService());
                 SharedLinkInbox.Register(vm);
                 return new HomeView { DataContext = vm };
             };
