@@ -73,7 +73,7 @@ var
 begin
   WizardForm.TasksList.Height := WizardForm.TasksList.Height - ScaleY(64);
   HelpText := TNewStaticText.Create(WizardForm);
-  HelpText.Parent := WizardForm.SelectTasksPage.Surface;
+  HelpText.Parent := WizardForm.TasksList.Parent;
   HelpText.Left := WizardForm.TasksList.Left;
   HelpText.Top := WizardForm.TasksList.Top + WizardForm.TasksList.Height + ScaleY(10);
   HelpText.Width := WizardForm.TasksList.Width;
