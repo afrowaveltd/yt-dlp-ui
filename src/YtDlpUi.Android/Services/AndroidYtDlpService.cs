@@ -135,7 +135,7 @@ public sealed class AndroidYtDlpService
         using var values = new ContentValues();
         values.Put(MediaStore.IMediaColumns.DisplayName, name);
         values.Put(MediaStore.IMediaColumns.MimeType, mime);
-        values.Put(MediaStore.IMediaColumns.RelativePath, $"{global::Android.OS.Environment.DirectoryDownloads}/Afrowave");
+        values.Put(MediaStore.IMediaColumns.RelativePath, global::Android.OS.Environment.DirectoryDownloads + "/Afrowave");
         values.Put(MediaStore.IMediaColumns.IsPending, 1);
 
         var destination = resolver.Insert(MediaStore.Downloads.ExternalContentUri!, values)
