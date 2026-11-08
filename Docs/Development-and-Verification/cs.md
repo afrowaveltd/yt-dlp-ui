@@ -1,6 +1,6 @@
 # Vývoj a ověřování
 
-[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.0/cs.md)
+[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.1/cs.md)
 
 ## Co potřebujeme
 
@@ -53,7 +53,7 @@ Smoke suite kontroluje anglický fallback, okamžitý český překlad, přidáv
 - Vytvoří portable Windows x64 a instalátor Inno Setup `setup.exe`.
 - Nahrají testovací artifacts k ručnímu ověření.
 
-Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [checklist 0.1.0](../Release-0.1.0/cs.md).
+Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.1](../Release-0.1.1/cs.md).
 
 ## Pravidla lokalizace
 

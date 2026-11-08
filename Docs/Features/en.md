@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.0 candidate** contains nine tabs:
+The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.1 maintenance preview** contains nine tabs:
 
 | Tab | Purpose |
 |---|---|

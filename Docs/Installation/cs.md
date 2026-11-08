@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-První **[veřejné vydání 0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** už obsahuje instalační soubory i jejich SHA-256 součty. Artifacts v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) slouží k průběžnému vývoji; veřejné preview binárky **nejsou digitálně podepsané**. Návody na vlastní sestavení spouštěj z kořene repozitáře.
+První **[veřejné vydání 0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)** už obsahuje instalační soubory i jejich SHA-256 součty. Artifacts v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) slouží k průběžnému vývoji; veřejné preview binárky **nejsou digitálně podepsané**. Návody na vlastní sestavení spouštěj z kořene repozitáře.
 
 ## Podporované platformy
 
@@ -26,7 +26,7 @@ První **[veřejné vydání 0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/rel
 
 ## Windows x64: instalační průvodce
 
-Z [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) stáhni Windows instalační EXE a spusť `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
+Z [v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1) stáhni Windows instalační EXE a spusť `yt-dlp-gui-setup-0.1.1-win-x64.exe`.
 
 Průvodce Inno Setup:
 1. Instaluje pro aktuálního uživatele do `%LOCALAPPDATA%\Programs\yt-dlp-gui` bez požadavku na UAC.
@@ -40,7 +40,7 @@ Log instalace volitelných nástrojů: `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency
 
 ### Přenosná verze Windows
 
-Soubor `yt-dlp-gui_0.1.0_win-x64_portable.zip` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
+Soubor `yt-dlp-gui_0.1.1_win-x64_portable.zip` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
 
 ### Sestavení ve Windows
 
@@ -55,7 +55,7 @@ S nainstalovaným [Inno Setup 6](https://jrsoftware.org/isinfo.php):
 .\scripts\build-windows-installer.ps1
 ~~~
 
-Vznikne `artifacts/yt-dlp-gui-setup-0.1.0-win-x64.exe`. Pro přenosnou verzi ARM64:
+Vznikne `artifacts/yt-dlp-gui-setup-0.1.1-win-x64.exe`. Pro přenosnou verzi ARM64:
 
 ~~~powershell
 .\scripts\build-windows.ps1 -Runtime win-arm64
@@ -65,7 +65,7 @@ Vznikne `artifacts/yt-dlp-gui-setup-0.1.0-win-x64.exe`. Pro přenosnou verzi ARM
 
 ~~~bash
 ./scripts/package-deb.sh
-sudo apt install ./artifacts/yt-dlp-gui_0.1.0_amd64.deb
+sudo apt install ./artifacts/yt-dlp-gui_0.1.1_amd64.deb
 ~~~
 
 Balíček instaluje program do `/opt/yt-dlp-gui`, spouštěč `/usr/bin/yt-dlp-gui` a položku nabídky aplikací. **Doporučuje** balíčky `yt-dlp` a `ffmpeg`; podle nastavení může APT doporučené balíčky přidat. Instalační hook nestahuje žádný externí program ze sítě.
@@ -76,7 +76,7 @@ Odinstalace: `sudo apt remove yt-dlp-gui`.
 
 ~~~bash
 ./scripts/package-rpm.sh              # potřebuje rpmbuild
-sudo dnf install ./artifacts/yt-dlp-gui-0.1.0-1.x86_64.rpm
+sudo dnf install ./artifacts/yt-dlp-gui-0.1.1-1.x86_64.rpm
 ~~~
 
 Na openSUSE lze použít odpovídající `zypper install ./...rpm`. Aplikace se umístí do `/opt/yt-dlp-gui` se spouštěčem v `/usr/bin`; balíček doporučuje yt-dlp a FFmpeg. RPM se **vytváří na Ubuntu runneru**, proto před vydáním ověř instalaci také na skutečné cílové distribuci.
@@ -85,7 +85,7 @@ Na openSUSE lze použít odpovídající `zypper install ./...rpm`. Aplikace se 
 
 ~~~bash
 ./scripts/package-linux-tar.sh
-tar -xzf artifacts/yt-dlp-gui_0.1.0_linux-x86_64.tar.gz
+tar -xzf artifacts/yt-dlp-gui_0.1.1_linux-x86_64.tar.gz
 ./yt-dlp-gui/yt-dlp-gui
 ~~~
 

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -479,6 +480,18 @@ public sealed partial class DownloadOptions : ObservableObject
         DownloadPreset.Custom => "Vlastní nastavení",
         _ => "Nejlepší kvalita (video + zvuk)",
     };
+
+    /// <summary>
+    /// Create an independent copy for a queue item. The queued download must keep
+    /// its format, paths and authentication choices even if the user edits the
+    /// options panel before the item starts. This copy is kept in memory only.
+    /// </summary>
+    public DownloadOptions Snapshot()
+    {
+        var json = JsonSerializer.Serialize(this);
+        return JsonSerializer.Deserialize<DownloadOptions>(json)
+            ?? throw new InvalidOperationException("Could not snapshot download options.");
+    }
 
     /// <summary>Raised when several properties change at once so the UI can refresh once.</summary>
     public void NotifyAll()

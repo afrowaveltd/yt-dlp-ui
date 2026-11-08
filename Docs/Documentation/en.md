@@ -2,7 +2,7 @@
 
 **Language:** English · [Česky](cs.md) · [Repository README](../../README.md)
 
-This index covers the published **0.1.0 community pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
+This index covers the published **0.1.1 community maintenance pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
 
 ## User guides
 
@@ -18,7 +18,8 @@ This index covers the published **0.1.0 community pre-release** and separates im
 7. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
 8. [Versioning and release policy](../Versioning/en.md) — PATCH fixes, MINOR previews, stable v1+, Git tags and release rules.
 9. [Android prototype](../Android/en.md) — separate touch interface, shared core, direct HTTPS downloads; not part of v0.1.0.
-10. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
+10. [Release 0.1.1 fixes](../Release-0.1.1/en.md) — current desktop patch, tests and remaining limitations.
+11. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
 
 ## Localized README
 

@@ -37,14 +37,15 @@ internal static class DocumentationChecks
 
         var englishMirror = File.ReadAllText(Path.Combine(docs, "README", "en.md"));
         Require(englishMirror == expectedMirror, "Docs/README/en.md differs from the canonical English README");
-        Require(rootReadme.Contains("0.1.0", StringComparison.Ordinal), "README version is missing");
-        Require(!rootReadme.Contains("1.0.0", StringComparison.Ordinal), "README still refers to 1.0.0");
-
         var props = File.ReadAllText(Path.Combine(root, "Directory.Build.props"));
         var setup = File.ReadAllText(Path.Combine(root, "packaging", "windows", "setup.iss"));
-        Require(props.Contains("<Version>0.1.0</Version>", StringComparison.Ordinal), "App version must be 0.1.0");
-        Require(setup.Contains("#define AppVersion \"0.1.0\"", StringComparison.Ordinal),
-            "Installer fallback version must match");
+        var match = Regex.Match(props, @"<Version>([0-9]+\.[0-9]+\.[0-9]+)</Version>");
+        Require(match.Success, "App version must follow MAJOR.MINOR.PATCH");
+        var version = match.Groups[1].Value;
+        Require(rootReadme.Contains(version, StringComparison.Ordinal),
+            "README must reference the current version");
+        Require(setup.Contains("#define AppVersion \"" + version + "\"", StringComparison.Ordinal),
+            "Installer fallback must match Directory.Build.props");
 
         var markdownFiles = topics.SelectMany(topic => Directory.EnumerateFiles(topic, "*.md"))
             .Append(Path.Combine(root, "README.md"));

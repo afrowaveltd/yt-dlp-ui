@@ -1,5 +1,7 @@
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Text.Json;
 
 namespace YtDlpUi.Core.Services;
@@ -18,11 +20,12 @@ public sealed class YtDlpInstaller : IDisposable
         new("https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest");
 
     private readonly HttpClient _http;
+    private readonly bool _ownsHttp;
 
     public YtDlpInstaller(HttpClient? http = null)
     {
-        _http = http ?? new HttpClient();
-        _http.Timeout = TimeSpan.FromMinutes(30);
+        _ownsHttp = http is null;
+        _http = http ?? new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
         if (!_http.DefaultRequestHeaders.UserAgent.Any())
         {
             _http.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("yt-dlp-ui", "1.0"));
@@ -62,62 +65,106 @@ public sealed class YtDlpInstaller : IDisposable
         return Path.Combine(UserPaths.LocalBinDirectory, name);
     }
 
-    /// <summary>Download the official standalone binary and make it executable.</summary>
+    /// <summary>
+    /// Find the publisher's SHA-256 value for exactly the selected binary.
+    /// Reject missing, ambiguous or malformed manifests instead of installing
+    /// an unchecked executable.
+    /// </summary>
+    public static string ReadPublishedChecksum(string manifest, string assetName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(assetName);
+        ArgumentNullException.ThrowIfNull(manifest);
+
+        var pattern = @"(?im)^[ \t]*([a-f0-9]{64})[ \t]+\*?" +
+                      Regex.Escape(assetName) + @"[ \t]*\r?$";
+        var matches = Regex.Matches(manifest, pattern);
+        if (matches.Count != 1)
+        {
+            throw new InvalidDataException($"Expected exactly one SHA-256 entry for {assetName}.");
+        }
+
+        return matches[0].Groups[1].Value;
+    }
+
+    /// <summary>
+    /// Download the official standalone binary, verify its published checksum and
+    /// replace the previous version only after the entire download is verified.
+    /// An interruption leaves the already-installed executable untouched.
+    /// </summary>
     public async Task<string> DownloadStandaloneAsync(
         string? destinationPath = null,
         IProgress<DownloadProgress>? progress = null,
         CancellationToken cancellationToken = default)
     {
         var asset = StandaloneAssetName();
-        var url = new Uri($"{ReleasesBase}/latest/download/{asset}");
+        var downloadUrl = new Uri($"{ReleasesBase}/latest/download/{asset}");
+        var checksumUrl = new Uri($"{ReleasesBase}/latest/download/SHA2-256SUMS");
         var destination = destinationPath ?? DefaultInstallPath();
 
-        var directory = Path.GetDirectoryName(destination);
-        if (!string.IsNullOrEmpty(directory))
+        var directory = Path.GetDirectoryName(Path.GetFullPath(destination));
+        Directory.CreateDirectory(directory!);
+
+        // The temporary file must live on the same filesystem for an atomic rename.
+        // Unique filenames also keep concurrent installation attempts isolated.
+        var tempFile = Path.Combine(directory!, "." + Path.GetFileName(destination) +
+            "." + Guid.NewGuid().ToString("N") + ".download");
+
+        try
         {
-            Directory.CreateDirectory(directory);
-        }
+            using var checksumResponse = await _http.GetAsync(checksumUrl, cancellationToken).ConfigureAwait(false);
+            checksumResponse.EnsureSuccessStatusCode();
+            var manifest = await checksumResponse.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var expected = ReadPublishedChecksum(manifest, asset);
 
-        var tempFile = destination + ".download";
-        using (var response = await _http
-                         .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, cancellationToken)
-                         .ConfigureAwait(false))
-        {
-            response.EnsureSuccessStatusCode();
-            var total = response.Content.Headers.ContentLength;
-
-            await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-            await using var target = new FileStream(tempFile, FileMode.Create, FileAccess.Write, FileShare.None, 81920, true);
-
-            var buffer = new byte[81920];
-            long received = 0;
-            int read;
-
-            while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
+            using (var response = await _http.GetAsync(
+                       downloadUrl, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false))
             {
-                await target.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
-                received += read;
-                progress?.Report(new DownloadProgress(
-                    received,
-                    total,
-                    total is > 0 ? received * 100d / total.Value : null));
+                response.EnsureSuccessStatusCode();
+                var total = response.Content.Headers.ContentLength;
+                await using var source = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+                await using var target = new FileStream(tempFile, FileMode.CreateNew, FileAccess.Write,
+                    FileShare.None, 81920, useAsync: true);
+
+                var buffer = new byte[81920];
+                long received = 0;
+                int read;
+                while ((read = await source.ReadAsync(buffer, cancellationToken).ConfigureAwait(false)) > 0)
+                {
+                    await target.WriteAsync(buffer.AsMemory(0, read), cancellationToken).ConfigureAwait(false);
+                    received += read;
+                    progress?.Report(new DownloadProgress(
+                        received, total, total is > 0 ? received * 100d / total.Value : null));
+                }
+            }
+
+            await using (var file = File.OpenRead(tempFile))
+            {
+                var actual = Convert.ToHexString(
+                    await SHA256.HashDataAsync(file, cancellationToken).ConfigureAwait(false));
+                if (!actual.Equals(expected, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new InvalidDataException("yt-dlp SHA-256 verification failed. Previous version was kept.");
+                }
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!OperatingSystem.IsWindows())
+            {
+                File.SetUnixFileMode(tempFile, File.GetUnixFileMode(tempFile) | ExecutableBits);
+            }
+
+            // Same-volume overwrite: never delete the old executable before verifying the new one.
+            File.Move(tempFile, destination, overwrite: true);
+            progress?.Report(new DownloadProgress(new FileInfo(destination).Length, null, 100));
+            return destination;
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+            {
+                File.Delete(tempFile);
             }
         }
-
-        if (File.Exists(destination))
-        {
-            File.Delete(destination);
-        }
-
-        File.Move(tempFile, destination);
-
-        if (!OperatingSystem.IsWindows())
-        {
-            File.SetUnixFileMode(destination, File.GetUnixFileMode(destination) | ExecutableBits);
-        }
-
-        progress?.Report(new DownloadProgress(new FileInfo(destination).Length, null, 100));
-        return destination;
     }
 
     /// <summary>Ask GitHub for the newest stable release tag (e.g. <c>2026.08.19</c>).</summary>
@@ -186,5 +233,11 @@ public sealed class YtDlpInstaller : IDisposable
         UnixFileMode.UserExecute | UnixFileMode.GroupExecute | UnixFileMode.OtherExecute;
 
     /// <inheritdoc />
-    public void Dispose() => _http.Dispose();
+    public void Dispose()
+    {
+        if (_ownsHttp)
+        {
+            _http.Dispose();
+        }
+    }
 }

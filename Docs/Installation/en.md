@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Documentation index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The first **[0.1.0 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** is published with installable binaries and SHA-256 checksums. [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) artifacts are for ongoing development; the public preview binaries are **not code-signed**. For source builds use the repository root as your working directory.
+The first **[0.1.1 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)** is published with installable binaries and SHA-256 checksums. [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) artifacts are for ongoing development; the public preview binaries are **not code-signed**. For source builds use the repository root as your working directory.
 
 ## Platform matrix
 
@@ -26,7 +26,7 @@ The first **[0.1.0 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/
 
 ## Windows x64: guided installer
 
-From [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0), download the Windows setup EXE and launch `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
+From [v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1), download the Windows setup EXE and launch `yt-dlp-gui-setup-0.1.1-win-x64.exe`.
 
 The Inno Setup wizard:
 1. Installs for the current user in `%LOCALAPPDATA%\Programs\yt-dlp-gui`, without UAC elevation.
@@ -40,7 +40,7 @@ The optional-tool log is in `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.lo
 
 ### Windows portable
 
-The release file `yt-dlp-gui_0.1.0_win-x64_portable.zip` contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
+The release file `yt-dlp-gui_0.1.1_win-x64_portable.zip` contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
 
 ### Windows manual build
 
@@ -55,7 +55,7 @@ With [Inno Setup 6](https://jrsoftware.org/isinfo.php) installed:
 .\scripts\build-windows-installer.ps1
 ~~~
 
-This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.0-win-x64.exe`. For an ARM64 portable build:
+This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.1-win-x64.exe`. For an ARM64 portable build:
 
 ~~~powershell
 .\scripts\build-windows.ps1 -Runtime win-arm64
@@ -65,7 +65,7 @@ This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.0-win-x64.exe`. F
 
 ~~~bash
 ./scripts/package-deb.sh
-sudo apt install ./artifacts/yt-dlp-gui_0.1.0_amd64.deb
+sudo apt install ./artifacts/yt-dlp-gui_0.1.1_amd64.deb
 ~~~
 
 The package installs into `/opt/yt-dlp-gui`, creates the `/usr/bin/yt-dlp-gui` launcher and a desktop menu entry. It **recommends** `yt-dlp` and `ffmpeg`; APT may install recommended dependencies depending on its configuration. It does not run network dependency downloads in a post-install hook.
@@ -76,7 +76,7 @@ To remove the package: `sudo apt remove yt-dlp-gui`.
 
 ~~~bash
 ./scripts/package-rpm.sh              # requires rpmbuild
-sudo dnf install ./artifacts/yt-dlp-gui-0.1.0-1.x86_64.rpm
+sudo dnf install ./artifacts/yt-dlp-gui-0.1.1-1.x86_64.rpm
 ~~~
 
 On openSUSE, use the appropriate `zypper install ./...rpm` invocation. The package uses `/opt/yt-dlp-gui` and a launcher under `/usr/bin`, with recommended yt-dlp/FFmpeg dependencies. RPM packaging is **built on Ubuntu CI**; test actual installation on the target distribution before calling it production-ready.
@@ -85,7 +85,7 @@ On openSUSE, use the appropriate `zypper install ./...rpm` invocation. The packa
 
 ~~~bash
 ./scripts/package-linux-tar.sh
-tar -xzf artifacts/yt-dlp-gui_0.1.0_linux-x86_64.tar.gz
+tar -xzf artifacts/yt-dlp-gui_0.1.1_linux-x86_64.tar.gz
 ./yt-dlp-gui/yt-dlp-gui
 ~~~
 

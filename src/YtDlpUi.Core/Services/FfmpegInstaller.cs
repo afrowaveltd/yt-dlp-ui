@@ -103,12 +103,9 @@ public sealed class FfmpegInstaller : IDisposable
                 throw new InvalidDataException("FFmpeg archive did not contain both expected executables.");
             }
 
-            if (Directory.Exists(destination))
-            {
-                Directory.Delete(destination, recursive: true);
-            }
-
-            Directory.Move(stage, destination);
+            // Keep the previous working FFmpeg installation until the new copy
+            // is ready, and restore it if moving the staged files fails.
+            FileDeployment.ReplaceDirectory(stage, destination);
             return destination;
         }
         finally

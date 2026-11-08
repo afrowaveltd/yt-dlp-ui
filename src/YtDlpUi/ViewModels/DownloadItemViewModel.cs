@@ -56,6 +56,12 @@ public sealed partial class DownloadItemViewModel : ObservableObject
     /// <summary>The link being downloaded.</summary>
     public string Url { get; }
 
+    /// <summary>
+    /// Independent, in-memory settings captured when this URL was queued.
+    /// Never share the live options view model with an active download.
+    /// </summary>
+    public DownloadOptions OptionsSnapshot { get; init; } = new();
+
     /// <summary>When the item entered the queue.</summary>
     public DateTime AddedAt { get; }
 

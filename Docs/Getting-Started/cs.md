@@ -13,13 +13,13 @@ Balíčky Windows a Linux DEB/RPM/tar obsahují vlastní runtime .NET. K běhu t
 
 ## 2. Volba instalace
 
-- **Windows x64:** z [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) stáhni instalační EXE a spusť průvodce. Pro nejjednodušší start nech zaškrtnuté dvě nezávislé volby **Instalovat yt-dlp** a **Instalovat FFmpeg**.
+- **Windows x64:** z [v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1) stáhni instalační EXE a spusť průvodce. Pro nejjednodušší start nech zaškrtnuté dvě nezávislé volby **Instalovat yt-dlp** a **Instalovat FFmpeg**.
 - **Debian/Ubuntu:** odpovídající `.deb` nainstaluj přes `sudo apt install ./soubor.deb`; správce balíčků může nainstalovat i doporučené závislosti.
 - **Fedora/openSUSE:** použij `.rpm` a správce balíčků příslušné distribuce.
 - **Jiné distribuce Linuxu:** rozbal `.tar.gz`, spusť obsažený program a podle potřeby doplň externí nástroje.
 - **Vývojáři:** naklonuj repozitář a použij postup v [Vývoji a ověřování](../Development-and-Verification/cs.md).
 
-Pro běžné stažení používej zveřejněný **[pre-release v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**. Artifacts v GitHub Actions slouží k vývoji a testování.
+Pro běžné stažení používej zveřejněný **[pre-release v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)**. Artifacts v GitHub Actions slouží k vývoji a testování.
 
 ## 3. První stažení
 
