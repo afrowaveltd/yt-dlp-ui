@@ -1,7 +1,8 @@
 <#
 Installs external tools selected in the yt-dlp GUI setup wizard.
-Uses publisher-provided SHA-256 checksums; requires HTTPS and no admin privileges.
-Does not alter the system PATH. Logs to %LOCALAPPDATA%\yt-dlp-ui\logs.
+Uses publisher-provided SHA-256 checksums; requires HTTPS and elevated admin rights.
+Installs to %ProgramData%\yt-dlp-ui\tools for all users; never changes PATH.
+Logs to %ProgramData%\yt-dlp-ui\logs. Per-user settings are unaffected.
 #>
 [CmdletBinding()]
 param(
@@ -13,7 +14,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$root = Join-Path $env:LOCALAPPDATA 'yt-dlp-ui'
+# Machine-level installation must never depend on the elevated admin's user profile.
+$principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw 'Machine-wide dependency installation requires administrator privileges.'
+}
+$root = Join-Path $env:ProgramData 'yt-dlp-ui'
 $tools = Join-Path $root 'tools'
 $logs = Join-Path $root 'logs'
 New-Item -ItemType Directory -Force -Path @($tools, $logs) | Out-Null
@@ -70,8 +76,8 @@ function Test-Available([string]$ExeName) {
 
 function Install-YtDlp {
     $path = Join-Path $tools 'yt-dlp.exe'
-    if ((Test-Path -LiteralPath $path) -or (Test-Available 'yt-dlp.exe')) {
-        Write-InstallLog 'yt-dlp already present. Skipping download.'
+    if (Test-Path -LiteralPath $path) {
+        Write-InstallLog 'Shared yt-dlp already present. Skipping download.'
         return
     }
 
@@ -93,11 +99,6 @@ function Install-Ffmpeg {
         Write-InstallLog 'Managed FFmpeg already present. Skipping download.'
         return
     }
-    if ((Test-Available 'ffmpeg.exe') -and (Test-Available 'ffprobe.exe')) {
-        Write-InstallLog 'System FFmpeg and ffprobe are already available. Skipping download.'
-        return
-    }
-
     $base = 'https://www.gyan.dev/ffmpeg/builds/'
     $archive = Get-VerifiedDownload ($base + 'ffmpeg-release-essentials.zip') ($base + 'ffmpeg-release-essentials.zip.sha256') 'ffmpeg-release-essentials.zip'
     $stage = Join-Path $tools ('ffmpeg-stage-' + [guid]::NewGuid().ToString('N'))

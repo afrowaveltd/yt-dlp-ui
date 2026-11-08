@@ -44,6 +44,16 @@ public static class UserPaths
         ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "yt-dlp-ui", "tools")
         : Path.Combine(Home, ".local", "bin");
 
+    /// <summary>
+    /// Machine-wide tools installed by elevated Windows setup under ProgramData.
+    /// These binaries are readable by normal users, while installation requires admin.
+    /// </summary>
+    public static string MachineToolsDirectory =>
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData), "yt-dlp-ui", "tools");
+
+    /// <summary>Machine-wide FFmpeg path, separate from per-user tool installs.</summary>
+    public static string MachineFfmpegDirectory => Path.Combine(MachineToolsDirectory, "ffmpeg");
+
     /// <summary>Managed FFmpeg directory.</summary>
     public static string ManagedFfmpegDirectory => Path.Combine(LocalBinDirectory, "ffmpeg");
 

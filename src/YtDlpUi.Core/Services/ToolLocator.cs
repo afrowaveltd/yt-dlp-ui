@@ -249,6 +249,11 @@ public static class ToolLocator
             {
                 yield return new ToolCandidate(managed, managed);
             }
+            var shared = Path.Combine(UserPaths.MachineFfmpegDirectory, "ffmpeg.exe");
+            if (File.Exists(shared))
+            {
+                yield return new ToolCandidate(shared, shared);
+            }
         }
 
         foreach (var directory in SearchDirectories())
@@ -287,6 +292,11 @@ public static class ToolLocator
     private static IEnumerable<string> SearchDirectories()
     {
         yield return UserPaths.LocalBinDirectory;
+        if (OperatingSystem.IsWindows())
+        {
+            // Admin-installed standalone tools are shared with non-admin accounts.
+            yield return UserPaths.MachineToolsDirectory;
+        }
         yield return Path.Combine(UserPaths.Home, "bin");
         yield return Path.Combine(UserPaths.Home, ".local", "pipx", "venvs", "yt-dlp", "bin");
 
