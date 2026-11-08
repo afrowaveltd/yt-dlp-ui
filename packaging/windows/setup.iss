@@ -1,6 +1,6 @@
 ; Per-user installer for yt-dlp GUI. Compiled by scripts/build-windows-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "0.1.0"
 #endif
 #define RepoRoot AddBackslash(SourcePath) + "..\.."
 

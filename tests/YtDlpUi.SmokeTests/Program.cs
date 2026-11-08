@@ -99,4 +99,5 @@ var index = argumentVector.IndexOf("--ffmpeg-location");
 Require(index >= 0 && argumentVector[index + 1] == ffmpegPath, "FFmpeg location argument");
 Require(argumentVector[^1] == "https://example.org/video", "URL is the final argument");
 
+DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");
