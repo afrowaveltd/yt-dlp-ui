@@ -136,6 +136,32 @@ public sealed partial class MobileViewModel : ObservableObject
         }
     }
 
+    /// <summary>Explicit diagnostic for verifying the bundled Python runtime on a phone.</summary>
+    [RelayCommand]
+    private async Task CheckEngineAsync()
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+
+        IsBusy = true;
+        Status = "Initializing embedded Python and yt-dlp…";
+        try
+        {
+            await _siteDownloader.CheckRuntimeAsync();
+            Status = "Embedded yt-dlp initialized successfully on this device.";
+        }
+        catch (Exception)
+        {
+            Status = "Embedded yt-dlp could not initialize on this device. Please report Android version and CPU architecture.";
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
     /// <summary>Open Android's standard Downloads screen.</summary>
     [RelayCommand]
     private void OpenDownloads() => _directDownloader.OpenDownloads();

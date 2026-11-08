@@ -27,6 +27,9 @@
             <Button Content="Download" Command="{Binding DownloadCommand}" />
             <Button Content="Clear" Command="{Binding ClearLinkCommand}" />
           </StackPanel>
+          <Button Content="Check local yt-dlp engine"
+                  Command="{Binding CheckEngineCommand}"
+                  HorizontalAlignment="Left" />
           <ProgressBar Minimum="0" Maximum="100" Value="{Binding ProgressPercent}"
                        Height="8" />
           <TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="14" />

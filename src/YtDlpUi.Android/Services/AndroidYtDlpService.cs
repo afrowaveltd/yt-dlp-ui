@@ -26,6 +26,10 @@ public sealed class AndroidYtDlpService
         ".aac", ".opus", ".ogg", ".flac", ".wav"
     };
 
+    /// <summary>Initialize the bundled Python/yt-dlp runtime without downloading anything.</summary>
+    public Task CheckRuntimeAsync() =>
+        Task.Run(() => YtDlp.Init(global::Android.App.Application.Context));
+
     /// <summary>
     /// Download a website URL with yt-dlp, then publish the resulting files using
     /// MediaStore. No broad external-storage permission is required on API 29+.
