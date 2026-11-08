@@ -58,8 +58,22 @@ public sealed class SettingsStore
             }
 
             var json = JsonSerializer.Serialize(settings, JsonOptions);
-            File.WriteAllText(_path, json);
-            return true;
+            // Write a complete new copy first, then atomically rename it on the
+            // same volume. A crash or failed write must not truncate settings.json.
+            var tempPath = _path + "." + Guid.NewGuid().ToString("N") + ".tmp";
+            try
+            {
+                File.WriteAllText(tempPath, json);
+                File.Move(tempPath, _path, overwrite: true);
+                return true;
+            }
+            finally
+            {
+                if (File.Exists(tempPath))
+                {
+                    File.Delete(tempPath);
+                }
+            }
         }
         catch (Exception)
         {
