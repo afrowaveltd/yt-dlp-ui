@@ -608,9 +608,11 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     private DownloadItemViewModel CreateQueueItem(string url)
     {
+        var snapshot = Options.Snapshot();
         var item = new DownloadItemViewModel(url)
         {
-            PresetLabel = DownloadOptions.PresetLabelFor(Options.Preset),
+            OptionsSnapshot = snapshot,
+            PresetLabel = DownloadOptions.PresetLabelFor(snapshot.Preset),
             State = DownloadState.Queued,
         };
 
@@ -621,7 +623,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
         if (Toolchain.Command is { } command)
         {
-            var args = YtDlpArgumentBuilder.Build(Options, [url]);
+            var args = YtDlpArgumentBuilder.Build(item.OptionsSnapshot, [url]);
             item.CommandPreview = command.Preview(args);
         }
 
@@ -740,15 +742,12 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         CurrentItem = item;
         AddLog($"━━ Začínám stahovat: {item.DisplayTitle}", LogKind.App);
 
-        if (item.CommandPreview is { Length: > 0 } preview)
-        {
-            AddLog($"   $ {preview}", LogKind.Debug);
-        }
-
+        // Avoid persisting raw command previews in logs: they can include
+        // passwords, cookie paths, custom authorization headers or tokens.
         var outcome = await DownloadEngine
             .RunAsync(
                 command,
-                Options,
+                item.OptionsSnapshot,
                 item.Url,
                 onEvent: e => DispatchProgress(item, e),
                 cancellationToken: cancellationToken)
@@ -856,6 +855,12 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         if (item is null)
         {
+            return;
+        }
+
+        if (item.IsRunning)
+        {
+            AddLog("Aktivní stahování nelze odstranit z fronty. Nejprve jej zrušte.", LogKind.Warning);
             return;
         }
 
@@ -1346,6 +1351,11 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         if (Settings.RememberOptions)
         {
             Settings.LastOptionsJson = SettingsStore.StoreOptions(Options);
+        }
+        else
+        {
+            // Clear an older remembered snapshot as soon as the user opts out.
+            Settings.LastOptionsJson = null;
         }
 
         _settingsStore.Save(Settings);
