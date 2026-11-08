@@ -28,9 +28,23 @@ jobs:
           ./scripts/package-deb.sh
           dpkg-deb --info artifacts/*.deb
           dpkg-deb --contents artifacts/*.deb | grep 'usr/bin/yt-dlp-gui'
+      - name: Upload Debian package
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yt-dlp-gui-deb
+          path: artifacts/*.deb
+          if-no-files-found: error
       - name: Windows portable release
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           ./scripts/build-windows.ps1
           if (-not (Test-Path 'publish/win-x64/yt-dlp-gui.exe')) { throw 'Missing Windows binary' }
+      - name: Upload Windows portable build
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yt-dlp-gui-windows-x64
+          path: publish/win-x64/
+          if-no-files-found: error
