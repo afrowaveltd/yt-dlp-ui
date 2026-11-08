@@ -19,6 +19,9 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="$(CommunityToolkitVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources/drawable/icon.png" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="../YtDlpUi.Core/YtDlpUi.Core.csproj" />
   </ItemGroup>
 </Project>

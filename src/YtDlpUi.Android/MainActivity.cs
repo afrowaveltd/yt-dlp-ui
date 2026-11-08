@@ -13,6 +13,7 @@ namespace YtDlpUi.Android;
 /// </summary>
 [Activity(
     Label = "Afrowave yt-dlp",
+    Icon = "@drawable/icon",
     MainLauncher = true,
     Exported = true,
     Theme = "@android:style/Theme.Material.Light.NoActionBar",
