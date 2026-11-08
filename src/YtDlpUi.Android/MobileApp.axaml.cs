@@ -9,7 +9,7 @@ using YtDlpUi.Core.Localization;
 namespace YtDlpUi.Android;
 
 /// <summary>Dedicated mobile UI; only the platform-neutral Core library is shared.</summary>
-public partial class MobileApp : Application
+public partial class MobileApp : Avalonia.Application
 {
     /// <inheritdoc />
     public override void Initialize()

@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Documentation index](../Documentation/en.md) · [Versioning](../Versioning/en.md)
 
-Our Android application has its **own touch-optimized Avalonia interface** and references the existing, platform-neutral `YtDlpUi.Core`. This is an experimental **0.2.0 development prototype**, not part of the published desktop [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0).
+Our Android application has its **own touch-optimized Avalonia interface** and references the existing, platform-neutral `YtDlpUi.Core`. The mobile host uses Avalonia 12.1.4 independently of the Avalonia 11 desktop app, as both reference only the Avalonia-free shared Core. This is an experimental **0.2.0 development prototype**, not part of the published desktop [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0).
 
 ## Implemented now
 

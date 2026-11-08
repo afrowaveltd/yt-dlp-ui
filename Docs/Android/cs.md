@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [Verzování](../Versioning/cs.md)
 
-Aplikace pro Android má **vlastní dotykové rozhraní Avalonia** a od desktopové verze přebírá pouze nezávislé jádro `YtDlpUi.Core`. Jde o experimentální **vývojový prototyp 0.2.0**, nikoli o součást vydaného desktopového [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0).
+Aplikace pro Android má **vlastní dotykové rozhraní Avalonia 12** a od desktopové verze přebírá pouze nezávislé jádro `YtDlpUi.Core`. Mobilní projekt používá Avalonia 12.1.4 nezávisle na desktopové Avalonia 11; sdílené jádro na Avalonia nezávisí. Jde o experimentální **vývojový prototyp 0.2.0**, nikoli o součást vydaného desktopového [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0).
 
 ## Co už umí
 
