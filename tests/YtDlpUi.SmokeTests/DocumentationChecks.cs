@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 
 internal static class DocumentationChecks
 {
@@ -53,7 +54,38 @@ internal static class DocumentationChecks
             ValidateLocalLinks(markdown);
         }
 
+        VerifyLanguagePickerLayout(root);
+
         Console.WriteLine($"Documentation smoke checks passed: {topics.Length} bilingual topics and local links.");
+    }
+
+    /// <summary>
+    /// Regression guard for Linux emoji-font clipping in the language selector.
+    /// A fixed vector icon and an empty Grid column keep the globe fully visible.
+    /// The Avalonia XAML compiler additionally validates these elements on CI.
+    /// </summary>
+    private static void VerifyLanguagePickerLayout(string root)
+    {
+        var path = Path.Combine(root, "src", "YtDlpUi", "Views", "MainWindow.axaml");
+        var document = XDocument.Load(path);
+        XNamespace avalonia = "https://github.com/avaloniaui";
+
+        var languageGrid = document.Descendants(avalonia + "Grid")
+            .FirstOrDefault(element =>
+                (string?)element.Attribute("ColumnDefinitions") == "30,18,175");
+        Require(languageGrid is not null,
+            "Language selector needs reserved vector icon / spacer / ComboBox columns");
+
+        var globe = languageGrid!.Elements(avalonia + "Canvas").FirstOrDefault(element =>
+            (string?)element.Attribute("Grid.Column") == "0");
+        Require(globe is not null &&
+                globe.Elements(avalonia + "Ellipse").Count() == 2 &&
+                globe.Elements(avalonia + "Line").Count() == 3,
+            "Language globe must be a complete vector, not a clipped emoji glyph");
+
+        Require(languageGrid.Elements(avalonia + "ComboBox").Any(element =>
+                (string?)element.Attribute("Grid.Column") == "2"),
+            "Language ComboBox must stay outside the globe and its spacer");
     }
 
     private static void ValidateLocalLinks(string markdown)
