@@ -28,6 +28,7 @@ jobs:
           ./scripts/package-deb.sh
           dpkg-deb --info artifacts/*.deb
           dpkg-deb --contents artifacts/*.deb | grep 'usr/bin/yt-dlp-gui'
+          dpkg-deb --contents artifacts/*.deb | grep 'opt/yt-dlp-gui/Locales/en.json'
       - name: Upload Debian package
         if: runner.os == 'Linux'
         uses: actions/upload-artifact@v4
@@ -66,6 +67,7 @@ jobs:
         run: |
           ./scripts/build-windows.ps1
           if (-not (Test-Path 'publish/win-x64/yt-dlp-gui.exe')) { throw 'Missing Windows binary' }
+          if (-not (Test-Path 'publish/win-x64/Locales/en.json')) { throw 'Missing bundled locale files' }
       - name: Upload Windows portable build
         if: runner.os == 'Windows'
         uses: actions/upload-artifact@v4

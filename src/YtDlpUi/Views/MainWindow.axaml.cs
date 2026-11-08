@@ -118,6 +118,9 @@ public partial class MainWindow : Window
         base.OnKeyDown(e);
     }
 
+    private void OnLanguageDropDownOpened(object? sender, EventArgs e) =>
+        _viewModel?.RefreshLanguages();
+
     private void FocusUrlBox()
     {
         var box = this.GetVisualDescendants()

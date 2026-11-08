@@ -61,6 +61,24 @@
             </StackPanel>
           </Border>
 
+          <!-- Language picker: populated from available Locales/*.json dictionaries. -->
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <TextBlock Text="🌐" FontSize="16" VerticalAlignment="Center"
+                       ToolTip.Tip="{loc:Tr Key='Interface language'}" />
+            <ComboBox Width="175"
+                      ItemsSource="{Binding AvailableLanguages}"
+                      SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
+                      DropDownOpened="OnLanguageDropDownOpened"
+                      ToolTip.Tip="{loc:Tr Key='Interface language'}"
+                      VerticalAlignment="Center">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding DisplayName}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
+
           <Button Classes="ghost" Command="{Binding ToggleThemeCommand}"
                   ToolTip.Tip="{Binding ThemeTooltip}">
             <TextBlock Text="{Binding ThemeGlyph}" FontSize="15" />
