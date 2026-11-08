@@ -165,8 +165,12 @@ function Install-Ffmpeg {
 function Test-CompatibleDeno([string]$Path) {
     if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
     try {
-        $first = (& $Path --version | Select-Object -First 1)
-        if ($LASTEXITCODE -ne 0 -or $first -notmatch '^deno\s+(\d+\.\d+\.\d+)') {
+        # Read the entire output; piping to Select-Object -First 1 can close
+        # the native process pipe before the executable exits successfully.
+        $output = @(& $Path --version 2>&1)
+        if ($LASTEXITCODE -ne 0 -or $output.Count -lt 1) { return $false }
+        $first = [string]$output[0]
+        if ($first -notmatch '^deno\s+(\d+\.\d+\.\d+)') {
             return $false
         }
         return ([version]$Matches[1] -ge [version]'2.3.0')
