@@ -7,7 +7,59 @@ v rozhraní našel téměř všechny volby, které yt-dlp nabízí.
 Postaveno na [Avalonia UI](https://avaloniaui.net/) (.NET 10) – jde o skutečnou desktopovou aplikaci,
 ne o webovou stránku v prohlížeči.
 
-![ikona](src/YtDlpUi/Assets/yt-dlp-gui.png)
+## Ukázky
+
+Hlavní obrazovka – odkaz se naplní ze schránky, aplikace ukáže náhled videa a vy jen vyberete profil:
+
+<a href="screenshots/main_screen.png"><img src="screenshots/main_screen.png" width="840" alt="Hlavní obrazovka yt-dlp GUI"></a>
+
+Zbývajících osm karet pro jemnější nastavení:
+
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/format_screen.png"><img src="screenshots/format_screen.png" width="430" alt="Karta Formát"></a>
+      <br><sub><b>Formát</b> – výběr streamu, převody, střih a tabulka dostupných formátů</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/playlist_screen.png"><img src="screenshots/playlist_screen.png" width="430" alt="Karta Playlist"></a>
+      <br><sub><b>Playlist</b> – rozsahy položek, archiv, filtry a chování při chybách</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/titulky_screen.png"><img src="screenshots/titulky_screen.png" width="430" alt="Karta Titulky a metadata"></a>
+      <br><sub><b>Titulky a metadata</b> – titulky, obaly, kapitoly i SponsorBlock</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/sit_screen.png"><img src="screenshots/sit_screen.png" width="430" alt="Karta Síť"></a>
+      <br><sub><b>Síť</b> – proxy, limity rychlosti, opakování a hlavičky</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/soubory_screen.png"><img src="screenshots/soubory_screen.png" width="430" alt="Karta Soubory"></a>
+      <br><sub><b>Soubory</b> – šablona názvu, přepisování a cache</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/prihlaseni_screen.png"><img src="screenshots/prihlaseni_screen.png" width="430" alt="Karta Přihlášení"></a>
+      <br><sub><b>Přihlášení</b> – cookies z prohlížeče, údaje a certifikáty</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/pokrocile_screen.png"><img src="screenshots/pokrocile_screen.png" width="430" alt="Karta Pokročilé"></a>
+      <br><sub><b>Pokročilé</b> – náhled přesného příkazu a vlastní argumenty</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="screenshots/nastroje_screen.png"><img src="screenshots/nastroje_screen.png" width="430" alt="Karta Nástroje"></a>
+      <br><sub><b>Nástroje</b> – instalace a aktualizace yt-dlp, ffmpeg, nastavení</sub>
+    </td>
+  </tr>
+</table>
+
+<sub>Screenshoty jsou z tmavého motivu. Světlý režim zapnete tlačítkem ☀ vpravo nahoře nebo přepínačem
+na kartě <b>Nástroje</b>. Kliknutím na obrázek se otevře v plném rozlišení.</sub>
 
 ## Co aplikace umí
 
