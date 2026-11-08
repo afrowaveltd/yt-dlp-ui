@@ -16,7 +16,8 @@ Rozcestník popisuje veřejnou **komunitní předběžnou verzi 0.1.0** a odděl
 
 6. [Řešení problémů](../Troubleshooting/cs.md) — chybějící nástroje, instalátory, síť, grafika Linuxu a logy.
 7. [Vývoj a ověřování](../Development-and-Verification/cs.md) — .NET 10, projekty, smoke testy a CI.
-8. [Stav vydání 0.1.0](../Release-0.1.0/cs.md) — **[zveřejněný pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, známé nedodělky a kontrolní seznam.
+8. [Verzování a vydávání](../Versioning/cs.md) — PATCH opravy, MINOR preview, stabilní 1.x, tagy a pravidla vydávání.
+9. [Stav vydání 0.1.0](../Release-0.1.0/cs.md) — **[zveřejněný pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, známé nedodělky a kontrolní seznam.
 
 ## README v obou jazycích
 

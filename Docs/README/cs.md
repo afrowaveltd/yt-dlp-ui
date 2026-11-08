@@ -99,7 +99,8 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 | Nastavení a úložiště | [Nastavení](../Configuration/cs.md) | [Configuration](../Configuration/en.md) |
 | Řešení problémů | [Nápověda](../Troubleshooting/cs.md) | [Troubleshooting](../Troubleshooting/en.md) |
 | Vývoj a ověřování | [Vývoj](../Development-and-Verification/cs.md) | [Development](../Development-and-Verification/en.md) |
-| Příprava 0.1.0 | [Checklist](../Release-0.1.0/cs.md) | [Release checklist](../Release-0.1.0/en.md) |
+| Verzování a vydávání | [Verzování](../Versioning/cs.md) | [Versioning](../Versioning/en.md) |
+| Stav vydání 0.1.0 | [Checklist](../Release-0.1.0/cs.md) | [Release checklist](../Release-0.1.0/en.md) |
 
 ## Licence, soukromí a poděkování
 
