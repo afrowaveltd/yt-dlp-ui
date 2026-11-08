@@ -159,6 +159,42 @@ program; **není součástí .deb**. Instalace přes `apt` typicky instaluje tak
 doporučené závislosti. Instalace do domovského adresáře přes
 `./scripts/install.sh` zůstává dostupná.
 
+## Windows Setup.exe – jednoduchý instalační průvodce
+
+Uživatelé Windows x64 mohou místo přenosné varianty spustit klasický
+instalační program s nabídkou Start, volitelným zástupcem na ploše a
+standardním odinstalováním. Není potřeba administrátorský účet ani
+předchozí instalace .NET.
+
+Průvodce má **dvě samostatné, standardně zaškrtnuté volby**:
+
+- **Nainstalovat yt-dlp** – program nutný pro samotné stahování videí.
+- **Nainstalovat FFmpeg** – doporučený pro slučování obrazu a zvuku a pro převody.
+
+Obě volby lze vypnout. U již fungujících nástrojů se další kopie
+nestahují. Jinak se vybrané nástroje stahují od vydavatelů přes HTTPS
+a ověřují kontrolním součtem SHA-256 podle zveřejněných kontrolních
+součtů. Je potřeba připojení k internetu. Externí nástroje nejsou
+součástí instalačního EXE a mají vlastní licence.
+
+Když stahování některého nástroje selže, GUI zůstává nainstalováno.
+Uživatel dostane upozornění a může instalaci zopakovat na kartě Nástroje.
+Záznam instalace: %LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log.
+
+Nástroje zůstávají při odinstalaci GUI v adresáři
+%LOCALAPPDATA%\yt-dlp-ui\tools, protože je může uživatel využívat i
+samostatně. V případě potřeby je lze ručně odstranit.
+
+Pro sestavení instalátoru je potřeba Inno Setup 6
+(https://jrsoftware.org/isinfo.php):
+
+~~~powershell
+.\scripts\build-windows-installer.ps1
+~~~
+
+Výstup: artifacts/yt-dlp-gui-setup-1.0.0-win-x64.exe.
+Pro Windows ARM64 zatím používejte přenosné sestavení.
+
 ## Windows 10/11
 
 yt-dlp je na Windows oficiálně dostupné jako samostatné `yt-dlp.exe`.
@@ -180,6 +216,23 @@ změny systémového PATH ani administrátorská oprávnění.
 
 FFmpeg z této distribuce má vlastní licenci (GPLv3); MIT licence našeho
 grafického rozhraní se na externí binární soubory nevztahuje.
+
+## Další distribuce Linuxu
+
+Vedle balíčku DEB podporujeme RPM (Fedora, openSUSE a příbuzné systémy)
+a přenosný archiv tar.gz pro distribuce bez našeho balíčku.
+
+~~~bash
+./scripts/package-rpm.sh
+./scripts/package-linux-tar.sh
+~~~
+
+RPM vyžaduje nástroj rpmbuild (na Fedoře typicky balíček rpm-build).
+Stejně jako DEB doporučuje systémové balíčky yt-dlp a ffmpeg, ale
+nestahuje je vlastním postinstalačním skriptem. Správce balíčků
+závislosti vyhodnocuje podle distribuce. Přenosný archiv umožňuje
+spustit GUI bez systémové instalace; externí nástroje se řeší zvlášť
+v systému nebo prostřednictvím karty Nástroje.
 
 ## Lokalizace
 
@@ -253,7 +306,8 @@ src/
     Views/               # MainWindow + jedna stránka na každou kartu
     ViewModels/          # MainWindowViewModel, ToolchainViewModel, DownloadItemViewModel
     Converters/, Styles/ # převodníky a vizuální styl
-scripts/                 # build.sh, install.sh, package-deb.sh, build-windows.ps1
+scripts/                 # sestavení a instalace pro Windows i Linux
+packaging/windows/       # instalační průvodce Inno Setup
 packaging/               # položka nabídky aplikací
 ```
 
