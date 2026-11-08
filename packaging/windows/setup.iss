@@ -1,6 +1,6 @@
-; Per-user installer for yt-dlp GUI. Compiled by scripts/build-windows-installer.ps1.
+; Machine-wide installer for yt-dlp GUI, with UAC elevation. Compiled by scripts/build-windows-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "0.1.1"
+  #define AppVersion "0.1.2"
 #endif
 #define RepoRoot AddBackslash(SourcePath) + "..\.."
 
@@ -13,9 +13,10 @@ AppPublisher=Afrowave contributors
 AppPublisherURL=https://github.com/afrowaveltd/yt-dlp-ui
 AppSupportURL=https://github.com/afrowaveltd/yt-dlp-ui/issues
 AppUpdatesURL=https://github.com/afrowaveltd/yt-dlp-ui/releases
-DefaultDirName={localappdata}\Programs\yt-dlp-gui
+DefaultDirName={autopf}\yt-dlp-gui
+UsePreviousAppDir=no
 DefaultGroupName=yt-dlp GUI
-PrivilegesRequired=lowest
+PrivilegesRequired=admin
 ArchitecturesAllowed=x64os
 ArchitecturesInstallIn64BitMode=x64os
 MinVersion=10.0
@@ -33,18 +34,18 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "czech"; MessagesFile: "compiler:Languages\Czech.isl"
 
 [CustomMessages]
-english.OptionalTools=Optional tools (installed only if selected)
-czech.OptionalTools=Volitelné nástroje (instalují se jen při zaškrtnutí)
+english.OptionalTools=Optional shared tools (installed for all users if selected)
+czech.OptionalTools=Volitelné společné nástroje (při zaškrtnutí pro všechny uživatele)
 english.InstallYtDlp=Install yt-dlp (required to download videos)
 czech.InstallYtDlp=Nainstalovat yt-dlp (nutný pro stahování videí)
 english.InstallFfmpeg=Install FFmpeg (recommended for merging and converting)
 czech.InstallFfmpeg=Nainstalovat FFmpeg (doporučený pro spojování a převod)
 english.CreateDesktopShortcut=Create a desktop shortcut
 czech.CreateDesktopShortcut=Vytvořit zástupce na ploše
-english.ToolInstallFailed=Could not install %1. Please open the Tools tab in yt-dlp GUI to retry. Details are recorded in the application data folder.
-czech.ToolInstallFailed=Instalace nástroje %1 se nezdařila. Zkuste ji zopakovat na kartě Nástroje. Záznam je v uživatelských datech aplikace.
-english.DependencyExplanation=The selected tools will be downloaded over HTTPS and verified with SHA-256. yt-dlp is needed for downloading; FFmpeg is recommended for merging audio and video. Details: README / Tools tab.
-czech.DependencyExplanation=Vybrané nástroje se stáhnou přes HTTPS a ověří pomocí SHA-256. yt-dlp je nutný ke stahování, FFmpeg slouží ke spojování a převodu videa. Více: README / karta Nástroje.
+english.ToolInstallFailed=Could not install %1 for all users. See the installation log under ProgramData\yt-dlp-ui\logs. You can retry with administrator privileges.
+czech.ToolInstallFailed=Instalace nástroje %1 pro všechny uživatele se nezdařila. Podrobnosti jsou v ProgramData\yt-dlp-ui\logs. Zkuste instalátor spustit znovu jako správce.
+english.DependencyExplanation=Setup requires administrator approval. The selected tools will be verified using SHA-256 and installed for all Windows users. Personal app settings remain per user. Details: README / Tools tab.
+czech.DependencyExplanation=Instalátor vyžaduje oprávnění správce. Vybrané nástroje se ověří pomocí SHA-256 a nainstalují pro všechny uživatele. Nastavení aplikace zůstává osobní.
 english.ToolStatus=Installing optional tool: %1
 czech.ToolStatus=Instaluje se volitelný nástroj: %1
 
@@ -64,7 +65,7 @@ Name: "{autoprograms}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"
 Name: "{autodesktop}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"; Tasks: desktopIcon
 
 [Run]
-Filename: "{app}\yt-dlp-gui.exe"; Description: "{cm:LaunchProgram,yt-dlp GUI}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\yt-dlp-gui.exe"; Description: "{cm:LaunchProgram,yt-dlp GUI}"; Flags: nowait postinstall skipifsilent runasoriginaluser
 
 [Code]
 procedure InitializeWizard();

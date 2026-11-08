@@ -1,7 +1,8 @@
 <#
 Installs external tools selected in the yt-dlp GUI setup wizard.
-Uses publisher-provided SHA-256 checksums; requires HTTPS and no admin privileges.
-Does not alter the system PATH. Logs to %LOCALAPPDATA%\yt-dlp-ui\logs.
+Uses publisher-provided SHA-256 checksums; requires HTTPS and elevated admin rights.
+Installs to %ProgramData%\yt-dlp-ui\tools for all users; never changes PATH.
+Logs to %ProgramData%\yt-dlp-ui\logs. Per-user settings are unaffected.
 #>
 [CmdletBinding()]
 param(
@@ -13,7 +14,12 @@ param(
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-$root = Join-Path $env:LOCALAPPDATA 'yt-dlp-ui'
+# Machine-level installation must never depend on the elevated admin's user profile.
+$principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+if (-not $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    throw 'Machine-wide dependency installation requires administrator privileges.'
+}
+$root = Join-Path $env:ProgramData 'yt-dlp-ui'
 $tools = Join-Path $root 'tools'
 $logs = Join-Path $root 'logs'
 New-Item -ItemType Directory -Force -Path @($tools, $logs) | Out-Null
@@ -53,15 +59,10 @@ function Get-VerifiedDownload([string]$Uri, [string]$ChecksumUri, [string]$FileN
     }
 }
 
-function Test-Available([string]$ExeName) {
-    $command = Get-Command $ExeName -CommandType Application -ErrorAction SilentlyContinue
-    if ($null -eq $command) { return $false }
+function Test-LocalExecutable([string]$Path, [string]$VersionFlag) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
     try {
-        if ($ExeName -eq 'yt-dlp.exe') {
-            & $command.Source --version | Out-Null
-        } else {
-            & $command.Source -version | Out-Null
-        }
+        & $Path $VersionFlag | Out-Null
         return ($LASTEXITCODE -eq 0)
     } catch {
         return $false
@@ -70,34 +71,46 @@ function Test-Available([string]$ExeName) {
 
 function Install-YtDlp {
     $path = Join-Path $tools 'yt-dlp.exe'
-    if ((Test-Path -LiteralPath $path) -or (Test-Available 'yt-dlp.exe')) {
-        Write-InstallLog 'yt-dlp already present. Skipping download.'
+    if (Test-LocalExecutable $path '--version') {
+        Write-InstallLog 'Working shared yt-dlp already present. Skipping download.'
         return
     }
 
     $asset = 'yt-dlp.exe'
     $release = 'https://github.com/yt-dlp/yt-dlp/releases/latest/download/'
     $download = Get-VerifiedDownload ($release + $asset) ($release + 'SHA2-256SUMS') $asset
+    $backup = Join-Path $tools ('yt-dlp-backup-' + [guid]::NewGuid().ToString('N') + '.exe')
+    $hadExisting = Test-Path -LiteralPath $path
     try {
-        Move-Item -LiteralPath $download -Destination $path
-        Write-InstallLog "Installed yt-dlp to $path"
+        if ($hadExisting) { Move-Item -LiteralPath $path -Destination $backup -ErrorAction Stop }
+        try {
+            Move-Item -LiteralPath $download -Destination $path -ErrorAction Stop
+            if (-not (Test-LocalExecutable $path '--version')) {
+                throw 'New yt-dlp did not start after installation.'
+            }
+        } catch {
+            Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+            if ($hadExisting -and (Test-Path -LiteralPath $backup)) {
+                Move-Item -LiteralPath $backup -Destination $path -ErrorAction Stop
+            }
+            throw
+        }
+        Write-InstallLog "Installed working yt-dlp to $path"
+        # A backup may only be removed after the new executable has been verified.
+        Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
     } finally {
         Remove-Item -LiteralPath $download -Force -ErrorAction SilentlyContinue
+        # Preserve an old backup if rollback failed, for manual recovery.
     }
 }
 
 function Install-Ffmpeg {
     $folder = Join-Path $tools 'ffmpeg'
-    if ((Test-Path -LiteralPath (Join-Path $folder 'ffmpeg.exe')) -and
-        (Test-Path -LiteralPath (Join-Path $folder 'ffprobe.exe'))) {
+    if ((Test-LocalExecutable (Join-Path $folder 'ffmpeg.exe') '-version') -and
+        (Test-LocalExecutable (Join-Path $folder 'ffprobe.exe') '-version')) {
         Write-InstallLog 'Managed FFmpeg already present. Skipping download.'
         return
     }
-    if ((Test-Available 'ffmpeg.exe') -and (Test-Available 'ffprobe.exe')) {
-        Write-InstallLog 'System FFmpeg and ffprobe are already available. Skipping download.'
-        return
-    }
-
     $base = 'https://www.gyan.dev/ffmpeg/builds/'
     $archive = Get-VerifiedDownload ($base + 'ffmpeg-release-essentials.zip') ($base + 'ffmpeg-release-essentials.zip.sha256') 'ffmpeg-release-essentials.zip'
     $stage = Join-Path $tools ('ffmpeg-stage-' + [guid]::NewGuid().ToString('N'))
@@ -120,6 +133,11 @@ function Install-Ffmpeg {
             }
         } finally {
             $zip.Dispose()
+        }
+
+        if (-not (Test-LocalExecutable (Join-Path $stage 'ffmpeg.exe') '-version') -or
+            -not (Test-LocalExecutable (Join-Path $stage 'ffprobe.exe') '-version')) {
+            throw 'Verified FFmpeg package could not execute after extraction.'
         }
 
         if (Test-Path -LiteralPath $folder) {

@@ -41,6 +41,6 @@ Před verzí 1.0 máme větší prostor měnit chování, ale každou nekompatib
 
 ## První veřejné vydání
 
-**[v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** je zveřejněné první preview. **[v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)** je první opravné vydání; další opravy mohou vyjít jako **v0.1.2**, nové funkce patří do **v0.2.0**. Přidání nové platformy, například případné androidové aplikace, patří mezi nové funkce, a proto do MINOR vydání (nebo samostatně verzovaného produktu), nikoli do PATCH opravy.
+**[v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** je zveřejněné první preview. **[v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)** je první opravné vydání; **[v0.1.2](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.2)** opravuje Windows setup; další PATCH může být **v0.1.3**, nové funkce patří do **v0.2.0**. Přidání nové platformy, například případné androidové aplikace, patří mezi nové funkce, a proto do MINOR vydání (nebo samostatně verzovaného produktu), nikoli do PATCH opravy.
 
 **Technická poznámka:** GitHubův přepínač *pre-release* je nezávislý na číslu verze. My ho záměrně používáme pro všechna `0.x.y` vydání; není to automatické pravidlo samotné specifikace SemVer.

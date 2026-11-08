@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.1** má devět karet:
+Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.2** má devět karet:
 
 | Karta | Účel |
 |---|---|

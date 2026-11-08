@@ -10,14 +10,14 @@ Instalátor Windows má samostatnou volbu **Nainstalovat yt-dlp**; pokud volitel
 
 ## Chybí FFmpeg nebo nefunguje převod
 
-Prověř `ffmpeg -version` a pro odpovídající operace také `ffprobe -version`. Windows x64 mohou nainstalovat vlastní ověřenou dvojici na kartě **Nástroje** či v instalačním průvodci; Linux zpravidla používá systémové balíčky. Podle potřeby nastav cestu k FFmpeg a zopakuj detekci. Prosté stažení streamu může proběhnout bez FFmpeg, ale spojení či převod často ne.
+Prověř `ffmpeg -version` a pro odpovídající operace také `ffprobe -version`. Průvodce Windows instaluje společné ověřené FFmpeg/FFprobe s UAC; karta **Nástroje** může instalovat osobní kopii; Linux zpravidla používá systémové balíčky. Podle potřeby nastav cestu k FFmpeg a zopakuj detekci. Prosté stažení streamu může proběhnout bez FFmpeg, ale spojení či převod často ne.
 
 ## Instalátor Windows nedokázal stáhnout nástroje
 
 - Ověř připojení, DNS a dostupnost serverů vydavatelů — GitHub releases pro yt-dlp a zdroje FFmpeg.
-- Podrobnosti hledej v `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log`.
+- Podrobnosti hledej v `%ProgramData%\yt-dlp-ui\logs\dependency-install.log`.
 - Musí být dostupné také kontrolní součty vydavatele. Nesouhlas SHA-256 má instalaci zastavit místo spuštění poškozené binárky.
-- Dokonči instalaci GUI a zopakuj pokus na kartě **Nástroje**, případně nainstaluj externí nástroje ručně.
+- Pro opravu společné instalace spusť znovu Windows **setup s UAC**, nebo použij kartu **Nástroje** pro osobní kopii. Starou uživatelskou instalaci GUI lze odinstalovat, aby nezůstaly dvojí zástupci.
 
 ## Video nejde analyzovat nebo stáhnout
 

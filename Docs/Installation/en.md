@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Documentation index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The first **[0.1.1 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)** is published with installable binaries and SHA-256 checksums. [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) artifacts are for ongoing development; the public preview binaries are **not code-signed**. For source builds use the repository root as your working directory.
+The first **[0.1.2 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.2)** is published with installable binaries and SHA-256 checksums. [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) artifacts are for ongoing development; the public preview binaries are **not code-signed**. For source builds use the repository root as your working directory.
 
 ## Platform matrix
 
@@ -26,21 +26,23 @@ The first **[0.1.1 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/
 
 ## Windows x64: guided installer
 
-From [v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1), download the Windows setup EXE and launch `yt-dlp-gui-setup-0.1.1-win-x64.exe`.
+From [v0.1.2](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.2), download the Windows setup EXE and launch `yt-dlp-gui-setup-0.1.2-win-x64.exe`.
 
 The Inno Setup wizard:
-1. Installs for the current user in `%LOCALAPPDATA%\Programs\yt-dlp-gui`, without UAC elevation.
-2. Creates a Start Menu entry; offers an optional desktop shortcut.
-3. Shows two **independent, initially checked** options: **Install yt-dlp** and **Install FFmpeg**. You can untick either.
-4. For selected, missing tools, downloads publisher-hosted executables over HTTPS and verifies against publisher-provided SHA-256 checksums. Network access is required.
-5. Reports optional tool-download failures without rolling back the installed GUI. Use the **Tools** tab to try again.
-6. Registers normal Windows uninstall. Personal copies of external tools in `%LOCALAPPDATA%\yt-dlp-ui\tools` remain after GUI uninstall to avoid deleting separately useful data.
+1. **Requests UAC administrator approval** and installs for all Windows users into `%ProgramFiles%\yt-dlp-gui`.
+2. Creates Start menu shortcuts, offers a desktop shortcut, and two **independent initially checked** options: install yt-dlp / install FFmpeg.
+3. Downloads selected tools over HTTPS, verifies publisher SHA-256 and installs them under `%ProgramData%\yt-dlp-ui\tools`. The installer verifies executables can start.
+4. Leaves individual app preferences under `%LOCALAPPDATA%\yt-dlp-ui`. The desktop GUI does **not** need administrator rights to run or download media.
+5. Reports optional download errors without uninstalling the GUI. Check `%ProgramData%\yt-dlp-ui\logs\dependency-install.log`; rerun Setup with UAC for shared repair. The Tools tab can install a separate per-user tool copy.
+6. Registers normal Windows uninstall. Machine-wide tools are retained after uninstall, to avoid breaking other users and applications.
 
-The optional-tool log is in `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log`. The setup is a per-user installer, **not** an enterprise MSI or a Windows ARM64 setup.
+**Migration from v0.1.0/v0.1.1:** the old setup installed into `%LOCALAPPDATA%\Programs\yt-dlp-gui`. Uninstall that old *per-user* copy through Windows Settings before installing this machine-wide version to avoid duplicate application shortcuts. This does **not** remove your personal settings or previously installed external tools. If the old copy was under another Windows user, that user should uninstall it.
+
+The setup requires administrative credentials via UAC; do not routinely launch the installed GUI elevated. This is an Inno Setup installer, not an MSI or an ARM64 installer.
 
 ### Windows portable
 
-The release file `yt-dlp-gui_0.1.1_win-x64_portable.zip` contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
+The release file `yt-dlp-gui_0.1.2_win-x64_portable.zip` contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
 
 ### Windows manual build
 
@@ -55,7 +57,7 @@ With [Inno Setup 6](https://jrsoftware.org/isinfo.php) installed:
 .\scripts\build-windows-installer.ps1
 ~~~
 
-This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.1-win-x64.exe`. For an ARM64 portable build:
+This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.2-win-x64.exe`. For an ARM64 portable build:
 
 ~~~powershell
 .\scripts\build-windows.ps1 -Runtime win-arm64
@@ -65,7 +67,7 @@ This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.1-win-x64.exe`. F
 
 ~~~bash
 ./scripts/package-deb.sh
-sudo apt install ./artifacts/yt-dlp-gui_0.1.1_amd64.deb
+sudo apt install ./artifacts/yt-dlp-gui_0.1.2_amd64.deb
 ~~~
 
 The package installs into `/opt/yt-dlp-gui`, creates the `/usr/bin/yt-dlp-gui` launcher and a desktop menu entry. It **recommends** `yt-dlp` and `ffmpeg`; APT may install recommended dependencies depending on its configuration. It does not run network dependency downloads in a post-install hook.
@@ -76,7 +78,7 @@ To remove the package: `sudo apt remove yt-dlp-gui`.
 
 ~~~bash
 ./scripts/package-rpm.sh              # requires rpmbuild
-sudo dnf install ./artifacts/yt-dlp-gui-0.1.1-1.x86_64.rpm
+sudo dnf install ./artifacts/yt-dlp-gui-0.1.2-1.x86_64.rpm
 ~~~
 
 On openSUSE, use the appropriate `zypper install ./...rpm` invocation. The package uses `/opt/yt-dlp-gui` and a launcher under `/usr/bin`, with recommended yt-dlp/FFmpeg dependencies. RPM packaging is **built on Ubuntu CI**; test actual installation on the target distribution before calling it production-ready.
@@ -85,7 +87,7 @@ On openSUSE, use the appropriate `zypper install ./...rpm` invocation. The packa
 
 ~~~bash
 ./scripts/package-linux-tar.sh
-tar -xzf artifacts/yt-dlp-gui_0.1.1_linux-x86_64.tar.gz
+tar -xzf artifacts/yt-dlp-gui_0.1.2_linux-x86_64.tar.gz
 ./yt-dlp-gui/yt-dlp-gui
 ~~~
 

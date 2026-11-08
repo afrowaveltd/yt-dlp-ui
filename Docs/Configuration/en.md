@@ -13,7 +13,8 @@ Application preferences live in a JSON settings file, separate from the yt-dlp a
 | Application cache directory | `~/.cache/yt-dlp-ui/` or `$XDG_CACHE_HOME/yt-dlp-ui/` | `%LOCALAPPDATA%\yt-dlp-ui\` |
 | App-managed yt-dlp | `~/.local/bin/yt-dlp` | `%LOCALAPPDATA%\yt-dlp-ui\tools\yt-dlp.exe` |
 | App-managed FFmpeg | Typically distro-installed | `%LOCALAPPDATA%\yt-dlp-ui\tools\ffmpeg\ffmpeg.exe` and `ffprobe.exe` |
-| Setup dependency log | Not applicable to DEB/RPM | `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log` |
+| Shared setup tools | Not applicable | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe` and `tools\ffmpeg\ffmpeg.exe` / `ffprobe.exe` |
+| Setup dependency log | Not applicable to DEB/RPM | `%ProgramData%\yt-dlp-ui\logs\dependency-install.log` |
 
 The **download destination** is user-selectable. On Linux the initial guess follows `user-dirs.dirs` when available, otherwise `~/Downloads` or the home directory. Do not assume every user downloads into the same location.
 
@@ -30,8 +31,8 @@ The **Tools** tab lets you override detected tool paths if they are installed ou
 - Supported password and 2FA fields are scrubbed from the **remembered download-options snapshot** before saving. This is not an encrypted secrets vault.
 - Cookies, command-line arguments, external processes and logs may still contain sensitive information. Inspect what you share, especially command previews and verbose logs.
 - The GUI contains no intentional advertisements or application telemetry. Network access is nevertheless required for video metadata/downloads and can be used for yt-dlp updates and optional dependency installation.
-- DEB/RPM packaging uses package-manager recommendations, not an automatic post-install downloader. Windows setup uses explicit checkboxes and publisher SHA-256 checksums.
-- Removing the Windows GUI does not automatically remove per-user externally installed tools; remove them manually if you no longer need them.
+- DEB/RPM packaging uses package-manager recommendations, not an automatic post-install downloader. Windows setup requires UAC and uses explicit checkboxes and publisher SHA-256 checksums to install machine-wide tools.
+- Removing the Windows GUI does not automatically remove per-user or machine-wide external tools, which may be needed by other users.
 
 ## Changing settings safely
 
