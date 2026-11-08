@@ -75,6 +75,10 @@ jobs:
           name: yt-dlp-gui-windows-x64
           path: publish/win-x64/
           if-no-files-found: error
+      - name: Verify machine-wide setup and PowerShell installer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./scripts/test-windows-installer.ps1
       - name: Install Inno Setup
         if: runner.os == 'Windows'
         shell: pwsh
