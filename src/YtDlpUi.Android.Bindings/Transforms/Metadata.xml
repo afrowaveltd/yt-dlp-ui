@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+  <!-- Chaquopy PyObject implements java.util.AbstractMap. Generating C# bindings
+       for its runtime types causes incompatible collection override signatures.
+       The app only invokes dev.ffmpegkit_maintained.ytdlp.*, so omit C# wrappers
+       while retaining the Chaquopy Java bytecode/native runtime in the AAR. -->
+  <remove-node path="/api/package[@name='com.chaquo.python']" />
+  <remove-node path="/api/package[@name='com.chaquo.python.android']" />
+</metadata>
