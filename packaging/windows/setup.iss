@@ -43,6 +43,8 @@ english.CreateDesktopShortcut=Create a desktop shortcut
 czech.CreateDesktopShortcut=Vytvořit zástupce na ploše
 english.ToolInstallFailed=Could not install %1. Please open the Tools tab in yt-dlp GUI to retry. Details are recorded in the application data folder.
 czech.ToolInstallFailed=Instalace nástroje %1 se nezdařila. Zkuste ji zopakovat na kartě Nástroje. Záznam je v uživatelských datech aplikace.
+english.DependencyExplanation=The selected tools will be downloaded over HTTPS and verified with SHA-256. yt-dlp is needed for downloading; FFmpeg is recommended for merging audio and video. Details: README / Tools tab.
+czech.DependencyExplanation=Vybrané nástroje se stáhnou přes HTTPS a ověří pomocí SHA-256. yt-dlp je nutný ke stahování, FFmpeg slouží ke spojování a převodu videa. Více: README / karta Nástroje.
 english.ToolStatus=Installing optional tool: %1
 czech.ToolStatus=Instaluje se volitelný nástroj: %1
 
@@ -55,6 +57,7 @@ Name: "desktopIcon"; Description: "{cm:CreateDesktopShortcut}"; Flags: unchecked
 Source: "{#RepoRoot}\publish\win-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#RepoRoot}\packaging\windows\install-dependencies.ps1"; DestDir: "{app}\support"; Flags: ignoreversion
 Source: "{#RepoRoot}\LICENSE"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#RepoRoot}\README.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{autoprograms}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"
@@ -64,6 +67,21 @@ Name: "{autodesktop}\yt-dlp GUI"; Filename: "{app}\yt-dlp-gui.exe"; Tasks: deskt
 Filename: "{app}\yt-dlp-gui.exe"; Description: "{cm:LaunchProgram,yt-dlp GUI}"; Flags: nowait postinstall skipifsilent
 
 [Code]
+procedure InitializeWizard();
+var
+  HelpText: TNewStaticText;
+begin
+  WizardForm.TasksList.Height := WizardForm.TasksList.Height - ScaleY(64);
+  HelpText := TNewStaticText.Create(WizardForm);
+  HelpText.Parent := WizardForm.SelectTasksPage.Surface;
+  HelpText.Left := WizardForm.TasksList.Left;
+  HelpText.Top := WizardForm.TasksList.Top + WizardForm.TasksList.Height + ScaleY(10);
+  HelpText.Width := WizardForm.TasksList.Width;
+  HelpText.Height := ScaleY(54);
+  HelpText.WordWrap := True;
+  HelpText.Caption := CustomMessage('DependencyExplanation');
+end;
+
 procedure InstallOptionalTool(Tool, Display: string);
 var
   PowerShellExe: string;
