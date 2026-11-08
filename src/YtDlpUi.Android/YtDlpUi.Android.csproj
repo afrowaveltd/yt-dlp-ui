@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>YtDlpUi.Android</RootNamespace>
+    <AssemblyName>YtDlpUi.Android</AssemblyName>
+    <ApplicationId>ltd.afrowave.ytdlpui</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>0.2.0-dev</ApplicationDisplayVersion>
+    <SupportedOSPlatformVersion>29</SupportedOSPlatformVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Android" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="$(CommunityToolkitVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources/drawable/icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../YtDlpUi.Core/YtDlpUi.Core.csproj" />
+  </ItemGroup>
+</Project>

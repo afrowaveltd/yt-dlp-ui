@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Android.Views.HomeView">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Margin="20,28,20,32" Spacing="16">
+      <TextBlock Text="AFROWAVE" FontWeight="Bold" FontSize="14" Foreground="#53B5EE" />
+      <TextBlock Text="Video &amp; audio" FontWeight="Bold" FontSize="30" />
+      <TextBlock Text="Android preview · separate mobile UI, shared .NET Core"
+                 FontSize="13" Foreground="#A0AABB" TextWrapping="Wrap" />
+      <Border Background="#22314A" CornerRadius="14" Padding="16">
+        <StackPanel Spacing="10">
+          <TextBlock Text="Paste or share a link" FontSize="18" FontWeight="SemiBold" />
+          <TextBox Watermark="https://example.org/video.mp4"
+                   Text="{Binding Link, Mode=TwoWay}"
+                   AcceptsReturn="False" FontSize="16" />
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="Download direct file"
+                    Command="{Binding DownloadDirectFileCommand}"
+                    HorizontalAlignment="Stretch" />
+            <Button Content="Clear" Command="{Binding ClearLinkCommand}" />
+          </StackPanel>
+          <TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="14" />
+        </StackPanel>
+      </Border>
+      <Border Background="#18273B" CornerRadius="14" Padding="16">
+        <StackPanel Spacing="8">
+          <TextBlock Text="Recent transfers" FontSize="18" FontWeight="SemiBold" />
+          <TextBlock Text="Android manages transfer progress and notifications."
+                     Foreground="#A0AABB" TextWrapping="Wrap" />
+          <ItemsControl ItemsSource="{Binding RecentDownloads}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" TextWrapping="Wrap" Margin="0,3" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </Border>
+      <TextBlock Text="Preview limitation: site links (YouTube, Vimeo and other yt-dlp extractors), quality presets and FFmpeg processing require a future mobile-native engine. Only direct HTTPS media files work today."
+                 Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
+      <TextBlock Text="Permissions: Internet only. Files go into system Downloads. No contacts, microphone, location or all-files access."
+                 Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

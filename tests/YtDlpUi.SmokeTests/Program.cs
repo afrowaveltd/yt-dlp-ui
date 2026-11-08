@@ -99,5 +99,23 @@ var index = argumentVector.IndexOf("--ffmpeg-location");
 Require(index >= 0 && argumentVector[index + 1] == ffmpegPath, "FFmpeg location argument");
 Require(argumentVector[^1] == "https://example.org/video", "URL is the final argument");
 
+// Android URL intake and strict direct-file detection.
+Require(MobileLinkParser.TryExtract("Shared: https://media.example.net/clip.mp4", out var shared) &&
+    shared == "https://media.example.net/clip.mp4", "Extract an Android shared link");
+Require(!MobileLinkParser.TryExtract("no media URL", out _), "Reject invalid share text");
+Require(MobileLinkParser.TryGetDirectMedia("https://media.example.net/video.mp4?token=abc",
+    out var mediaUri, out var safeName) &&
+    mediaUri is not null && safeName.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase),
+    "Accept HTTPS direct video files");
+Require(MobileLinkParser.TryGetDirectMedia("https://media.example.net/song.mp3",
+    out _, out _), "Accept HTTPS direct audio files");
+Require(!MobileLinkParser.TryGetDirectMedia("https://youtube.com/watch?v=123",
+    out _, out _), "Video websites require a genuine Android yt-dlp backend");
+Require(!MobileLinkParser.TryGetDirectMedia("http://media.example.net/video.mp4",
+    out _, out _), "Reject insecure HTTP");
+Require(!MobileLinkParser.TryGetDirectMedia("file:///tmp/clip.mp4",
+    out _, out _), "Reject local file URIs");
+Require(!MobileLinkParser.TryGetDirectMedia("https://media.example.net/installer.exe",
+    out _, out _), "Reject nonmedia extension");
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");
