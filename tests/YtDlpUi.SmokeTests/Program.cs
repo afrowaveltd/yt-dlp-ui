@@ -35,9 +35,9 @@ Require(observable.Value == "Download", "Observable fallback after switching");
 
 var ffmpegPath = Path.Combine("somewhere", "ffmpeg");
 var options = new DownloadOptions { FfmpegLocation = ffmpegPath };
-var args = YtDlpArgumentBuilder.Build(options, ["https://example.org/video"]);
-var index = args.IndexOf("--ffmpeg-location");
-Require(index >= 0 && args[index + 1] == ffmpegPath, "FFmpeg location argument");
-Require(args[^1] == "https://example.org/video", "URL is the final argument");
+var argumentVector = YtDlpArgumentBuilder.Build(options, ["https://example.org/video"]);
+var index = argumentVector.IndexOf("--ffmpeg-location");
+Require(index >= 0 && argumentVector[index + 1] == ffmpegPath, "FFmpeg location argument");
+Require(argumentVector[^1] == "https://example.org/video", "URL is the final argument");
 
 Console.WriteLine("All localization and command-line smoke tests passed.");
