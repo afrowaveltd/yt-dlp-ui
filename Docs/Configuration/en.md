@@ -13,7 +13,7 @@ Application preferences live in a JSON settings file, separate from the yt-dlp a
 | Application cache directory | `~/.cache/yt-dlp-ui/` or `$XDG_CACHE_HOME/yt-dlp-ui/` | `%LOCALAPPDATA%\yt-dlp-ui\` |
 | App-managed yt-dlp | `~/.local/bin/yt-dlp` | `%LOCALAPPDATA%\yt-dlp-ui\tools\yt-dlp.exe` |
 | App-managed FFmpeg | Typically distro-installed | `%LOCALAPPDATA%\yt-dlp-ui\tools\ffmpeg\ffmpeg.exe` and `ffprobe.exe` |
-| Shared setup tools | Not applicable | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe` and `tools\ffmpeg\ffmpeg.exe` / `ffprobe.exe` |
+| Shared setup tools | Not applicable | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe`, `tools\ffmpeg\ffmpeg.exe` / `ffprobe.exe` and `tools\deno.exe` |
 | Setup dependency log | Not applicable to DEB/RPM | `%ProgramData%\yt-dlp-ui\logs\dependency-install.log` |
 
 The **download destination** is user-selectable. On Linux the initial guess follows `user-dirs.dirs` when available, otherwise `~/Downloads` or the home directory. Do not assume every user downloads into the same location.
@@ -23,6 +23,8 @@ The **download destination** is user-selectable. On Linux the initial guess foll
 `AppSettings` includes custom paths for yt-dlp and FFmpeg, default download folder, clipboard monitoring, automatic analysis after paste, update checks for yt-dlp, remembering options, UI language, theme, concurrency and first-run/window state. Most settings persist automatically after a short delay or on normal shutdown.
 
 Language setting `system` uses the current UI culture when a matching JSON exists, otherwise English; an explicit selection is stored as a language code.
+
+For YouTube, the GUI automatically discovers Deno in the machine-wide tools folder, the per-user tools folder or the system PATH, and passes it to yt-dlp. An explicit JavaScript runtime option in the Network tab or extra arguments always takes precedence. The official standalone yt-dlp.exe already bundles yt-dlp-ejs challenge scripts.
 
 The **Tools** tab lets you override detected tool paths if they are installed outside standard directories. The header shows their detection status. The application attempts to resolve runnable tools, not merely check for a filename.
 

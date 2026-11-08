@@ -12,6 +12,17 @@ Windows setup has a selectable **Install yt-dlp** task; a failed optional downlo
 
 Check `ffmpeg -version` and, for relevant operations, `ffprobe -version`. Windows setup installs machine-wide verified FFmpeg/FFprobe with UAC; the **Tools** tab can install a separate per-user pair; Linux installations normally use system packages. If necessary, set the FFmpeg path on **Tools**, then recheck detection. A download that only copies an existing stream might work without FFmpeg, while merging or converting may not.
 
+## YouTube: WARNING about missing JavaScript runtime
+
+This message comes from yt-dlp, not from the GUI or FFmpeg. YouTube may omit some formats without a supported JavaScript runtime. **Deno (version 2.3.0 or newer)** is the recommended runtime, enabled by default in yt-dlp.
+
+- Windows: install Deno with the new **Install Deno** checkbox in our UAC Setup, or run `winget install --id DenoLand.Deno -e`. Restart the GUI afterward.
+- Linux: install a current Deno from the official distribution or package manager, and make sure `deno --version` works from the same account.
+- The GUI can automatically locate the Deno executable inside Windows ProgramData, user-local locations or PATH, even if the directory is not in PATH.
+- An explicit `--js-runtimes node` (Node 22+) or `--js-runtimes deno:/full/path` is also available through advanced yt-dlp options.
+- Official yt-dlp standalone executables include `yt-dlp-ejs`. Some pip/distribution installations require `yt-dlp[default]` or separate EJS solver scripts. Follow the [official yt-dlp EJS guide](https://github.com/yt-dlp/yt-dlp/wiki/EJS).
+- Do not use `--no-warnings` to hide the message: it would conceal an unmet requirement.
+
 ## Windows installer couldn't download tools
 
 - Confirm network/DNS access to the upstream publisher, GitHub releases for yt-dlp and the FFmpeg archive host.
