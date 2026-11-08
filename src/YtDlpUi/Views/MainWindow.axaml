@@ -63,7 +63,7 @@
 
           <!-- Language picker: populated from available Locales/*.json dictionaries. -->
           <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-            <TextBlock Text="🌐" FontSize="16" VerticalAlignment="Center"
+            <TextBlock Text="🌐" FontSize="16" VerticalAlignment="Center" Margin="0,0,12,0"
                        ToolTip.Tip="{loc:Tr Key='Interface language'}" />
             <ComboBox Width="175"
                       ItemsSource="{Binding AvailableLanguages}"
