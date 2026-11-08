@@ -27,7 +27,7 @@ mkdir -p "$STAGE/yt-dlp-gui"
 cp -a "$ROOT/publish/." "$STAGE/yt-dlp-gui/"
 cp -f "$ROOT/LICENSE" "$STAGE/yt-dlp-gui/LICENSE"
 mkdir -p "$ROOT/artifacts"
-OUTPUT="$ROOT/artifacts/yt-dlp-gui_$VERSION_linux-$ARCH.tar.gz"
+OUTPUT="$ROOT/artifacts/yt-dlp-gui_${VERSION}_linux-${ARCH}.tar.gz"
 tar -C "$STAGE" -czf "$OUTPUT" yt-dlp-gui
 echo "Portable archive: $OUTPUT"
 echo "Unpack it, then run ./yt-dlp-gui/yt-dlp-gui."
