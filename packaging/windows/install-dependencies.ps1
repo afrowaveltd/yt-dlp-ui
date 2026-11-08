@@ -7,7 +7,7 @@ Logs to %ProgramData%\yt-dlp-ui\logs. Per-user settings are unaffected.
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)]
-    [ValidateSet('yt-dlp','ffmpeg')]
+    [ValidateSet('yt-dlp','ffmpeg','deno')]
     [string]$Tool
 )
 
@@ -35,7 +35,8 @@ function Get-VerifiedDownload([string]$Uri, [string]$ChecksumUri, [string]$FileN
     $escapedName = [regex]::Escape($FileName)
     $match = [regex]::Match($hashText, "(?mi)^([0-9a-f]{64})\s+\*?$escapedName\s*$")
     if (-not $match.Success) {
-        if ($FileName -ne 'ffmpeg-release-essentials.zip') {
+        if ($FileName -ne 'ffmpeg-release-essentials.zip' -and
+            $FileName -ne 'deno-x86_64-pc-windows-msvc.zip') {
             throw "Publisher checksum entry for $FileName was not found."
         }
         # Gyan's .sha256 may contain only a hexadecimal hash or a full filename.
@@ -161,11 +162,79 @@ function Install-Ffmpeg {
     }
 }
 
+function Test-CompatibleDeno([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    try {
+        $first = (& $Path --version | Select-Object -First 1)
+        if ($LASTEXITCODE -ne 0 -or $first -notmatch '^deno\s+(\d+\.\d+\.\d+)') {
+            return $false
+        }
+        return ([version]$Matches[1] -ge [version]'2.3.0')
+    } catch {
+        return $false
+    }
+}
+
+function Install-Deno {
+    $path = Join-Path $tools 'deno.exe'
+    if (Test-CompatibleDeno $path) {
+        Write-InstallLog 'Compatible shared Deno already present. Skipping download.'
+        return
+    }
+
+    # Deno is the recommended JS runtime for the yt-dlp YouTube EJS solver.
+    # The official release ZIP contains deno.exe; verify its matching SHA256 sidecar.
+    $asset = 'deno-x86_64-pc-windows-msvc.zip'
+    $release = 'https://github.com/denoland/deno/releases/latest/download/'
+    $archive = Get-VerifiedDownload ($release + $asset) ($release + $asset + '.sha256sum') $asset
+    $stage = Join-Path $tools ('deno-stage-' + [guid]::NewGuid().ToString('N') + '.exe')
+    $backup = Join-Path $tools ('deno-backup-' + [guid]::NewGuid().ToString('N') + '.exe')
+    try {
+        Add-Type -AssemblyName System.IO.Compression
+        Add-Type -AssemblyName System.IO.Compression.FileSystem
+        $zip = [IO.Compression.ZipFile]::OpenRead($archive)
+        try {
+            $entries = @($zip.Entries | Where-Object { $_.FullName -eq 'deno.exe' })
+            if ($entries.Count -ne 1 -or $entries[0].Length -gt 350MB) {
+                throw 'Deno archive must contain one expected deno.exe entry.'
+            }
+            [IO.Compression.ZipFileExtensions]::ExtractToFile($entries[0], $stage)
+        } finally {
+            $zip.Dispose()
+        }
+        if (-not (Test-CompatibleDeno $stage)) {
+            throw 'Verified Deno failed its version or execution check (minimum 2.3.0).'
+        }
+
+        $hadExisting = Test-Path -LiteralPath $path
+        if ($hadExisting) { Move-Item -LiteralPath $path -Destination $backup -ErrorAction Stop }
+        try {
+            Move-Item -LiteralPath $stage -Destination $path -ErrorAction Stop
+            if (-not (Test-CompatibleDeno $path)) {
+                throw 'Installed Deno failed its version check.'
+            }
+        } catch {
+            Remove-Item -LiteralPath $path -Force -ErrorAction SilentlyContinue
+            if ($hadExisting -and (Test-Path -LiteralPath $backup)) {
+                Move-Item -LiteralPath $backup -Destination $path -ErrorAction Stop
+            }
+            throw
+        }
+        Write-InstallLog "Installed compatible Deno to $path"
+        Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
+    } finally {
+        Remove-Item -LiteralPath $archive -Force -ErrorAction SilentlyContinue
+        Remove-Item -LiteralPath $stage -Force -ErrorAction SilentlyContinue
+        # If rollback failed, retain its backup for manual recovery.
+    }
+}
+
 try {
     Write-InstallLog "Starting optional installation: $Tool"
     switch ($Tool) {
         'yt-dlp' { Install-YtDlp }
         'ffmpeg' { Install-Ffmpeg }
+        'deno' { Install-Deno }
     }
     Write-InstallLog "Completed optional installation: $Tool"
     exit 0
