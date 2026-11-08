@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:YtDlpUi.Localization"
              xmlns:vm="using:YtDlpUi.ViewModels"
              x:Class="YtDlpUi.Views.Pages.DownloadPage">
 
@@ -12,13 +13,13 @@
               BorderBrush="{DynamicResource AccentBrush}">
         <Grid ColumnDefinitions="*,Auto">
           <StackPanel Grid.Column="0" Spacing="6">
-            <TextBlock Classes="h2" Text="Vítejte! Stahování videí ve třech krocích" />
+            <TextBlock Classes="h2" Text="{loc:Tr Key='Welcome! Download videos in three steps'}" />
             <TextBlock Classes="secondary"
                        Text="1) Vložte odkaz – klidně ho zkopírujte kdekoliv a tady se sám objeví.   2) Vyberte, zda chcete video nebo jen zvuk.   3) Stiskněte „Stáhnout“." />
             <TextBlock Classes="hint"
                        Text="Hotové soubory najdete ve složce, kterou vidíte níže. Vše ostatní (titulky, playlisty, kvalitu) najdete na dalších kartách." />
           </StackPanel>
-          <Button Grid.Column="1" Classes="ghost" Content="Rozumím" VerticalAlignment="Top"
+          <Button Grid.Column="1" Classes="ghost" Content="{loc:Tr Key='Got it'}" VerticalAlignment="Top"
                   Command="{Binding DismissWelcomeCommand}" />
         </Grid>
       </Border>
@@ -31,11 +32,11 @@
           <TextBlock Grid.Column="0" Text="⚠" FontSize="20" Margin="0,0,12,0"
                      Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center" />
           <StackPanel Grid.Column="1" Spacing="3">
-            <TextBlock Text="yt-dlp zatím není nainstalováno" FontWeight="SemiBold" />
+            <TextBlock Text="{loc:Tr Key='yt-dlp is not installed yet'}" FontWeight="SemiBold" />
             <TextBlock Classes="hint"
                        Text="Bez nástroje yt-dlp nelze nic stáhnout. Otevřete kartu Nástroje a nechte jej nainstalovat – je to otázka jednoho kliknutí." />
           </StackPanel>
-          <Button Grid.Column="2" Classes="primary" Content="Otevřít nástroje"
+          <Button Grid.Column="2" Classes="primary" Content="{loc:Tr Key='Open Tools'}"
                   Command="{Binding ShowToolsTabCommand}" VerticalAlignment="Center" />
         </Grid>
       </Border>
@@ -44,9 +45,9 @@
       <Border Classes="card">
         <StackPanel Spacing="10">
           <StackPanel Spacing="2">
-            <TextBlock Classes="h2" Text="1 · Odkaz na video" />
+            <TextBlock Classes="h2" Text="{loc:Tr Key='1 · Video link'}" />
             <TextBlock Classes="hint"
-                       Text="Vložte adresu videa nebo playlistu (YouTube, Vimeo, Twitch, SoundCloud…). Můžete vložit i více odkazů, každý na samostatný řádek." />
+                       Text="{loc:Tr Key='Enter a video or playlist URL. You can also paste multiple links, one per line.'}" />
           </StackPanel>
 
           <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
@@ -54,9 +55,9 @@
                      Text="{Binding Url, Mode=TwoWay}"
                      Watermark="https://www.youtube.com/watch?v=…"
                      FontSize="14" Padding="12,10" />
-            <Button Grid.Column="1" Content="Vložit" Click="OnPasteClick"
+            <Button Grid.Column="1" Content="{loc:Tr Key='Paste'}" Click="OnPasteClick"
                     ToolTip.Tip="Vložit odkaz ze schránky" />
-            <Button Grid.Column="2" Classes="primary" Content="Analyzovat"
+            <Button Grid.Column="2" Classes="primary" Content="{loc:Tr Key='Analyze'}"
                     Command="{Binding AnalyzeCommand}"
                     ToolTip.Tip="Zjistit název, délku a dostupné formáty (F5)" />
           </Grid>
@@ -69,14 +70,14 @@
             <Grid ColumnDefinitions="Auto,*,Auto">
               <TextBlock Grid.Column="0" Text="📋" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center" />
               <StackPanel Grid.Column="1" Spacing="1">
-                <TextBlock Text="Ve schránce je odkaz" FontWeight="Medium" FontSize="12.5" />
+                <TextBlock Text="{loc:Tr Key='A link was found in the clipboard'}" FontWeight="Medium" FontSize="12.5" />
                 <TextBlock Text="{Binding ClipboardUrl}" Classes="hint" MaxLines="1"
                            TextTrimming="CharacterEllipsis" />
               </StackPanel>
               <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
-                <Button Classes="tiny" Content="Použít" Command="{Binding AcceptClipboardUrlCommand}" />
+                <Button Classes="tiny" Content="{loc:Tr Key='Use'}" Command="{Binding AcceptClipboardUrlCommand}" />
                 <Button Classes="ghost tiny" Content="✕" Command="{Binding DismissClipboardUrlCommand}"
-                        ToolTip.Tip="Ignorovat" />
+                        ToolTip.Tip="{loc:Tr Key='Ignore'}" />
               </StackPanel>
             </Grid>
           </Border>
@@ -187,9 +188,9 @@
       <Border Classes="card">
         <StackPanel Spacing="10">
           <StackPanel Spacing="2">
-            <TextBlock Classes="h2" Text="2 · Co chcete stáhnout?" />
+            <TextBlock Classes="h2" Text="{loc:Tr Key='2 · What would you like to download?'}" />
             <TextBlock Classes="hint"
-                       Text="Vyberte si profil. Nemusíte řešit technické detaily – vše potřebné se nastaví samo." />
+                       Text="{loc:Tr Key='Choose a preset. Technical details will be set automatically.'}" />
           </StackPanel>
 
           <ListBox ItemsSource="{Binding Presets}"
@@ -232,16 +233,16 @@
       <Border Classes="card">
         <StackPanel Spacing="10">
           <StackPanel Spacing="2">
-            <TextBlock Classes="h2" Text="3 · Kam soubor uložit" />
+            <TextBlock Classes="h2" Text="{loc:Tr Key='3 · Where to save the file'}" />
             <TextBlock Classes="hint"
-                       Text="Složka, do které se video nebo hudba uloží. Název souboru a další podrobnosti najdete na kartě Soubory." />
+                       Text="{loc:Tr Key='This is where your video or music will be saved. More options are on the Files tab.'}" />
           </StackPanel>
 
           <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
             <TextBox Grid.Column="0" Text="{Binding Options.OutputDirectory, Mode=TwoWay}"
                      Watermark="Složka pro ukládání" />
-            <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseOutputFolderClick" />
-            <Button Grid.Column="2" Content="Otevřít" Command="{Binding OpenOutputFolderCommand}"
+            <Button Grid.Column="1" Content="{loc:Tr Key='Browse…'}" Click="OnBrowseOutputFolderClick" />
+            <Button Grid.Column="2" Content="{loc:Tr Key='Open'}" Command="{Binding OpenOutputFolderCommand}"
                     ToolTip.Tip="Otevřít složku ve správci souborů" />
           </Grid>
         </StackPanel>
@@ -254,8 +255,8 @@
             <Button Classes="primary" Content="⬇   Stáhnout" Command="{Binding DownloadCommand}"
                     Padding="26,11" FontSize="14"
                     ToolTip.Tip="Stáhnout hned (Ctrl+Enter)" />
-            <Button Content="Přidat do fronty" Command="{Binding EnqueueCommand}" />
-            <Button Classes="ghost" Content="Vyčistit" Command="{Binding ClearUrlCommand}" />
+            <Button Content="{loc:Tr Key='Add to queue'}" Command="{Binding EnqueueCommand}" />
+            <Button Classes="ghost" Content="{loc:Tr Key='Clear'}" Command="{Binding ClearUrlCommand}" />
           </StackPanel>
           <TextBlock Grid.Column="1" Text="{Binding StatusMessage}" Classes="hint"
                      VerticalAlignment="Center" MaxWidth="320" TextAlignment="Right" />

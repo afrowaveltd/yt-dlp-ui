@@ -242,6 +242,15 @@ public static class ToolLocator
             yield return new ToolCandidate(onPath, onPath);
         }
 
+        if (OperatingSystem.IsWindows())
+        {
+            var managed = Path.Combine(UserPaths.ManagedFfmpegDirectory, "ffmpeg.exe");
+            if (File.Exists(managed))
+            {
+                yield return new ToolCandidate(managed, managed);
+            }
+        }
+
         foreach (var directory in SearchDirectories())
         {
             var candidate = Path.Combine(directory, "ffmpeg" + WindowsExecutableSuffix());

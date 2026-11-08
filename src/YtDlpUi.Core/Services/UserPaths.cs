@@ -16,9 +16,9 @@ public static class UserPaths
         get
         {
             var xdg = Environment.GetEnvironmentVariable("XDG_CONFIG_HOME");
-            var root = string.IsNullOrWhiteSpace(xdg)
-                ? Path.Combine(Home, ".config")
-                : xdg!;
+            var root = OperatingSystem.IsWindows()
+                ? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                : string.IsNullOrWhiteSpace(xdg) ? Path.Combine(Home, ".config") : xdg!;
             return Path.Combine(root, "yt-dlp-ui");
         }
     }
@@ -29,9 +29,9 @@ public static class UserPaths
         get
         {
             var xdg = Environment.GetEnvironmentVariable("XDG_CACHE_HOME");
-            var root = string.IsNullOrWhiteSpace(xdg)
-                ? Path.Combine(Home, ".cache")
-                : xdg!;
+            var root = OperatingSystem.IsWindows()
+                ? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
+                : string.IsNullOrWhiteSpace(xdg) ? Path.Combine(Home, ".cache") : xdg!;
             return Path.Combine(root, "yt-dlp-ui");
         }
     }
@@ -40,7 +40,12 @@ public static class UserPaths
     public static string SettingsFile => Path.Combine(ConfigDirectory, "settings.json");
 
     /// <summary>Folder used when installing a private yt-dlp copy.</summary>
-    public static string LocalBinDirectory => Path.Combine(Home, ".local", "bin");
+    public static string LocalBinDirectory => OperatingSystem.IsWindows()
+        ? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "yt-dlp-ui", "tools")
+        : Path.Combine(Home, ".local", "bin");
+
+    /// <summary>Managed FFmpeg directory.</summary>
+    public static string ManagedFfmpegDirectory => Path.Combine(LocalBinDirectory, "ffmpeg");
 
     /// <summary>
     /// Best guess at the user's download folder: honours <c>user-dirs.dirs</c>, then

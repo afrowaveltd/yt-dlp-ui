@@ -36,6 +36,9 @@ public sealed partial class AppSettings : ObservableObject
     /// <summary>Snapshot of the last used download options as JSON.</summary>
     public string? LastOptionsJson { get; set; }
 
+    /// <summary>UI language: "system", "en" or "cs". Stored independently from OS settings.</summary>
+    [ObservableProperty] public partial string Language { get; set; } = "system";
+
     /// <summary>Use the dark theme.</summary>
     [ObservableProperty] public partial bool DarkTheme { get; set; } = true;
 

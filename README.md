@@ -142,6 +142,61 @@ Práva správce nejsou potřeba. Odinstalace: `./scripts/install.sh --uninstall`
 
 Předpokladem je, že `~/.local/bin` máte v `PATH` (na většině distribucí bývá).
 
+## Debian / Ubuntu (.deb)
+
+Balíček je self-contained (nevyžaduje .NET runtime) a instaluje aplikaci do
+`/opt/yt-dlp-gui`, spouštěcí příkaz do `/usr/bin/yt-dlp-gui` a ikonu do nabídky aplikací:
+
+```bash
+./scripts/package-deb.sh
+sudo apt install ./artifacts/yt-dlp-gui_1.0.0_amd64.deb
+```
+
+Na ARM64 se vytvoří balíček s příponou `_arm64.deb`. Verze se přebírá z
+`Directory.Build.props`. Aplikace doporučuje systémové balíčky `yt-dlp` a
+`ffmpeg`, ale může používat i vlastní instalaci yt-dlp. Obojí je externí
+program; **není součástí .deb**. Instalace přes `apt` typicky instaluje také
+doporučené závislosti. Instalace do domovského adresáře přes
+`./scripts/install.sh` zůstává dostupná.
+
+## Windows 10/11
+
+yt-dlp je na Windows oficiálně dostupné jako samostatné `yt-dlp.exe`.
+Windows sestavení aplikace vytvoříte v PowerShellu:
+
+```powershell
+.\\scripts\\build-windows.ps1
+.\\publish\\win-x64\\yt-dlp-gui.exe
+```
+
+Výsledek obsahuje .NET runtime. Alternativně lze použít
+`-Runtime win-arm64` pro Windows ARM64.
+
+Na kartě **Nástroje** umí aplikace stáhnout yt-dlp bez Pythonu.
+Pro Windows x64 je tam také tlačítko pro instalaci `ffmpeg.exe` a
+`ffprobe.exe` z oficiálního odkazu FFmpeg na Gyan.dev, včetně ověření SHA-256.
+Nástroje se ukládají pod `%LOCALAPPDATA%\\yt-dlp-ui\\tools` a nevyžadují
+změny systémového PATH ani administrátorská oprávnění.
+
+FFmpeg z této distribuce má vlastní licenci (GPLv3); MIT licence našeho
+grafického rozhraní se na externí binární soubory nevztahuje.
+
+## Lokalizace
+
+Rozhraní nyní postupně přechází na jednoduchý dictionaryless JSON model.
+`src/YtDlpUi.Core/Locales/en.json` obsahuje anglické klíče i hodnoty,
+`cs.json` obsahuje české překlady. Chybějící překlad vrací anglický klíč.
+Překladové řetězce se používají pomocí `{loc:Tr Key='Download'}` v XAML.
+Jazyk lze změnit přímo na kartě **Nástroje** bez restartu a volba se uloží
+do `settings.json`. Při prvním spuštění se používá jazyk systému, pokud je
+dostupný, jinak angličtina.
+
+V první fázi jsou lokalizovány hlavní okno a vybrané části karet
+**Stáhnout** a **Nástroje**. Další karty a dynamické zprávy zatím
+zůstávají v češtině. Pro přidání nového jazyka stačí přidat JSON a jeho
+dvoupísmenný jazyk do `SimpleLocalizer`; data i UI jsou oddělená pro
+budoucí přechod na UnderstandMe.
+
 ## Jak aplikaci používat
 
 1. Zkopírujte si odkaz na video kdekoliv (v prohlížeči, v aplikaci…).
@@ -198,7 +253,7 @@ src/
     Views/               # MainWindow + jedna stránka na každou kartu
     ViewModels/          # MainWindowViewModel, ToolchainViewModel, DownloadItemViewModel
     Converters/, Styles/ # převodníky a vizuální styl
-scripts/                 # build.sh, install.sh
+scripts/                 # build.sh, install.sh, package-deb.sh, build-windows.ps1
 packaging/               # položka nabídky aplikací
 ```
 
@@ -228,6 +283,18 @@ dotnet build YtDlpUi.slnx
 Poznámka: projekt záměrně **nevypíná** trimming při publikaci (`PublishTrimmed=false`), protože vazby
 v XAML jsou reflexní a ořez by je rozbil. Kompilované vazby (`x:DataType`) by šly zapnout, ale přidaly by
 velké množství boilerplate do devíti stránek.
+
+## Ověření změn
+
+```bash
+dotnet build YtDlpUi.slnx -c Release
+dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
+```
+
+Smoke testy pokrývají přepínání jazyků, chybějící překlady a předávání cesty
+k FFmpeg. GitHub Actions navíc sestaví Linux i Windows variantu a ověří
+strukturu balíčku `.deb`. V reálném prostředí je stále potřeba ověřit
+samotné stahování a instalaci nástrojů.
 
 ## Licence a poděkování
 

@@ -3,4 +3,7 @@
     <Project Path="src/YtDlpUi.Core/YtDlpUi.Core.csproj" />
     <Project Path="src/YtDlpUi/YtDlpUi.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj" />
+  </Folder>
 </Solution>
