@@ -127,5 +127,6 @@ Require(MobileDownloadFormats.For(MobileDownloadQuality.UpTo480p) == "b[height<=
 Require(MobileDownloadFormats.For(MobileDownloadQuality.AudioOriginal) == "ba",
     "Audio-only preset downloads existing audio, without transcoding");
 
+await HardeningSmokeChecks.VerifyAsync();
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");
