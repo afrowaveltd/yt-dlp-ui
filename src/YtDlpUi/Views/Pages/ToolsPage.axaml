@@ -160,8 +160,8 @@
 
           <StackPanel Spacing="6">
             <TextBlock Classes="label" Text="{loc:Tr Key='Interface language'}" />
-            <WrapPanel Orientation="Horizontal" Spacing="8">
-              <Button Content="English" Command="{Binding UseEnglishCommand}" />
+            <WrapPanel Orientation="Horizontal">
+              <Button Content="English" Command="{Binding UseEnglishCommand}" Margin="0,0,8,0" />
               <Button Content="Čeština" Command="{Binding UseCzechCommand}" />
             </WrapPanel>
             <TextBlock Classes="hint" Text="{loc:Tr Key='Language changes immediately and is remembered.'}" />

@@ -16,9 +16,9 @@ Require(localization.Translate("Download") == "Download", "English dictionaryles
 var observable = localization.For("Download");
 Require(observable.Value == "Download", "English observable translation");
 var updates = 0;
-observable.PropertyChanged += (_, args) =>
+observable.PropertyChanged += (_, propertyChange) =>
 {
-    if (args.PropertyName == nameof(LocalizedText.Value))
+    if (propertyChange.PropertyName == nameof(LocalizedText.Value))
     {
         updates++;
     }
