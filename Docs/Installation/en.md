@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Documentation index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-This project is preparing its **first 0.1.0 release**. Until a GitHub Release is published, packages shown in [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) are **CI artifacts**, not signed final distributions. For source builds use the repository root as your working directory.
+The first **[0.1.0 public pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** is published with installable binaries and SHA-256 checksums. [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) artifacts are for ongoing development; the public preview binaries are **not code-signed**. For source builds use the repository root as your working directory.
 
 ## Platform matrix
 
@@ -26,7 +26,7 @@ This project is preparing its **first 0.1.0 release**. Until a GitHub Release is
 
 ## Windows x64: guided installer
 
-From the latest appropriate [CI run](https://github.com/afrowaveltd/yt-dlp-ui/actions), download **`yt-dlp-gui-windows-setup`**, unzip the artifact, and launch `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
+From [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0), download the Windows setup EXE and launch `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
 
 The Inno Setup wizard:
 1. Installs for the current user in `%LOCALAPPDATA%\Programs\yt-dlp-gui`, without UAC elevation.
@@ -40,7 +40,7 @@ The optional-tool log is in `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.lo
 
 ### Windows portable
 
-The `yt-dlp-gui-windows-x64` CI artifact contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
+The release file `yt-dlp-gui_0.1.0_win-x64_portable.zip` contains a self-contained folder with `yt-dlp-gui.exe`. Extract the entire folder and run the EXE; do not move just the EXE away from its runtime dependencies.
 
 ### Windows manual build
 

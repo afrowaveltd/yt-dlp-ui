@@ -1,8 +1,8 @@
-# Příprava prvního vydání — 0.1.0
+# První veřejné preview — v0.1.0
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [Vývoj a ověřování](../Development-and-Verification/cs.md)
 
-**Stav: připravujeme 0.1.0. Netvrdíme, že existuje zveřejněný GitHub Release nebo neměnný tag.** Tento soubor popisuje plánovaný obsah první preview verze a co ještě musíme otestovat.
+**Stav: [v0.1.0 je veřejně vydaná](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) jako pre-release dne 8. listopadu 2026.** Tag zůstává neměnný; následující seznam sleduje zbývající ruční testy a případné budoucí opravy.
 
 ## Zamýšlený obsah vydání
 
@@ -14,13 +14,13 @@
 - Anglický/český README a dvojice `Docs/<Téma>/{en,cs}.md`.
 - Smoke testy překladů a vyhledávání JSON, GitHub Actions sestavení Windows/Linux.
 
-## Ověřeno v CI (po úspěšném běhu aktuální verze)
+## Publikované balíčky a ověření v CI
 
-- [ ] Zkontrolovat finální SHA commitu a zelený Linux/Windows běh v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions).
-- [ ] Ověřit metadata/obsah DEB a RPM, archiv Linuxu a Windows setup/portable artifacts.
-- [ ] Ověřit dvojjazyčné dokumenty, shodu verze a všechny lokální odkazy.
+- [x] Sestavení a testy pro Windows a Linux: [úspěšný publikační workflow](https://github.com/afrowaveltd/yt-dlp-ui/actions/runs/42517322864).
+- [x] Vytvořit a prověřit obsah DEB, RPM, přenosného Linuxu, Windows setup i portable ZIP.
+- [x] Ověřit dvojjazyčnou dokumentaci, verzi 0.1.0 a místní odkazy ve smoke testech.
 
-Tyto kroky mají být zaškrtnuty teprve po úspěšném sestavení finálního kódu verze `0.1.0`.
+Publikační workflow nahrál všech pět balíčků a `SHA256SUMS.txt`. Ruční integrační testy zůstávají samostatným úkolem.
 
 ## Ruční přejímací testy
 
@@ -41,15 +41,13 @@ Tyto kroky mají být zaškrtnuty teprve po úspěšném sestavení finálního 
 - Windows instalátor je jen x64. ARM64 lze sestavit ručně; ověřený ARM64 setup ani macOS balíček do prvního vydání nepatří.
 - Automatické testy ověřují vybrané funkce a tvorbu balíčků, **nikoliv** všechny weby či instalátory end-to-end.
 - Externí programy se instalují zvlášť a mají vlastní licenční podmínky; GUI je MIT.
-- Netvrdíme, že máme certifikát pro podpis kódu nebo vydaný podepsaný release.
+- Veřejné binárky nejsou digitálně podepsané; součástí vydání jsou součty SHA-256.
 
-## Postup vydání (zatím neprovedeno)
+## Splněné kroky a co nás čeká
 
-1. Opravit chyby z přejímacího seznamu a aktualizovat oba jazyky dokumentace.
-2. Ověřit, že `Directory.Build.props`, náhradní verze Inno Setup, názvy balíčků a příklady uvádějí **0.1.0**.
-3. Ověřit zelené CI pro přesný commit určený k vydání.
-4. **Až po přejímce** založit neměnný Git tag `v0.1.0`.
-5. Zveřejnit GitHub Release s ověřenými balíčky a odpovídajícími kontrolními součty.
-6. Oznamovat pouze skutečně publikované balíčky a udržovat poznámky pro pozdější opravy.
+1. **Hotovo:** verze 0.1.0, dvojjazyčná dokumentace, zelené buildy i smoke testy pro Linux/Windows.
+2. **Hotovo:** tag `v0.1.0` a [veřejný pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) s pěti balíčky a kontrolními součty.
+3. **Dále:** sbírat hlášení komunity a provést zbývající ruční testy uvedené výše.
+4. **Případné opravy:** vydávat pod novou verzí a tagem, nepřepisovat zveřejněný `v0.1.0`.
 
 [Repozitář](https://github.com/afrowaveltd/yt-dlp-ui) · [Instalace](../Installation/cs.md)

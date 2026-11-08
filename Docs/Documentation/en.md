@@ -2,7 +2,7 @@
 
 **Language:** English · [Česky](cs.md) · [Repository README](../../README.md)
 
-This index covers the current **0.1.0 release candidate** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
+This index covers the published **0.1.0 community pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
 
 ## User guides
 
@@ -16,7 +16,7 @@ This index covers the current **0.1.0 release candidate** and separates implemen
 
 6. [Troubleshooting](../Troubleshooting/en.md) — missing tools, installers, network, Linux graphics and log inspection.
 7. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
-8. [Release 0.1.0 readiness](../Release-0.1.0/en.md) — scope, known gaps, proposed verification checklist; **not yet published**.
+8. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
 
 ## Localized README
 

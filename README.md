@@ -2,7 +2,7 @@
 
 A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp)**, built with [Avalonia UI](https://avaloniaui.net/) and .NET 10. Paste a video or playlist URL, choose a preset, and manage downloads without memorizing command-line options. Advanced yt-dlp options remain accessible when you need them.
 
-**Release status:** Preparing the first **0.1.0** release. The source code and CI test builds exist; **the public 0.1.0 GitHub Release has not been published yet**.
+**Release status:** **[v0.1.0 — first public preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
 
 **Documentation:** English (this page) · [Česky](Docs/README/cs.md) · [Documentation index](Docs/Documentation/en.md) · [Český rozcestník](Docs/Documentation/cs.md)
 
@@ -34,13 +34,13 @@ Screenshots illustrate the interface at the time they were captured; newer langu
 
 ### Windows 10/11 (x64)
 
-Download the **`yt-dlp-gui-windows-setup`** CI artifact, extract the ZIP, then run `yt-dlp-gui-setup-0.1.0-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers two **independent, initially selected** options: install yt-dlp and install FFmpeg. Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear either checkbox or install the tools later. Setup is a per-user install without elevation.
+Download **the Windows setup EXE** from [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) and run `yt-dlp-gui-setup-0.1.0-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers two **independent, initially selected** options: install yt-dlp and install FFmpeg. Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear either checkbox or install the tools later. Setup is a per-user install without elevation.
 
-A **`yt-dlp-gui-windows-x64`** portable build is also produced. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
+A **`yt-dlp-gui_0.1.0_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
 
 ### Debian / Ubuntu, Fedora / openSUSE, other Linux
 
-Download the corresponding CI artifact from [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions), then use your distribution's package manager:
+Download the matching **DEB or RPM** from [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0), then use your distribution's package manager:
 
 ~~~bash
 sudo apt install ./yt-dlp-gui_0.1.0_amd64.deb    # Debian/Ubuntu x64
@@ -51,7 +51,7 @@ Package filenames depend on version and architecture. DEB/RPM **recommend** `yt-
 
 For a per-user Linux installation from source, run `./scripts/install.sh`; for removal, `./scripts/install.sh --uninstall`.
 
-**All pre-release builds are test artifacts, not signed production releases.** See [Installation](Docs/Installation/en.md) for exact build commands, dependencies and platform limitations.
+**v0.1.0 is a published, unsigned pre-release.** See [Installation](Docs/Installation/en.md) for exact build commands, dependencies and platform limitations.
 
 ## Build from source
 
@@ -107,4 +107,4 @@ The **GUI source code** is licensed under [MIT](LICENSE). [yt-dlp](https://githu
 
 Remembered download options deliberately omit supported password and 2FA fields. Treat downloaded files, cookies and logs according to your own privacy needs. Download only media you are authorized to access and respect site terms.
 
-This is a **0.1.0 release candidate in preparation**, not an announcement that a tagged GitHub Release has shipped. See [release readiness](Docs/Release-0.1.0/en.md).
+**[v0.1.0 is published](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** as our first community pre-release. See [release status and outstanding tests](Docs/Release-0.1.0/en.md).

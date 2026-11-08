@@ -2,7 +2,7 @@
 
 Přívětivé **multiplatformní grafické rozhraní pro [yt-dlp](https://github.com/yt-dlp/yt-dlp)** vytvořené v [Avalonia UI](https://avaloniaui.net/) a .NET 10. Stačí vložit odkaz na video nebo playlist, vybrat profil a spravovat stahování bez memorování přepínačů příkazové řádky. Pokročilé volby yt-dlp přitom zůstávají dostupné.
 
-**Stav vydání:** Připravujeme první vydání **0.1.0**. Zdrojové kódy a testovací sestavení z CI existují, ale **veřejný GitHub Release 0.1.0 zatím vydaný není**.
+**Stav vydání:** **[v0.1.0 – první veřejné preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** je dostupné pro Windows x64 a Linux x64. Jde o komunitní pre-release; uvítáme zpětnou vazbu a hlášení chyb.
 
 **Dokumentace:** [English](en.md) · Česky (tato stránka) · [Rozcestník](../Documentation/cs.md) · [Documentation index](../Documentation/en.md)
 
@@ -34,13 +34,13 @@ Snímky představují stav aplikace při pořízení a nemusí obsahovat nejnov�
 
 ### Windows 10/11 (x64)
 
-Ze sestavení [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) stáhni artifact **`yt-dlp-gui-windows-setup`**, rozbal ZIP a spusť `yt-dlp-gui-setup-0.1.0-win-x64.exe`. Průvodce vytvoří zástupce v nabídce Start, umožní běžnou odinstalaci a nabídne dvě **nezávislé, ve výchozím stavu zaškrtnuté** položky: nainstalovat yt-dlp a FFmpeg. Stahování vyžaduje internet a používá kontrolní součty SHA-256 od vydavatelů. Obě volby lze vypnout a nástroje doplnit později. Instalace probíhá pro aktuálního uživatele bez zvýšených oprávnění.
+Z [prvního vydání v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) stáhni **Windows instalační EXE** a spusť `yt-dlp-gui-setup-0.1.0-win-x64.exe`. Průvodce vytvoří zástupce v nabídce Start, umožní běžnou odinstalaci a nabídne dvě **nezávislé, ve výchozím stavu zaškrtnuté** položky: nainstalovat yt-dlp a FFmpeg. Stahování vyžaduje internet a používá kontrolní součty SHA-256 od vydavatelů. Obě volby lze vypnout a nástroje doplnit později. Instalace probíhá pro aktuálního uživatele bez zvýšených oprávnění.
 
-K dispozici je i přenosný balíček **`yt-dlp-gui-windows-x64`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
+V release najdeš i přenosný balíček **`yt-dlp-gui_0.1.0_win-x64_portable.zip`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
 
 ### Debian / Ubuntu, Fedora / openSUSE, další Linux
 
-Stáhni příslušný artifact z [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) a použij správce balíčků distribuce:
+Stáhni odpovídající balíček DEB nebo RPM z [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) a použij správce balíčků distribuce:
 
 ~~~bash
 sudo apt install ./yt-dlp-gui_0.1.0_amd64.deb    # Debian/Ubuntu x64
@@ -51,7 +51,7 @@ Názvy balíčků se liší podle verze a architektury. DEB/RPM **doporučují**
 
 Pro uživatelskou instalaci z kódu je tu `./scripts/install.sh`, odinstalace `./scripts/install.sh --uninstall`.
 
-**Balíčky před prvním vydáním jsou testovací artifacts, nikoli podepsané produkční releasy.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
+**v0.1.0 je veřejný, nepodepsaný pre-release.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
 
 ## Sestavení ze zdrojových kódů
 
@@ -107,4 +107,4 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 
 Zapamatované volby stahování záměrně vynechávají podporovaná pole hesel a 2FA. Se staženými soubory, cookies a logy nakládej podle svých požadavků na soukromí. Stahuj jen obsah, ke kterému máš oprávnění, a respektuj podmínky služeb.
 
-Toto je **příprava prvního vydání 0.1.0**, nikoli oznámení, že už bylo zveřejněno. Viz [připravenost vydání](../Release-0.1.0/cs.md).
+**[v0.1.0 už je veřejně vydaná](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** jako první komunitní preview. Viz [stav vydání a zbývající testy](../Release-0.1.0/cs.md).

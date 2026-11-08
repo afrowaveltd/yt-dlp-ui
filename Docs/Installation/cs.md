@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-Připravujeme **první vydání 0.1.0**. Dokud není zveřejněný GitHub Release, jsou soubory v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) **testovací artifacts**, nikoliv podepsané finální balíčky. Návody na vlastní sestavení spouštěj z kořene repozitáře.
+První **[veřejné vydání 0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** už obsahuje instalační soubory i jejich SHA-256 součty. Artifacts v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) slouží k průběžnému vývoji; veřejné preview binárky **nejsou digitálně podepsané**. Návody na vlastní sestavení spouštěj z kořene repozitáře.
 
 ## Podporované platformy
 
@@ -26,7 +26,7 @@ Připravujeme **první vydání 0.1.0**. Dokud není zveřejněný GitHub Releas
 
 ## Windows x64: instalační průvodce
 
-Z příslušného [CI běhu](https://github.com/afrowaveltd/yt-dlp-ui/actions) stáhni **`yt-dlp-gui-windows-setup`**, rozbal ZIP a spusť `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
+Z [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) stáhni Windows instalační EXE a spusť `yt-dlp-gui-setup-0.1.0-win-x64.exe`.
 
 Průvodce Inno Setup:
 1. Instaluje pro aktuálního uživatele do `%LOCALAPPDATA%\Programs\yt-dlp-gui` bez požadavku na UAC.
@@ -40,7 +40,7 @@ Log instalace volitelných nástrojů: `%LOCALAPPDATA%\yt-dlp-ui\logs\dependency
 
 ### Přenosná verze Windows
 
-Artifact `yt-dlp-gui-windows-x64` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
+Soubor `yt-dlp-gui_0.1.0_win-x64_portable.zip` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
 
 ### Sestavení ve Windows
 

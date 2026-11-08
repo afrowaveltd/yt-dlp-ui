@@ -13,13 +13,13 @@ The Windows setup and Linux DEB/RPM/tar files are self-contained: you do **not**
 
 ## 2. Choose a distribution
 
-- **Windows x64:** download `yt-dlp-gui-windows-setup` from [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions). Extract the archive and run the setup executable. Leave the independent **Install yt-dlp** and **Install FFmpeg** boxes checked for the simplest first run.
+- **Windows x64:** download the setup executable from [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0) and run it. Leave the independent **Install yt-dlp** and **Install FFmpeg** boxes checked for the simplest first run.
 - **Debian/Ubuntu:** install the matching `.deb` with `sudo apt install ./filename.deb`; the package manager may install recommended dependencies.
 - **Fedora/openSUSE:** use the matching `.rpm` with the appropriate package manager.
 - **Other Linux:** unpack the `.tar.gz` archive and launch the included executable; install external tools separately as needed.
 - **Developers:** clone the source and run the commands in [Development and verification](../Development-and-Verification/en.md).
 
-These are **CI build artifacts** until the 0.1.0 GitHub Release is actually published.
+Prefer the published **[v0.1.0 pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)** for downloads. GitHub Actions artifacts are for development and testing.
 
 ## 3. First download
 
