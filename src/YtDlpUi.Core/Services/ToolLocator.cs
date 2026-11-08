@@ -127,6 +127,17 @@ public static class ToolLocator
             }
         }
 
+        // Prefer the setup-installed machine copy over older versions in PATH.
+        // Explicit user-selected overrides above still take priority.
+        if (OperatingSystem.IsWindows())
+        {
+            var shared = Path.Combine(UserPaths.MachineToolsDirectory, "yt-dlp.exe");
+            if (File.Exists(shared) && seen.Add(shared))
+            {
+                yield return new YtDlpCommand { FileName = shared, DisplayPath = shared };
+            }
+        }
+
         foreach (var name in BinaryNames())
         {
             var onPath = FindOnPath(name);
@@ -236,6 +247,15 @@ public static class ToolLocator
             }
         }
 
+        if (OperatingSystem.IsWindows())
+        {
+            var shared = Path.Combine(UserPaths.MachineFfmpegDirectory, "ffmpeg.exe");
+            if (File.Exists(shared))
+            {
+                yield return new ToolCandidate(shared, shared);
+            }
+        }
+
         var onPath = FindOnPath("ffmpeg");
         if (onPath is not null)
         {
@@ -248,11 +268,6 @@ public static class ToolLocator
             if (File.Exists(managed))
             {
                 yield return new ToolCandidate(managed, managed);
-            }
-            var shared = Path.Combine(UserPaths.MachineFfmpegDirectory, "ffmpeg.exe");
-            if (File.Exists(shared))
-            {
-                yield return new ToolCandidate(shared, shared);
             }
         }
 
