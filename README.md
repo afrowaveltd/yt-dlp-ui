@@ -284,6 +284,18 @@ Poznámka: projekt záměrně **nevypíná** trimming při publikaci (`PublishTr
 v XAML jsou reflexní a ořez by je rozbil. Kompilované vazby (`x:DataType`) by šly zapnout, ale přidaly by
 velké množství boilerplate do devíti stránek.
 
+## Ověření změn
+
+```bash
+dotnet build YtDlpUi.slnx -c Release
+dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
+```
+
+Smoke testy pokrývají přepínání jazyků, chybějící překlady a předávání cesty
+k FFmpeg. GitHub Actions navíc sestaví Linux i Windows variantu a ověří
+strukturu balíčku `.deb`. V reálném prostředí je stále potřeba ověřit
+samotné stahování a instalaci nástrojů.
+
 ## Licence a poděkování
 
 Zdrojový kód aplikace je dostupný pod licencí [MIT](LICENSE). Můžete jej používat, upravovat a šířit za podmínek uvedených v licenci.

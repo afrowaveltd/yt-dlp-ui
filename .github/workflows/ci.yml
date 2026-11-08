@@ -1,0 +1,36 @@
+name: build-and-package
+
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build
+        run: dotnet build YtDlpUi.slnx -c Release
+      - name: Smoke tests
+        run: dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release --no-build
+      - name: Debian package
+        if: runner.os == 'Linux'
+        run: |
+          ./scripts/package-deb.sh
+          dpkg-deb --info artifacts/*.deb
+          dpkg-deb --contents artifacts/*.deb | grep 'usr/bin/yt-dlp-gui'
+      - name: Windows portable release
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          ./scripts/build-windows.ps1
+          if (-not (Test-Path 'publish/win-x64/yt-dlp-gui.exe')) { throw 'Missing Windows binary' }
