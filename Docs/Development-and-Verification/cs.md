@@ -1,6 +1,6 @@
 # Vývoj a ověřování
 
-[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.2/cs.md)
+[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.3/cs.md)
 
 ## Co potřebujeme
 
@@ -45,7 +45,7 @@ Docs/<Téma>/en.md, cs.md   dvojjazyčné návody a vydání
 
 ## Aktuální automatické ověřování
 
-Smoke suite kontroluje anglický fallback, okamžitý český překlad, přidávání/mazání/přepisování JSON jazyků za běhu, regionální a nadřazené kultury a předání cesty FFmpeg do příkazové řádky. Jsou to **smoke testy**, nikoliv kompletní UI a integrační testy.
+Smoke suite také kontroluje detekci JavaScript runtime Deno, přednost ručního nastavení a Windows instalátor Deno. Kontroluje anglický fallback, okamžitý český překlad, přidávání/mazání/přepisování JSON jazyků za běhu, regionální a nadřazené kultury a předání cesty FFmpeg do příkazové řádky. Jsou to **smoke testy**, nikoliv kompletní UI a integrační testy.
 
 [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) sestavují Linux a Windows a spouštějí smoke testy. Navíc:
 
@@ -53,7 +53,7 @@ Smoke suite kontroluje anglický fallback, okamžitý český překlad, přidáv
 - Vytvoří portable Windows x64 a instalátor Inno Setup `setup.exe`. Setup vyžaduje UAC, CI navíc testuje nastavení instalátoru a syntaxi PowerShell.
 - Nahrají testovací artifacts k ručnímu ověření.
 
-Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.2](../Release-0.1.2/cs.md).
+Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.3](../Release-0.1.3/cs.md).
 
 ## Pravidla lokalizace
 
@@ -75,6 +75,6 @@ Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test ka
 
 ## Doporučené ruční testování
 
-Otestuj minimálně desktop Debian/Ubuntu, jednu distribuci RPM a Windows x64. Vyzkoušej čistý setup s oběma zaškrtávacími volbami, vypnuté volby, existující programy, výpadky internetu, odinstalaci, stahování vlastního ukázkového videa, audio převod, přidání JSON jazyka za běhu, trvalé nastavení, světlý/tmavý motiv, zkratky a cesty s mezerami.
+Otestuj minimálně desktop Debian/Ubuntu, jednu distribuci RPM a Windows x64. Vyzkoušej čistý setup se všemi třemi nezávislými volbami (yt-dlp, FFmpeg a Deno), vypnuté volby, existující programy, výpadky internetu, odinstalaci, stahování vlastního ukázkového videa, audio převod, přidání JSON jazyka za běhu, trvalé nastavení, světlý/tmavý motiv, zkratky a cesty s mezerami.
 
 [Zdrojový kód](https://github.com/afrowaveltd/yt-dlp-ui) · [Řešení problémů](../Troubleshooting/cs.md)

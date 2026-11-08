@@ -1,6 +1,6 @@
 # Development and verification
 
-[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.2/en.md)
+[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.3/en.md)
 
 ## Build requirements
 
@@ -45,7 +45,7 @@ Docs/<Topic>/en.md, cs.md   bilingual guides and release notes
 
 ## Current automated checks
 
-The smoke suite validates dictionaryless English fallback, live Czech translation, dynamic addition/removal/override of locale JSON, regional/parent culture handling, and FFmpeg command-line argument construction. It is a lightweight executable **smoke test**, not a complete UI/integration test suite.
+The smoke suite also covers automatic JavaScript runtime discovery, manual override precedence and Windows Deno installer configuration. It validates dictionaryless English fallback, live Czech translation, dynamic addition/removal/override of locale JSON, regional/parent culture handling, and FFmpeg command-line argument construction. It is a lightweight executable **smoke test**, not a complete UI/integration test suite.
 
 [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) runs builds and smoke checks on Ubuntu and Windows. It also:
 
@@ -53,7 +53,7 @@ The smoke suite validates dictionaryless English fallback, live Czech translatio
 - Creates a Windows x64 portable build and an Inno Setup `setup.exe`. The setup requests UAC; CI additionally checks its config and PowerShell installer syntax.
 - Uploads CI artifacts so they can be manually installed and tested.
 
-Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.2 patch notes](../Release-0.1.2/en.md).
+Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.3 patch notes](../Release-0.1.3/en.md).
 
 ## Localization conventions
 
@@ -75,6 +75,6 @@ Success in CI confirms compilation and package generation, **not** that every Wi
 
 ## Proposed manual test matrix
 
-Test on at least Debian/Ubuntu desktop, one RPM distribution and Windows x64. Cover clean setup with both dependency checkboxes, disabled checkboxes, existing external tools, cancellation/network errors, app uninstall, downloading a sample you own, audio conversion, custom JSON hot-add, persistent settings, light/dark theme, keyboard shortcuts and URLs/paths containing spaces.
+Test on at least Debian/Ubuntu desktop, one RPM distribution and Windows x64. Cover clean setup with all three independent dependency checkboxes (yt-dlp, FFmpeg and Deno), disabled checkboxes, existing external tools, cancellation/network errors, app uninstall, downloading a sample you own, audio conversion, custom JSON hot-add, persistent settings, light/dark theme, keyboard shortcuts and URLs/paths containing spaces.
 
 [Source code](https://github.com/afrowaveltd/yt-dlp-ui) · [Troubleshooting](../Troubleshooting/en.md)
