@@ -24,7 +24,7 @@ Assert-Contains $script 'SHA-256 verification failed' 'Keep download integrity v
 Assert-Contains $script 'Test-LocalExecutable' 'Verify working binaries before skipping them.'
 Assert-Contains $script 'Install-Deno' 'Install the Deno YouTube JavaScript runtime.'
 Assert-Contains $script 'Test-CompatibleDeno' 'Require a supported Deno version.'
-Assert-Contains $script "\$release \+ \$asset \+ '\.sha256sum'" 'Verify Deno SHA-256 sidecar from publisher.'
+Assert-Contains $script '\$release \+ \$asset \+ ''\.sha256sum''' 'Verify Deno SHA-256 sidecar from publisher.'
 Assert-Contains $paths 'MachineToolsDirectory' 'Core must expose machine tool directory.'
 Assert-Contains $paths 'CommonApplicationData' 'Machine tool path must use the OS ProgramData location.'
 Assert-Contains $locator 'MachineToolsDirectory' 'yt-dlp detection must find the machine copy.'
