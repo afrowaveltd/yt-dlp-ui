@@ -162,6 +162,36 @@ public sealed partial class MobileViewModel : ObservableObject
         }
     }
 
+    /// <summary>Notices shipped with this APK, displayed without internet access.</summary>
+    [ObservableProperty] public partial string ThirdPartyNotices { get; set; } = string.Empty;
+
+    /// <summary>Visibility of offline third-party licensing notices.</summary>
+    [ObservableProperty] public partial bool AreNoticesVisible { get; set; }
+
+    /// <summary>Open and close bundled licensing information.</summary>
+    [RelayCommand]
+    private void ToggleNotices()
+    {
+        if (AreNoticesVisible)
+        {
+            AreNoticesVisible = false;
+            return;
+        }
+
+        try
+        {
+            using var stream = global::Android.App.Application.Context.Assets!
+                .Open("THIRD-PARTY-NOTICES.txt");
+            using var reader = new StreamReader(stream);
+            ThirdPartyNotices = reader.ReadToEnd();
+            AreNoticesVisible = true;
+        }
+        catch (Exception)
+        {
+            Status = "Local license notices could not be loaded.";
+        }
+    }
+
     /// <summary>Open Android's standard Downloads screen.</summary>
     [RelayCommand]
     private void OpenDownloads() => _directDownloader.OpenDownloads();

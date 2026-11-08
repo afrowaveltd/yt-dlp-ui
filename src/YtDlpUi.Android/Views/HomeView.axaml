@@ -53,6 +53,10 @@
 
       <TextBlock Text="Experimental local engine: supports many video sites via bundled Python + yt-dlp. Download success depends on the site. No FFmpeg merging, conversion, persistent queue or long-running foreground service yet."
                  Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
+      <Button Content="Open-source licenses" Command="{Binding ToggleNoticesCommand}"
+              HorizontalAlignment="Left" />
+      <TextBlock Text="{Binding ThirdPartyNotices}" IsVisible="{Binding AreNoticesVisible}"
+                 TextWrapping="Wrap" FontSize="12" Foreground="#A0AABB" />
       <TextBlock Text="Permissions: Internet only. Android saves direct files to Downloads; yt-dlp exports completed files via MediaStore to Downloads/Afrowave. No all-files access."
                  Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
     </StackPanel>

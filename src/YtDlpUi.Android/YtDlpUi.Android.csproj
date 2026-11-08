@@ -21,6 +21,8 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources/drawable/icon.png" />
+    <AndroidAsset Include="Assets/THIRD-PARTY-NOTICES.txt" LogicalName="THIRD-PARTY-NOTICES.txt" />
+    <AndroidAsset Include="Assets/YTDLP-ANDROID-MIT-LICENSE.txt" LogicalName="YTDLP-ANDROID-MIT-LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../YtDlpUi.Core/YtDlpUi.Core.csproj" />
