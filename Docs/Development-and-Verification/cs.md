@@ -1,6 +1,6 @@
 # Vývoj a ověřování
 
-[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.1/cs.md)
+[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.2/cs.md)
 
 ## Co potřebujeme
 
@@ -50,10 +50,10 @@ Smoke suite kontroluje anglický fallback, okamžitý český překlad, přidáv
 [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) sestavují Linux a Windows a spouštějí smoke testy. Navíc:
 
 - Vytvoří a prověří strukturu `.deb`, `.rpm` a `.tar.gz` na Linuxu.
-- Vytvoří portable Windows x64 a instalátor Inno Setup `setup.exe`.
+- Vytvoří portable Windows x64 a instalátor Inno Setup `setup.exe`. Setup vyžaduje UAC, CI navíc testuje nastavení instalátoru a syntaxi PowerShell.
 - Nahrají testovací artifacts k ručnímu ověření.
 
-Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.1](../Release-0.1.1/cs.md).
+Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.2](../Release-0.1.2/cs.md).
 
 ## Pravidla lokalizace
 
