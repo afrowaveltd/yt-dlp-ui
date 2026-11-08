@@ -5,28 +5,42 @@
     <StackPanel Margin="20,28,20,32" Spacing="16">
       <TextBlock Text="AFROWAVE" FontWeight="Bold" FontSize="14" Foreground="#53B5EE" />
       <TextBlock Text="Video &amp; audio" FontWeight="Bold" FontSize="30" />
-      <TextBlock Text="Android preview · separate mobile UI, shared .NET Core"
+      <TextBlock Text="Android 0.2.0 development preview · local yt-dlp"
                  FontSize="13" Foreground="#A0AABB" TextWrapping="Wrap" />
+
       <Border Background="#22314A" CornerRadius="14" Padding="16">
-        <StackPanel Spacing="10">
-          <TextBlock Text="Paste or share a link" FontSize="18" FontWeight="SemiBold" />
-          <TextBox Watermark="https://example.org/video.mp4"
+        <StackPanel Spacing="12">
+          <TextBlock Text="Paste or share a video link" FontSize="18" FontWeight="SemiBold" />
+          <TextBox Watermark="https://example.org/watch?v=..."
                    Text="{Binding Link, Mode=TwoWay}"
                    AcceptsReturn="False" FontSize="16" />
+          <TextBlock Text="Quality (single stream; no FFmpeg needed)" FontSize="13" />
+          <ComboBox ItemsSource="{Binding QualityOptions}"
+                    SelectedItem="{Binding SelectedQuality, Mode=TwoWay}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Label}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
           <StackPanel Orientation="Horizontal" Spacing="8">
-            <Button Content="Download direct file"
-                    Command="{Binding DownloadDirectFileCommand}"
-                    HorizontalAlignment="Stretch" />
+            <Button Content="Download" Command="{Binding DownloadCommand}" />
             <Button Content="Clear" Command="{Binding ClearLinkCommand}" />
           </StackPanel>
+          <Button Content="Check local yt-dlp engine"
+                  Command="{Binding CheckEngineCommand}"
+                  HorizontalAlignment="Left" />
+          <ProgressBar Minimum="0" Maximum="100" Value="{Binding ProgressPercent}"
+                       Height="8" />
           <TextBlock Text="{Binding Status}" TextWrapping="Wrap" FontSize="14" />
         </StackPanel>
       </Border>
+
       <Border Background="#18273B" CornerRadius="14" Padding="16">
-        <StackPanel Spacing="8">
+        <StackPanel Spacing="10">
           <TextBlock Text="Recent transfers" FontSize="18" FontWeight="SemiBold" />
-          <TextBlock Text="Android manages transfer progress and notifications."
-                     Foreground="#A0AABB" TextWrapping="Wrap" />
+          <Button Content="Open system Downloads" Command="{Binding OpenDownloadsCommand}"
+                  HorizontalAlignment="Left" />
           <ItemsControl ItemsSource="{Binding RecentDownloads}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
@@ -36,9 +50,14 @@
           </ItemsControl>
         </StackPanel>
       </Border>
-      <TextBlock Text="Preview limitation: site links (YouTube, Vimeo and other yt-dlp extractors), quality presets and FFmpeg processing require a future mobile-native engine. Only direct HTTPS media files work today."
+
+      <TextBlock Text="Experimental local engine: supports many video sites via bundled Python + yt-dlp. Download success depends on the site. No FFmpeg merging, conversion, persistent queue or long-running foreground service yet."
                  Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
-      <TextBlock Text="Permissions: Internet only. Files go into system Downloads. No contacts, microphone, location or all-files access."
+      <Button Content="Open-source licenses" Command="{Binding ToggleNoticesCommand}"
+              HorizontalAlignment="Left" />
+      <TextBlock Text="{Binding ThirdPartyNotices}" IsVisible="{Binding AreNoticesVisible}"
+                 TextWrapping="Wrap" FontSize="12" Foreground="#A0AABB" />
+      <TextBlock Text="Permissions: Internet only. Android saves direct files to Downloads; yt-dlp exports completed files via MediaStore to Downloads/Afrowave. No all-files access."
                  Foreground="#A0AABB" TextWrapping="Wrap" FontSize="13" />
     </StackPanel>
   </ScrollViewer>

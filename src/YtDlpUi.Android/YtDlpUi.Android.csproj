@@ -9,6 +9,7 @@
     <ApplicationDisplayVersion>0.2.0-dev</ApplicationDisplayVersion>
     <SupportedOSPlatformVersion>29</SupportedOSPlatformVersion>
     <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
@@ -20,8 +21,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources/drawable/icon.png" />
+    <AndroidAsset Include="Assets/THIRD-PARTY-NOTICES.txt" LogicalName="THIRD-PARTY-NOTICES.txt" />
+    <AndroidAsset Include="Assets/YTDLP-ANDROID-MIT-LICENSE.txt" LogicalName="YTDLP-ANDROID-MIT-LICENSE.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../YtDlpUi.Core/YtDlpUi.Core.csproj" />
+    <ProjectReference Include="../YtDlpUi.Android.Bindings/YtDlpUi.Android.Bindings.csproj" />
   </ItemGroup>
 </Project>

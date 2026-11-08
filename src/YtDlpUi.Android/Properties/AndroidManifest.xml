@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
   <!-- Only internet permission. Android DownloadManager writes directly to Downloads;
        storage/media super-permissions and MANAGE_EXTERNAL_STORAGE are not required. -->
   <uses-permission android:name="android.permission.INTERNET" />
+  <!-- Legacy WRITE_EXTERNAL_STORAGE from upstream AAR is not needed on API 29+. -->
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:node="remove" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:node="remove" />
   <application android:label="Afrowave yt-dlp" android:icon="@drawable/icon" android:usesCleartextTraffic="false" />
 </manifest>

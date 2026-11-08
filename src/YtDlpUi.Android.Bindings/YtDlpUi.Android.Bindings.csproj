@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <IsBindingProject>true</IsBindingProject>
+    <Nullable>enable</Nullable>
+    <RootNamespace>YtDlpUi.Android.Bindings</RootNamespace>
+    <NoWarn>$(NoWarn);BG8401;BG8102</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Bind only the yt-dlp Java facade, not internal Chaquopy runtime classes.
+         Those classes remain packaged in the underlying AAR for runtime use. -->
+    <TransformFile Include="Transforms/Metadata.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- MIT Java API with embedded CPython + yt-dlp, pinned to an audited release.
+         This is Android-only, never referenced by the desktop solution.
+         Verify package contents and transitive dependencies before distribution. -->
+    <AndroidMavenLibrary Include="dev.ffmpegkit-maintained:yt-dlp-android"
+                         Version="2.0.2" />
+  </ItemGroup>
+</Project>

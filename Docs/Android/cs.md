@@ -12,7 +12,11 @@ Aplikace pro Android má **vlastní dotykové rozhraní Avalonia 12** a od deskt
 - Pro přímé **HTTPS odkazy na soubory médií** (`.mp4`, `.webm`, `.mp3` a další) využívá systémový **DownloadManager**. Ukládá do veřejné složky **Downloads**; průběh, opakování a oznámení řeší Android.
 - Používá společný, automaticky testovaný parser odkazů v `YtDlpUi.Core`.
 
-**Zatím nejde o plný yt-dlp engine pro Android:** odkazy na stránky YouTube/Vimeo nejsou přímými soubory. Prototyp srozumitelně vysvětlí, že takové odkazy ještě nestahuje. Analýza webů, kvality, playlisty a FFmpeg potřebují příští etapu.
+- **Odkazy na videoportály** nově dostává samostatný lokální adaptér s knihovnou [yt-dlp-android 2.0.2](https://github.com/ffmpegkit-maintained/yt-dlp-android) pod MIT. Python 3.13 a Chaquopy jsou zabalené v APK, dostupné přes Java/.NET binding. **Žádný vzdálený server ani spouštění staženého EXE.**
+- **Předvolby bez FFmpeg**: nejlepší společný stream, do 720p, do 480p a původní zvukový stream. Zobrazuje se procentní průběh a tlačítko **Check local yt-dlp engine** pro ověření inicializace na telefonu.
+- yt-dlp stahuje do soukromé složky aplikace, dokončené soubory pak publikuje přes **MediaStore** do **Downloads/Afrowave**, bez plošného přístupu k úložišti.
+
+**Omezení ověření:** prototyp už obsahuje skutečnou lokální knihovnu yt-dlp, ale inicializaci Pythonu, stahování z webů a předání souborů do MediaStore **ještě musíme otestovat na skutečném telefonu**. Některé weby vyžadují cookies nebo napodobení prohlížeče. Playlisty, FFmpeg, konverze, spolehlivé rušení a trvalá služba na pozadí ještě hotové nejsou.
 
 ## Oprávnění — jen nezbytná
 
@@ -36,8 +40,8 @@ dotnet build YtDlpUi.Android.slnx -c Debug -p:AndroidPackageFormat=apk
 - **Core:** společné zpracování odkazů, volby a budoucí kontrakty fronty.
 - **Android host:** aktivita, sdílení, oprávnění a systémové Downloads.
 - **Mobilní UI:** vlastní pohledy a ViewModely Avalonia; žádná kopie devíti desktopových karet.
-- **Stahovací engine:** oddělený adaptér, zatím **jen pro přímé soubory**.
+- **Stahovací engine:** zvlášť Android DownloadManager pro přímé soubory a lokální Java binding zabaleného yt-dlp pro odkazy na videoportály.
 
-Před plnohodnotným yt-dlp prověříme možnosti zabalení Pythonu/yt-dlp či použití nativní knihovny, omezení architektur a licence externích komponent (některé možnosti používají GPL). Nikdy nebudeme spouštět libovolné programy stažené do zapisovatelné složky aplikace. Systémový výběr umístění, skutečnou frontu, průběh/rušení, mobilní lokalizaci a služby na pozadí doplníme, až budou potřebné.
+Před veřejným vydáním ověříme nativní runtime i licence na skutečném telefonu. Zvolená knihovna je MIT, yt-dlp používá Unlicense, Chaquopy MIT a Python licenci PSF; viz [upstream licence](https://github.com/ffmpegkit-maintained/yt-dlp-android/blob/main/THIRD-PARTY-NOTICES.txt). Podporujeme jen arm64-v8a a x86_64. Žádné aktualizace spouštěním stažených EXE. Dále potřebujeme ověřit reálné stahování, doplnit rušení, mobilní překlady, licenčně prověřit FFmpeg a případně implementovat foreground service.
 
 [Repozitář](https://github.com/afrowaveltd/yt-dlp-ui) · [Desktop release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)
