@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/YtDlpUi.Core/YtDlpUi.Core.csproj" />
+    <Project Path="src/YtDlpUi.Android.Bindings/YtDlpUi.Android.Bindings.csproj" />
     <Project Path="src/YtDlpUi.Android/YtDlpUi.Android.csproj" />
   </Folder>
 </Solution>

@@ -23,5 +23,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../YtDlpUi.Core/YtDlpUi.Core.csproj" />
+    <ProjectReference Include="../YtDlpUi.Android.Bindings/YtDlpUi.Android.Bindings.csproj" />
   </ItemGroup>
 </Project>
