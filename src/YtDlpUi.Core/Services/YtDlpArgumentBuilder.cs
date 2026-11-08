@@ -216,7 +216,10 @@ public static class YtDlpArgumentBuilder
         AddLines(args, o.AddHeaders, "--add-headers");
         AddOption(args, "--geo-verification-proxy", o.GeoVerificationProxy);
         AddOption(args, "--xff", o.XForwardedFor);
-        AddOption(args, "--js-runtimes", o.JsRuntimes);
+        // Deno is recommended by yt-dlp for YouTube EJS challenges. Explicit
+        // settings or extra command-line arguments always override detection.
+        AddOption(args, "--js-runtimes", JavaScriptRuntimeLocator.ResolveArgument(
+            o.JsRuntimes, o.ExtraArguments));
         AddOption(args, "--remote-components", o.RemoteComponents);
         AddOption(args, "--downloader", o.ExternalDownloader);
         AddOption(args, "--downloader-args", o.ExternalDownloaderArgs);
