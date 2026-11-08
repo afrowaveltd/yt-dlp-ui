@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Documentation index](../Documentation/en.md) · [Versioning](../Versioning/en.md)
 
-Our Android application has its **own touch-optimized Avalonia interface** and references the existing, platform-neutral `YtDlpUi.Core`. The mobile host uses Avalonia 12.1.4 independently of the Avalonia 11 desktop app, as both reference only the Avalonia-free shared Core. This is an experimental **0.2.0 development prototype**, not part of the published desktop [v0.1.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0).
+Our Android application has its **own touch-optimized Avalonia interface** and references the existing, platform-neutral `YtDlpUi.Core`. The mobile host uses Avalonia 12.1.4 independently of the Avalonia 11 desktop app, as both reference only the Avalonia-free shared Core. This is an experimental **0.2.0 development prototype**, not part of the published desktop [v0.1.1](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1).
 
 ## Implemented now
 
@@ -44,4 +44,4 @@ The [Android CI workflow](https://github.com/afrowaveltd/yt-dlp-ui/actions/workf
 
 Before public release, verify native runtime packaging and source/licenses on a real phone. The pinned library is MIT, yt-dlp is Unlicense, Chaquopy is MIT and Python has the PSF license; see [upstream third-party notices](https://github.com/ffmpegkit-maintained/yt-dlp-android/blob/main/THIRD-PARTY-NOTICES.txt). The embedded runtime supports arm64-v8a and x86_64 only. No in-app executable updates. Later steps include real-device download tests, persistent progress/cancellation, mobile localization, FFmpeg license analysis and a foreground service when necessary.
 
-[Source](https://github.com/afrowaveltd/yt-dlp-ui) · [Desktop release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)
+[Source](https://github.com/afrowaveltd/yt-dlp-ui) · [Desktop release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.1)

@@ -1,6 +1,6 @@
 # Development and verification
 
-[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.0/en.md)
+[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.1/en.md)
 
 ## Build requirements
 
@@ -53,7 +53,7 @@ The smoke suite validates dictionaryless English fallback, live Czech translatio
 - Creates a Windows x64 portable build and an Inno Setup `setup.exe`.
 - Uploads CI artifacts so they can be manually installed and tested.
 
-Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.0 checklist](../Release-0.1.0/en.md).
+Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.1 patch notes](../Release-0.1.1/en.md).
 
 ## Localization conventions
 
