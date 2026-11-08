@@ -100,6 +100,7 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 | Řešení problémů | [Nápověda](../Troubleshooting/cs.md) | [Troubleshooting](../Troubleshooting/en.md) |
 | Vývoj a ověřování | [Vývoj](../Development-and-Verification/cs.md) | [Development](../Development-and-Verification/en.md) |
 | Verzování a vydávání | [Verzování](../Versioning/cs.md) | [Versioning](../Versioning/en.md) |
+| Android (experimentální) | [Android](../Android/cs.md) | [Android](../Android/en.md) |
 | Stav vydání 0.1.0 | [Checklist](../Release-0.1.0/cs.md) | [Release checklist](../Release-0.1.0/en.md) |
 
 ## Licence, soukromí a poděkování

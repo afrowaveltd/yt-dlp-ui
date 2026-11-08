@@ -100,6 +100,7 @@ Reopen the language selector to rescan files. Filenames are culture codes (e.g. 
 | Troubleshooting | [Help](Docs/Troubleshooting/en.md) | [Řešení problémů](Docs/Troubleshooting/cs.md) |
 | Development and verification | [Development](Docs/Development-and-Verification/en.md) | [Vývoj](Docs/Development-and-Verification/cs.md) |
 | Versioning and release policy | [Versioning](Docs/Versioning/en.md) | [Verzování](Docs/Versioning/cs.md) |
+| Android prototype (experimental) | [Android](Docs/Android/en.md) | [Android](Docs/Android/cs.md) |
 | First release status | [Release checklist](Docs/Release-0.1.0/en.md) | [Kontrolní seznam](Docs/Release-0.1.0/cs.md) |
 
 ## License, privacy and attribution

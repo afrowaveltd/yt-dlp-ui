@@ -17,7 +17,8 @@ This index covers the published **0.1.0 community pre-release** and separates im
 6. [Troubleshooting](../Troubleshooting/en.md) — missing tools, installers, network, Linux graphics and log inspection.
 7. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
 8. [Versioning and release policy](../Versioning/en.md) — PATCH fixes, MINOR previews, stable v1+, Git tags and release rules.
-9. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
+9. [Android prototype](../Android/en.md) — separate touch interface, shared core, direct HTTPS downloads; not part of v0.1.0.
+10. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
 
 ## Localized README
 
