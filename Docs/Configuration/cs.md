@@ -13,7 +13,7 @@ Předvolby aplikace jsou v souboru JSON, odděleně od binárek yt-dlp a FFmpeg.
 | Cache aplikace | `~/.cache/yt-dlp-ui/` nebo `$XDG_CACHE_HOME/yt-dlp-ui/` | `%LOCALAPPDATA%\yt-dlp-ui\` |
 | yt-dlp spravované aplikací | `~/.local/bin/yt-dlp` | `%LOCALAPPDATA%\yt-dlp-ui\tools\yt-dlp.exe` |
 | FFmpeg spravovaný aplikací | Zpravidla instalovaný distribucí | `%LOCALAPPDATA%\yt-dlp-ui\tools\ffmpeg\ffmpeg.exe` a `ffprobe.exe` |
-| Sdílené nástroje ze setupu | Nevztahuje se | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe`, `tools\ffmpeg\ffmpeg.exe` a `ffprobe.exe` |
+| Sdílené nástroje ze setupu | Nevztahuje se | `%ProgramData%\yt-dlp-ui\tools\yt-dlp.exe`, `tools\ffmpeg\ffmpeg.exe`, `ffprobe.exe` a `tools\deno.exe` |
 | Log Windows instalátoru | Nevztahuje se na DEB/RPM | `%ProgramData%\yt-dlp-ui\logs\dependency-install.log` |
 
 **Cílová složka stahování** je uživatelsky nastavitelná. Na Linuxu se nejdřív hledá `user-dirs.dirs`, jinak `~/Downloads` nebo domovský adresář. Ne všichni uživatelé proto budou stahovat do stejné složky.
@@ -23,6 +23,8 @@ Předvolby aplikace jsou v souboru JSON, odděleně od binárek yt-dlp a FFmpeg.
 `AppSettings` obsahuje vlastní cesty pro yt-dlp a FFmpeg, výchozí složku, sledování schránky, automatickou analýzu po vložení, kontrolu aktualizací yt-dlp, pamatování voleb, jazyk, motiv, souběžnost a stav prvního spuštění i rozměry okna. Většina změn se uloží po krátké prodlevě nebo při běžném ukončení.
 
 Volba jazyka `system` používá systémové prostředí, pokud existuje odpovídající JSON, jinak angličtinu. Ručně vybraný jazyk se ukládá jako kód.
+
+Pro YouTube GUI automaticky vyhledá Deno ve společné složce nástrojů, uživatelské složce či PATH a předá jej programu yt-dlp. Výslovně nastavený JavaScript runtime na kartě Síť nebo další parametry mají přednost. Oficiální samostatné yt-dlp.exe už obsahuje EJS skripty.
 
 Na kartě **Nástroje** lze nastavit vlastní cesty pro programy mimo běžné složky. V hlavičce je jejich detekovaný stav. Aplikace se snaží ověřit, že je program opravdu spustitelný; nekontroluje jen existenci souboru.
 

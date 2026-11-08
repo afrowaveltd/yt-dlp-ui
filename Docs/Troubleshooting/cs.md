@@ -12,6 +12,17 @@ Instalátor Windows má samostatnou volbu **Nainstalovat yt-dlp**; pokud volitel
 
 Prověř `ffmpeg -version` a pro odpovídající operace také `ffprobe -version`. Průvodce Windows instaluje společné ověřené FFmpeg/FFprobe s UAC; karta **Nástroje** může instalovat osobní kopii; Linux zpravidla používá systémové balíčky. Podle potřeby nastav cestu k FFmpeg a zopakuj detekci. Prosté stažení streamu může proběhnout bez FFmpeg, ale spojení či převod často ne.
 
+## YouTube: WARNING o chybějícím JavaScript prostředí
+
+Jde o upozornění ze samotného yt-dlp, nikoliv o problém FFmpeg či GUI. Bez kompatibilního JavaScript prostředí mohou některé formáty YouTube chybět. **Doporučeno je Deno 2.3.0 nebo novější**, které yt-dlp podporuje automaticky.
+
+- Windows: v novém setupu zaškrtni **Nainstalovat Deno**, nebo použij PowerShell: `winget install --id DenoLand.Deno -e`. Pak restartuj GUI.
+- Linux: nainstaluj aktuální Deno od vydavatele či pomocí správce balíčků; ověř `deno --version` ve stejném účtu.
+- GUI automaticky vyhledá Deno i ve společném Windows ProgramData, osobních složkách nebo PATH; umí předat absolutní cestu.
+- Pokročilí uživatelé mohou nastavit `--js-runtimes node` (Node 22+) nebo `--js-runtimes deno:/cesta/k/deno`.
+- Oficiální samostatná binárka yt-dlp obsahuje `yt-dlp-ejs`; instalace přes pip/distribuci mohou potřebovat `yt-dlp[default]`. Viz [návod autorů yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/EJS).
+- Není vhodné jen skrýt WARNING pomocí `--no-warnings`; problém by tím nezmizel.
+
 ## Instalátor Windows nedokázal stáhnout nástroje
 
 - Ověř připojení, DNS a dostupnost serverů vydavatelů — GitHub releases pro yt-dlp a zdroje FFmpeg.

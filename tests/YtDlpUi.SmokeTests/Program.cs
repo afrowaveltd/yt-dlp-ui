@@ -127,6 +127,44 @@ Require(MobileDownloadFormats.For(MobileDownloadQuality.UpTo480p) == "b[height<=
 Require(MobileDownloadFormats.For(MobileDownloadQuality.AudioOriginal) == "ba",
     "Audio-only preset downloads existing audio, without transcoding");
 
+// Deno used by YouTube challenge solver must be explicitly routed when outside PATH.
+// Test formatting without running untrusted binaries or making network calls.
+var denoDir = Path.Combine(Path.GetTempPath(), "yt-dlp-ui-deno test " + Guid.NewGuid().ToString("N"));
+Directory.CreateDirectory(denoDir);
+try
+{
+    var deno = Path.Combine(denoDir, OperatingSystem.IsWindows() ? "deno.exe" : "deno");
+    File.WriteAllText(deno, "placeholder for a packaged binary");
+    var denoRuntime = JavaScriptRuntimeLocator.ToArgument(deno);
+    Require(denoRuntime == "deno:" + Path.GetFullPath(deno),
+        "Deno runtime paths (including whitespace) must be passed as one yt-dlp argument");
+    Require(JavaScriptRuntimeLocator.ToArgument(Path.Combine(denoDir, "missing.exe")) is null,
+        "Missing Deno executables must not be advertised");
+    Require(JavaScriptRuntimeLocator.ResolveArgument("node", null) == "node",
+        "Manual JavaScript runtime setting takes precedence");
+    Require(JavaScriptRuntimeLocator.ResolveArgument(null, "--js-runtimes node") is null,
+        "Advanced user --js-runtimes must not be overridden");
+    Require(JavaScriptRuntimeLocator.ResolveArgument(null, "--js-runtimes=node") is null,
+        "Equals-style --js-runtimes must not be overridden");
+    Require(JavaScriptRuntimeLocator.ResolveArgument(null, "--no-js-runtimes") is null,
+        "Explicit disabling of JavaScript must be respected");
+
+    var manualRuntimeOptions = new DownloadOptions { JsRuntimes = "node" };
+    var manualDownload = YtDlpArgumentBuilder.Build(manualRuntimeOptions, ["https://example.org/watch"]);
+    var manualAnalysis = YtDlpArgumentBuilder.BuildAnalysisArguments(
+        manualRuntimeOptions, "https://example.org/watch", false);
+    Require(manualDownload.Contains("--js-runtimes") &&
+            manualDownload[manualDownload.IndexOf("--js-runtimes") + 1] == "node",
+        "Download must pass manual JavaScript runtime through to yt-dlp");
+    Require(manualAnalysis.Contains("--js-runtimes") &&
+            manualAnalysis[manualAnalysis.IndexOf("--js-runtimes") + 1] == "node",
+        "Analysis and download must use the same JavaScript runtime option");
+}
+finally
+{
+    Directory.Delete(denoDir, recursive: true);
+}
+
 await HardeningSmokeChecks.VerifyAsync();
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");

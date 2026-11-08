@@ -1,6 +1,6 @@
 ; Machine-wide installer for yt-dlp GUI, with UAC elevation. Compiled by scripts/build-windows-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "0.1.2"
+  #define AppVersion "0.1.3"
 #endif
 #define RepoRoot AddBackslash(SourcePath) + "..\.."
 
@@ -39,19 +39,22 @@ czech.OptionalTools=Volitelné společné nástroje (při zaškrtnutí pro všec
 english.InstallYtDlp=Install yt-dlp (required to download videos)
 czech.InstallYtDlp=Nainstalovat yt-dlp (nutný pro stahování videí)
 english.InstallFfmpeg=Install FFmpeg (recommended for merging and converting)
+english.InstallDeno=Install Deno (recommended JavaScript runtime for YouTube)
 czech.InstallFfmpeg=Nainstalovat FFmpeg (doporučený pro spojování a převod)
+czech.InstallDeno=Nainstalovat Deno (doporučené JavaScript prostředí pro YouTube)
 english.CreateDesktopShortcut=Create a desktop shortcut
 czech.CreateDesktopShortcut=Vytvořit zástupce na ploše
 english.ToolInstallFailed=Could not install %1 for all users. See the installation log under ProgramData\yt-dlp-ui\logs. You can retry with administrator privileges.
 czech.ToolInstallFailed=Instalace nástroje %1 pro všechny uživatele se nezdařila. Podrobnosti jsou v ProgramData\yt-dlp-ui\logs. Zkuste instalátor spustit znovu jako správce.
-english.DependencyExplanation=Setup requires administrator approval. The selected tools will be verified using SHA-256 and installed for all Windows users. Personal app settings remain per user. Details: README / Tools tab.
-czech.DependencyExplanation=Instalátor vyžaduje oprávnění správce. Vybrané nástroje se ověří pomocí SHA-256 a nainstalují pro všechny uživatele. Nastavení aplikace zůstává osobní.
+english.DependencyExplanation=Setup requires administrator approval. The selected tools (yt-dlp, FFmpeg and Deno) will be verified using SHA-256 and installed for all Windows users. Personal app settings remain per user. Details: README / Tools tab.
+czech.DependencyExplanation=Instalátor vyžaduje oprávnění správce. Vybrané nástroje (yt-dlp, FFmpeg a Deno) se ověří pomocí SHA-256 a nainstalují pro všechny uživatele. Nastavení aplikace zůstává osobní.
 english.ToolStatus=Installing optional tool: %1
 czech.ToolStatus=Instaluje se volitelný nástroj: %1
 
 [Tasks]
 Name: "installYtDlp"; Description: "{cm:InstallYtDlp}"; GroupDescription: "{cm:OptionalTools}"; Flags: checkedonce
 Name: "installFfmpeg"; Description: "{cm:InstallFfmpeg}"; GroupDescription: "{cm:OptionalTools}"; Flags: checkedonce
+Name: "installDeno"; Description: "{cm:InstallDeno}"; GroupDescription: "{cm:OptionalTools}"; Flags: checkedonce
 Name: "desktopIcon"; Description: "{cm:CreateDesktopShortcut}"; Flags: unchecked
 
 [Files]
@@ -113,5 +116,7 @@ begin
       InstallOptionalTool('yt-dlp', 'yt-dlp');
     if WizardIsTaskSelected('installFfmpeg') then
       InstallOptionalTool('ffmpeg', 'FFmpeg');
+    if WizardIsTaskSelected('installDeno') then
+      InstallOptionalTool('deno', 'Deno');
   end;
 end;
