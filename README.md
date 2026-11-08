@@ -108,7 +108,7 @@ Pro běh ze zdrojových kódů dále **.NET SDK 10**.
 ## Rychlý start
 
 ```bash
-git clone <repo> yt-dlp-ui && cd yt-dlp-ui
+git clone https://github.com/afrowaveltd/yt-dlp-ui.git && cd yt-dlp-ui
 
 # 1) sestavení
 dotnet build YtDlpUi.slnx
@@ -230,6 +230,8 @@ v XAML jsou reflexní a ořez by je rozbil. Kompilované vazby (`x:DataType`) by
 velké množství boilerplate do devíti stránek.
 
 ## Licence a poděkování
+
+Zdrojový kód aplikace je dostupný pod licencí [MIT](LICENSE). Můžete jej používat, upravovat a šířit za podmínek uvedených v licenci.
 
 Aplikace je pouze rozhraní – veškerou práci odvádí [yt-dlp](https://github.com/yt-dlp/yt-dlp) a
 [ffmpeg](https://ffmpeg.org/). Respektujte prosím autorská práva a podmínky služeb jednotlivých webů;
