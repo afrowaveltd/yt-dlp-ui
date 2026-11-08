@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - 'src/YtDlpUi.Android/**'
+      - 'src/YtDlpUi.Android.Bindings/**'
       - 'src/YtDlpUi.Core/**'
       - 'YtDlpUi.Android.slnx'
       - '.github/workflows/android-preview.yml'
@@ -39,6 +40,11 @@ jobs:
         run: |
           find src/YtDlpUi.Android/bin/Debug -name '*.apk' -print
           test "$(find src/YtDlpUi.Android/bin/Debug -name '*.apk' | wc -l)" -ge 1
+      - name: Inspect bundled Python and yt-dlp AAR
+        run: |
+          APK="$(find src/YtDlpUi.Android/bin/Debug -name '*.apk' | head -n1)"
+          test -n "$APK"
+          unzip -l "$APK" | grep -E '(libpython|chaquopy|ytdlp_runner|THIRD-PARTY-NOTICES)' | head -n 25 || true
       - name: Upload development-only Android APK
         uses: actions/upload-artifact@v4
         with:
