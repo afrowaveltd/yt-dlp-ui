@@ -50,6 +50,7 @@ jobs:
           "$ANDROID_HOME/build-tools/36.0.0/aapt" dump permissions "$APK" | tee /tmp/afrowave-permissions.txt
           if grep -Fq 'android.permission.MANAGE_EXTERNAL_STORAGE' /tmp/afrowave-permissions.txt; then exit 1; fi
           if grep -Fq 'android.permission.WRITE_EXTERNAL_STORAGE' /tmp/afrowave-permissions.txt; then exit 1; fi
+          if grep -Fq 'android.permission.READ_EXTERNAL_STORAGE' /tmp/afrowave-permissions.txt; then exit 1; fi
       - name: Upload development-only Android APK
         uses: actions/upload-artifact@v4
         with:
