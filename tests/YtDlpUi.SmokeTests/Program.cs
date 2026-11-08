@@ -117,5 +117,15 @@ Require(!MobileLinkParser.TryGetDirectMedia("file:///tmp/clip.mp4",
     out _, out _), "Reject local file URIs");
 Require(!MobileLinkParser.TryGetDirectMedia("https://media.example.net/installer.exe",
     out _, out _), "Reject nonmedia extension");
+// Mobile single-stream format choices are explicit and do not depend on FFmpeg.
+Require(MobileDownloadFormats.For(MobileDownloadQuality.Best) == "b",
+    "Android best preset uses a single audio/video stream");
+Require(MobileDownloadFormats.For(MobileDownloadQuality.UpTo720p) == "b[height<=720]/b",
+    "720p preset has a compatible fallback");
+Require(MobileDownloadFormats.For(MobileDownloadQuality.UpTo480p) == "b[height<=480]/b",
+    "480p preset has a compatible fallback");
+Require(MobileDownloadFormats.For(MobileDownloadQuality.AudioOriginal) == "ba",
+    "Audio-only preset downloads existing audio, without transcoding");
+
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");
