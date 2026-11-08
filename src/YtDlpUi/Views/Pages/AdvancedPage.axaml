@@ -1,0 +1,132 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.AdvancedPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ Command preview ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Classes="h2" Text="Příkaz, který se spustí" />
+              <TextBlock Classes="hint"
+                         Text="Přesně to, co byste napsali do terminálu. Můžete si jej zkopírovat a vyzkoušet jinde." />
+            </StackPanel>
+            <Button Grid.Column="1" Content="Kopírovat" Click="OnCopyCommandClick" />
+          </Grid>
+
+          <TextBox Text="{Binding CommandPreview, Mode=OneWay}"
+                   IsReadOnly="True" AcceptsReturn="True" Height="120"
+                   TextWrapping="Wrap" FontFamily="{DynamicResource MonoFont}" FontSize="11.5" />
+
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Extra arguments ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Vlastní argumenty" />
+            <TextBlock Classes="hint"
+                       Text="Cokoli, co v rozhraní nenajdete, můžete přidat sem – argumenty se přidají na konec příkazu." />
+          </StackPanel>
+
+          <TextBox Text="{Binding Options.ExtraArguments, Mode=TwoWay}"
+                   AcceptsReturn="True" Height="100" TextWrapping="Wrap"
+                   FontFamily="{DynamicResource MonoFont}"
+                   Watermark="--no-mtime --sleep-requests 1.5" />
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ yt-dlp configuration ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Konfigurace yt-dlp" />
+            <TextBlock Classes="hint" Text="Většina uživatelů zde nic měnit nemusí." />
+          </StackPanel>
+
+          <CheckBox Content="Ignorovat konfigurační soubory yt-dlp"
+                    IsChecked="{Binding Options.IgnoreConfig}" />
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vlastní konfigurační soubor" />
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBox Grid.Column="0" Text="{Binding Options.ConfigLocations, Mode=TwoWay}" />
+                <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseConfigClick" />
+              </Grid>
+            </StackPanel>
+
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Složky pluginů" />
+              <TextBox Text="{Binding Options.PluginDirs, Mode=TwoWay}" />
+              <TextBlock Classes="hint" Text="Oddělte středníkem, pokud jich je více" />
+            </StackPanel>
+
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Argumenty pro extraktor" />
+              <TextBox Text="{Binding Options.ExtractorArgs, Mode=TwoWay}"
+                       Watermark="youtube:player_client=android"
+                       FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Formát: extraktor:klíč=hodnota" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ After download ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Akce po stažení" />
+            <TextBlock Classes="hint"
+                       Text="Příkaz, který se spustí po dokončení souboru. Můžete použít pole yt-dlp, například %(filepath)q." />
+          </StackPanel>
+
+          <TextBox Text="{Binding Options.ExecCommand, Mode=TwoWay}"
+                   FontFamily="{DynamicResource MonoFont}"
+                   Watermark="echo %(filepath)q" />
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Diagnostics ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Diagnostika" />
+            <TextBlock Classes="hint"
+                       Text="Když něco nefunguje, zapněte podrobný výstup – v logu pak bývá vidět příčina." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Podrobný výstup (verbose)" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.Verbose}" />
+            <CheckBox Content="Skrýt upozornění" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.NoWarnings}" />
+            <CheckBox Content="Uložit stažené stránky" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WritePages}" />
+            <CheckBox Content="Zobrazit HTTP komunikaci" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.PrintTraffic}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Reset ══════════ -->
+      <Border Classes="card" Background="{DynamicResource CardAltBrush}">
+        <Grid ColumnDefinitions="*,Auto">
+          <StackPanel Grid.Column="0" Spacing="2">
+            <TextBlock Text="Obnovit výchozí nastavení" FontWeight="Medium" />
+            <TextBlock Classes="hint"
+                       Text="Vrátí všechny volby stahování do původního stavu. Vaše složka pro ukládání zůstane zachována." />
+          </StackPanel>
+          <Button Grid.Column="1" Classes="danger" Content="Obnovit výchozí"
+                  Command="{Binding ResetOptionsCommand}" VerticalAlignment="Center" />
+        </Grid>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

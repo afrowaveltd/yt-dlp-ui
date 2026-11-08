@@ -1,0 +1,196 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.ToolsPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ yt-dlp status ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <Ellipse Grid.Column="0" Width="12" Height="12" Margin="0,0,12,0" VerticalAlignment="Center"
+                     Fill="{Binding Toolchain.YtDlpAvailable, Converter={StaticResource AvailableBrush}}" />
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Classes="h2" Text="yt-dlp" />
+              <TextBlock Classes="hint" Text="{Binding Toolchain.YtDlpLocationText}"
+                         TextTrimming="CharacterEllipsis" MaxLines="2" />
+            </StackPanel>
+            <Border Grid.Column="2" Classes="pill" VerticalAlignment="Center">
+              <TextBlock Classes="mono" Text="{Binding Toolchain.YtDlpVersionText}" />
+            </Border>
+          </Grid>
+
+          <Border Classes="cardAlt" Padding="10"
+                  Background="{DynamicResource WarningSoftBrush}"
+                  BorderBrush="{DynamicResource WarningBrush}"
+                  IsVisible="{Binding Toolchain.YtDlpMissing}">
+            <TextBlock Classes="secondary"
+                       Text="yt-dlp nebylo nalezeno. Níže jej můžete jedním kliknutím stáhnout a nainstalovat do ~/.local/bin – nepotřebujete práva správce." />
+          </Border>
+
+          <Border Classes="cardAlt" Padding="10"
+                  Background="{DynamicResource AccentSoftBrush}"
+                  BorderBrush="{DynamicResource AccentBrush}"
+                  IsVisible="{Binding Toolchain.UpdateHint, Converter={StaticResource StringNotEmpty}}">
+            <TextBlock Text="{Binding Toolchain.UpdateHint}" Classes="secondary" />
+          </Border>
+
+          <WrapPanel Orientation="Horizontal">
+            <Button Content="Zjistit znovu" Command="{Binding Toolchain.RefreshCommand}"
+                    Margin="0,0,8,8" />
+            <Button Content="Aktualizovat yt-dlp" Command="{Binding Toolchain.UpdateYtDlpCommand}"
+                    Margin="0,0,8,8"
+                    IsEnabled="{Binding Toolchain.YtDlpAvailable}"
+                    ToolTip.Tip="Spustí yt-dlp --update" />
+            <Button Content="Zkontrolovat novou verzi" Command="{Binding Toolchain.CheckLatestCommand}"
+                    Margin="0,0,8,8" Classes="ghost" />
+            <Button Content="Instalovat přes pip" Command="{Binding Toolchain.InstallViaPipCommand}"
+                    Margin="0,0,8,8" Classes="ghost"
+                    ToolTip.Tip="Použije pipx nebo pip" />
+          </WrapPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Vlastní cesta k yt-dlp (nepovinné)" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Settings.YtDlpPath, Mode=TwoWay}"
+                       Watermark="Prázdné = hledat automaticky" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseYtDlpClick" />
+            </Grid>
+            <TextBlock Classes="hint"
+                       Text="Po změně cesty stiskněte „Zjistit znovu“." />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Install ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Stáhnout a nainstalovat yt-dlp" />
+            <TextBlock Classes="hint"
+                       Text="Stáhne oficiální samostatný program z GitHubu (necelých 30 MB) do složky ~/.local/bin a nastaví práva ke spuštění. Nepotřebujete Python ani práva správce." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <Button Classes="primary" Content="Stáhnout a nainstalovat"
+                    Command="{Binding Toolchain.InstallStandaloneCommand}"
+                    IsEnabled="{Binding Toolchain.IsBusy, Converter={StaticResource InverseBool}}"
+                    Margin="0,0,8,8" />
+            <Button Content="Zastavit" Classes="danger"
+                    Click="OnCancelInstallClick"
+                    IsVisible="{Binding Toolchain.IsBusy}"
+                    Margin="0,0,8,8" />
+          </WrapPanel>
+
+          <StackPanel Spacing="4"
+                      IsVisible="{Binding Toolchain.InstallProgress, Converter={StaticResource NotNull}}">
+            <ProgressBar Minimum="0" Maximum="100" Value="{Binding Toolchain.InstallProgress, FallbackValue=0, TargetNullValue=0}" />
+            <TextBlock Classes="hint" Text="{Binding Toolchain.InstallProgress, StringFormat='{}{0:0} %'}" />
+          </StackPanel>
+
+          <TextBox Text="{Binding Toolchain.InstallLogText, Mode=OneWay}"
+                   IsReadOnly="True" AcceptsReturn="True"
+                   Height="130" TextWrapping="NoWrap"
+                   FontFamily="{DynamicResource MonoFont}" FontSize="11.5"
+                   IsVisible="{Binding Toolchain.InstallLogText, Converter={StaticResource StringNotEmpty}}" />
+
+          <Border Classes="cardAlt">
+            <StackPanel Spacing="4">
+              <TextBlock Text="Ruční instalace" FontWeight="Medium" FontSize="12.5" />
+              <TextBlock Classes="hint" TextWrapping="Wrap"
+                         Text="Pokud dáváte přednost terminálu: pipx install yt-dlp · nebo pip install --user yt-dlp · nebo si stáhněte samostatný soubor z github.com/yt-dlp/yt-dlp/releases" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ ffmpeg ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <Ellipse Grid.Column="0" Width="12" Height="12" Margin="0,0,12,0" VerticalAlignment="Center"
+                     Fill="{Binding Toolchain.FfmpegAvailable, Converter={StaticResource AvailableBrush}}" />
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Classes="h2" Text="ffmpeg" />
+              <TextBlock Classes="hint" Text="{Binding Toolchain.FfmpegLocationText}"
+                         TextTrimming="CharacterEllipsis" MaxLines="2" />
+            </StackPanel>
+            <TextBlock Grid.Column="2" Text="🎬" FontSize="18" VerticalAlignment="Center" />
+          </Grid>
+
+          <Border Classes="cardAlt" Padding="10"
+                  Background="{DynamicResource WarningSoftBrush}"
+                  BorderBrush="{DynamicResource WarningBrush}"
+                  IsVisible="{Binding !Toolchain.FfmpegAvailable}">
+            <StackPanel Spacing="4">
+              <TextBlock Text="ffmpeg není nainstalován" FontWeight="SemiBold" />
+              <TextBlock Classes="hint" TextWrapping="Wrap"
+                         Text="Bez ffmpeg nelze slučovat video se zvukem ani převádět do MP3. Nainstalujte jej prosím z vašeho správce balíčků, například: sudo apt install ffmpeg · sudo dnf install ffmpeg · sudo pacman -S ffmpeg" />
+            </StackPanel>
+          </Border>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Vlastní cesta k ffmpeg (nepovinné)" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Settings.FfmpegPath, Mode=TwoWay}"
+                       Watermark="Prázdné = hledat automaticky" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseFfmpegClick" />
+            </Grid>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ App settings ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Nastavení aplikace" />
+            <TextBlock Classes="hint" Text="Tato nastavení se ukládají do ~/.config/yt-dlp-ui/settings.json." />
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Výchozí složka pro ukládání" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Settings.DefaultOutputDirectory, Mode=TwoWay}" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseDefaultOutputClick" />
+            </Grid>
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Automaticky naplnit odkaz ze schránky" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.AutoFillFromClipboard}" />
+            <CheckBox Content="Hlídat schránku průběžně" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.WatchClipboardContinuously}" />
+            <CheckBox Content="Po vložení odkazu rovnou analyzovat" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.AutoAnalyzeOnPaste}" />
+            <CheckBox Content="Pamatovat si nastavení mezi spuštěními" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.RememberOptions}" />
+            <CheckBox Content="Tmavý režim" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.DarkTheme}" />
+            <CheckBox Content="Kontrolovat nové verze yt-dlp při startu" MinWidth="330" Margin="0,0,16,6"
+                      IsChecked="{Binding Settings.CheckForYtDlpUpdates}" />
+          </WrapPanel>
+
+          <StackPanel Width="240" Spacing="4">
+            <TextBlock Classes="label" Text="Počet souběžných stahování" />
+            <TextBox Text="{Binding Settings.MaxConcurrentDownloads, Mode=TwoWay, Converter={StaticResource IntText}}" />
+            <TextBlock Classes="hint" Text="1–4, doporučeno 1 (přehlednější log)" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ About ══════════ -->
+      <Border Classes="card" Background="{DynamicResource CardAltBrush}">
+        <StackPanel Spacing="6">
+          <TextBlock Classes="h2" Text="O aplikaci" />
+          <TextBlock Classes="hint" TextWrapping="Wrap"
+                     Text="yt-dlp GUI je grafické rozhraní nad nástrojem yt-dlp. Neobsahuje žádné reklamy ani telemetrii a nic neodesílá na vzdálené servery – veškerá komunikace probíhá přímo mezi vaším počítačem a daným webem." />
+          <TextBlock Classes="hint" TextWrapping="Wrap"
+                     Text="Zdroje: github.com/yt-dlp/yt-dlp · Dokumentace a všechny volby: yt-dlp --help" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

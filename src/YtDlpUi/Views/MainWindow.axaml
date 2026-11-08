@@ -1,0 +1,287 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:YtDlpUi.ViewModels"
+        xmlns:pages="using:YtDlpUi.Views.Pages"
+        x:Class="YtDlpUi.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="yt-dlp GUI – stahování videí"
+        Width="1320" Height="880"
+        MinWidth="1040" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource AppBackgroundBrush}">
+
+  <Grid RowDefinitions="Auto,*,Auto,4,230">
+
+    <!-- ══════════════ Header ══════════════ -->
+    <Border Grid.Row="0"
+            Background="{DynamicResource PanelBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="0,0,0,1"
+            Padding="18,12">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+          <Border Width="38" Height="38" CornerRadius="10"
+                  Background="{DynamicResource AccentBrush}">
+            <TextBlock Text="⬇" FontSize="20" Foreground="#FFFFFF"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <StackPanel VerticalAlignment="Center" Spacing="1">
+            <TextBlock Text="yt-dlp GUI" Classes="h1" />
+            <TextBlock Classes="hint" Text="Přátelské rozhraní pro stahování videí a hudby" />
+          </StackPanel>
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+
+          <!-- yt-dlp status pill -->
+          <Border Classes="pill" ToolTip.Tip="{Binding Toolchain.YtDlpLocationText}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                       Fill="{Binding Toolchain.YtDlpAvailable, Converter={StaticResource AvailableBrush}}" />
+              <TextBlock Classes="mono" VerticalAlignment="Center">
+                <TextBlock.Text>
+                  <MultiBinding StringFormat="yt-dlp {0}">
+                    <Binding Path="Toolchain.YtDlpVersionText" />
+                  </MultiBinding>
+                </TextBlock.Text>
+              </TextBlock>
+            </StackPanel>
+          </Border>
+
+          <!-- ffmpeg status pill -->
+          <Border Classes="pill" ToolTip.Tip="{Binding Toolchain.FfmpegLocationText}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                       Fill="{Binding Toolchain.FfmpegAvailable, Converter={StaticResource AvailableBrush}}" />
+              <TextBlock Classes="mono" Text="ffmpeg" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
+          <Button Classes="ghost" Command="{Binding ToggleThemeCommand}" ToolTip.Tip="Přepnout světlý / tmavý režim">
+            <TextBlock Text="◐" FontSize="15" />
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- ══════════════ Main: options + queue ══════════════ -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,340" Margin="14,12,14,0">
+
+      <Border Grid.Column="0" Classes="surface" Padding="0" ClipToBounds="True">
+        <TabControl Margin="6,6,6,0" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
+
+          <TabItem Header="Stáhnout">
+            <pages:DownloadPage />
+          </TabItem>
+
+          <TabItem Header="Formát">
+            <pages:FormatPage />
+          </TabItem>
+
+          <TabItem Header="Playlist">
+            <pages:PlaylistPage />
+          </TabItem>
+
+          <TabItem Header="Titulky a metadata">
+            <pages:MetadataPage />
+          </TabItem>
+
+          <TabItem Header="Síť">
+            <pages:NetworkPage />
+          </TabItem>
+
+          <TabItem Header="Soubory">
+            <pages:FilesPage />
+          </TabItem>
+
+          <TabItem Header="Přihlášení">
+            <pages:AuthPage />
+          </TabItem>
+
+          <TabItem Header="Pokročilé">
+            <pages:AdvancedPage />
+          </TabItem>
+
+          <TabItem Header="Nástroje">
+            <pages:ToolsPage />
+          </TabItem>
+
+        </TabControl>
+      </Border>
+
+      <!-- ─────────── Queue ─────────── -->
+      <Border Grid.Column="1" Classes="surface" Margin="12,0,0,0" Padding="12">
+        <Grid RowDefinitions="Auto,*,Auto">
+
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="Fronta stahování" Classes="h2" />
+              <TextBlock Text="{Binding QueueSummary}" Classes="hint" />
+            </StackPanel>
+            <Button Grid.Column="1" Classes="ghost tiny" Content="Vyčistit"
+                    Command="{Binding ClearFinishedCommand}"
+                    ToolTip.Tip="Odstranit hotové a chybné položky" />
+          </Grid>
+
+          <ListBox Grid.Row="1"
+                   ItemsSource="{Binding Queue}"
+                   SelectedItem="{Binding SelectedQueueItem}"
+                   Background="Transparent">
+            <ListBox.Styles>
+              <Style Selector="ListBoxItem">
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="Margin" Value="0,0,0,6" />
+                <Setter Property="CornerRadius" Value="10" />
+                <Setter Property="Background" Value="Transparent" />
+              </Style>
+              <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+              </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="vm:DownloadItemViewModel">
+                <Border Classes="cardAlt" Padding="10" Margin="0,0,4,0">
+                  <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,Auto">
+
+                    <TextBlock Grid.Row="0" Grid.Column="0"
+                               Text="{Binding DisplayTitle}"
+                               FontWeight="Medium" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Row="0" Grid.Column="1"
+                               Text="{Binding StateText}"
+                               Classes="hint" VerticalAlignment="Top"
+                               Foreground="{Binding State, Converter={StaticResource StateBrush}}" />
+
+                    <ProgressBar Grid.Row="1" Grid.ColumnSpan="2"
+                                 Classes="tiny" Margin="0,8,0,6"
+                                 Minimum="0" Maximum="100"
+                                 Value="{Binding Progress}"
+                                 IsIndeterminate="{Binding Progress, Converter={StaticResource IsNull}}" />
+
+                    <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Spacing="2">
+                      <TextBlock Text="{Binding DisplaySubtitle}" Classes="hint"
+                                 TextTrimming="CharacterEllipsis" MaxLines="1" />
+                      <StackPanel Orientation="Horizontal" Spacing="8"
+                                  IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmpty}}">
+                        <TextBlock Text="⚠" Foreground="{DynamicResource ErrorBrush}" FontSize="11" />
+                        <TextBlock Text="{Binding ErrorMessage}" Classes="hint"
+                                   Foreground="{DynamicResource ErrorBrush}" MaxLines="2" />
+                      </StackPanel>
+                      <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,4,0,0">
+                        <Button Classes="ghost tiny" Content="Složka"
+                                Command="{Binding $parent[Window].DataContext.OpenItemFolderCommand}"
+                                CommandParameter="{Binding}"
+                                IsVisible="{Binding FilePath, Converter={StaticResource StringNotEmpty}}" />
+                        <Button Classes="ghost tiny" Content="Znovu"
+                                Command="{Binding $parent[Window].DataContext.RetryQueueItemCommand}"
+                                CommandParameter="{Binding}"
+                                IsVisible="{Binding IsFinished}" />
+                        <Button Classes="ghost tiny" Content="Odebrat"
+                                Command="{Binding $parent[Window].DataContext.RemoveQueueItemCommand}"
+                                CommandParameter="{Binding}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <TextBlock Grid.Row="1" Classes="hint" Margin="4,20,4,0"
+                     IsVisible="{Binding Queue.Count, Converter={StaticResource IsZero}}"
+                     Text="Zatím nic ke stažení. Vložte odkaz vlevo a stiskněte „Stáhnout“." />
+
+          <ProgressBar Grid.Row="2" Margin="0,10,0,0"
+                       Minimum="0" Maximum="100"
+                       Value="{Binding OverallProgress}"
+                       IsIndeterminate="{Binding IsQueueRunning}" />
+        </Grid>
+      </Border>
+    </Grid>
+
+    <!-- ══════════════ Current download bar ══════════════ -->
+    <Border Grid.Row="2" Margin="14,10,14,0"
+            Background="{DynamicResource PanelBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1" CornerRadius="12" Padding="14,10">
+      <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+
+        <StackPanel Grid.Row="0" Grid.Column="0" Spacing="2">
+          <TextBlock Text="{Binding StatusMessage}" FontWeight="Medium" />
+          <TextBlock Classes="hint">
+            <TextBlock.Text>
+              <MultiBinding StringFormat="{}{0}   {1}   {2}">
+                <Binding Path="CurrentItem.SpeedText" FallbackValue="" />
+                <Binding Path="CurrentItem.EtaText" FallbackValue="" TargetNullValue="" />
+                <Binding Path="CurrentItem.SizeText" FallbackValue="" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
+        </StackPanel>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+          <Button Content="⬇  Stáhnout" Classes="primary"
+                  Command="{Binding DownloadCommand}"
+                  IsVisible="{Binding Url, Converter={StaticResource StringNotEmpty}}"
+                  ToolTip.Tip="Stáhnout zadaný odkaz (Ctrl+Enter)" />
+          <Button Content="Otevřít složku" Classes="ghost"
+                  Command="{Binding OpenOutputFolderCommand}" />
+          <Button Content="Zrušit" Classes="danger"
+                  Command="{Binding CancelAllCommand}"
+                  IsVisible="{Binding IsQueueRunning}" />
+        </StackPanel>
+
+        <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Margin="0,8,0,0"
+                     Minimum="0" Maximum="100"
+                     Value="{Binding CurrentItem.Progress, FallbackValue=0, TargetNullValue=0}"
+                     IsIndeterminate="{Binding CurrentItem.Progress, Converter={StaticResource IsNull}, FallbackValue=True}" />
+      </Grid>
+    </Border>
+
+    <GridSplitter Grid.Row="3" ResizeDirection="Rows"
+                  Background="Transparent" Margin="14,0" />
+
+    <!-- ══════════════ Log ══════════════ -->
+    <Border Grid.Row="4" Margin="14,0,14,12"
+            Background="{DynamicResource PanelBrush}"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1" CornerRadius="12">
+      <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="14,8,10,4">
+          <TextBlock Grid.Column="0" Text="Výstup yt-dlp" Classes="section" VerticalAlignment="Center" />
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
+            <Button Classes="ghost tiny" Content="Kopírovat" Click="OnCopyLogClick"
+                    ToolTip.Tip="Zkopírovat celý výstup do schránky" />
+            <Button Classes="ghost tiny" Content="Vymazat" Command="{Binding ClearLogCommand}" />
+          </StackPanel>
+        </Grid>
+
+        <ListBox Grid.Row="1" x:Name="LogList"
+                 ItemsSource="{Binding Log}"
+                 Background="Transparent"
+                 Padding="10,0,10,8"
+                 SelectionMode="Multiple">
+          <ListBox.Styles>
+            <Style Selector="ListBoxItem">
+              <Setter Property="Padding" Value="4,1" />
+              <Setter Property="Margin" Value="0" />
+              <Setter Property="CornerRadius" Value="4" />
+              <Setter Property="MinHeight" Value="0" />
+            </Style>
+          </ListBox.Styles>
+          <ListBox.ItemTemplate>
+            <DataTemplate DataType="vm:LogLine">
+              <Grid ColumnDefinitions="Auto,Auto,*">
+                <TextBlock Grid.Column="0" Text="{Binding Stamp}" Classes="mono"
+                           Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" />
+                <TextBlock Grid.Column="2" Text="{Binding Text}" Classes="mono"
+                           TextWrapping="NoWrap"
+                           Foreground="{Binding Kind, Converter={StaticResource LogKindBrush}}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

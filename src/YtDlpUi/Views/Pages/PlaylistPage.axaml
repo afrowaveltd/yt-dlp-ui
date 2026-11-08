@@ -1,0 +1,189 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.PlaylistPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ What to download from a playlist ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Playlist" />
+            <TextBlock Classes="hint"
+                       Text="Když odkaz obsahuje video i playlist (typicky YouTube watch?v=…&amp;list=…), rozhodněte, co se má stáhnout." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="290" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Chování" />
+              <ComboBox ItemsSource="{Binding PlaylistOptions}"
+                        SelectedItem="{Binding Options.PlaylistHandling, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource EnumLabel}}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+
+            <StackPanel Width="290" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vybrané položky (-I)" />
+              <TextBox Text="{Binding Options.PlaylistItems, Mode=TwoWay}"
+                       Watermark="1-10,15,20" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Rozsahy i jednotlivé položky: 1:5, 8, -3::2" />
+            </StackPanel>
+
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Maximálně souborů" />
+              <TextBox Text="{Binding Options.MaxDownloads, Mode=TwoWay, Converter={StaticResource IntText}}"
+                       Watermark="0 = bez omezení" />
+              <TextBlock Classes="hint" Text="0 znamená bez omezení" />
+            </StackPanel>
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Opačné pořadí" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.PlaylistReverse}" />
+            <CheckBox Content="Náhodné pořadí" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.PlaylistRandom}" />
+            <CheckBox Content="Zpracovávat průběžně (lazy)" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.LazyPlaylist}" />
+            <CheckBox Content="Nerozbalovat položky (flat)" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.FlatPlaylist}" />
+            <CheckBox Content="Živý přenos od začátku" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.LiveFromStart}" />
+            <CheckBox Content="Označit jako zhlédnuté" MinWidth="220" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.MarkWatched}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Archive and resuming ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Archiv – nestahovat dvakrát" />
+            <TextBlock Classes="hint"
+                       Text="yt-dlp si zapíše ID již stažených položek. Užitečné u velkých playlistů a opakovaného stahování." />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <TextBox Grid.Column="0" Text="{Binding Options.DownloadArchive, Mode=TwoWay}"
+                     Watermark="Soubor archivu, např. ~/.config/yt-dlp-ui/archive.txt" />
+            <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseArchiveClick" />
+          </Grid>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Zastavit u již stažené položky" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.BreakOnExisting}" />
+            <CheckBox Content="Počítadla resetovat pro každý odkaz" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.BreakPerInput}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Errors ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Chování při chybách" />
+            <TextBlock Classes="hint"
+                       Text="Doporučeno: pokračovat na další video, aby jeden nefunkční odkaz nezastavil celý playlist." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Pokračovat i při chybě" MinWidth="270" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.IgnoreErrors}" />
+            <CheckBox Content="Zastavit při první chybě" MinWidth="270" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.AbortOnError}" />
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="290" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Přeskočit playlist po N chybách" />
+              <TextBox Text="{Binding Options.SkipPlaylistAfterErrors, Mode=TwoWay, Converter={StaticResource IntText}}"
+                       Watermark="0 = nikdy" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Filters ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Filtry – co přeskočit" />
+            <TextBlock Classes="hint" Text="Hodí se při stahování celých kanálů: omezíte délku, velikost i datum." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Minimální velikost" />
+              <TextBox Text="{Binding Options.MinFilesize, Mode=TwoWay}" Watermark="50k" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Maximální velikost" />
+              <TextBox Text="{Binding Options.MaxFilesize, Mode=TwoWay}" Watermark="4.2G" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Datum nahrání" />
+              <TextBox Text="{Binding Options.Date, Mode=TwoWay}" Watermark="YYYYMMDD" />
+              <TextBlock Classes="hint" Text="např. today-2weeks" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vloženo po" />
+              <TextBox Text="{Binding Options.DateAfter, Mode=TwoWay}" Watermark="20240101" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vloženo před" />
+              <TextBox Text="{Binding Options.DateBefore, Mode=TwoWay}" Watermark="20241231" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Věkové omezení" />
+              <TextBox Text="{Binding Options.AgeLimit, Mode=TwoWay, Converter={StaticResource IntText}}"
+                       Watermark="0 = bez omezení" />
+            </StackPanel>
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vlastní filtry (jeden na řádek)" />
+              <TextBox Text="{Binding Options.MatchFilters, Mode=TwoWay}"
+                       AcceptsReturn="True" Height="90" TextWrapping="Wrap"
+                       FontFamily="{DynamicResource MonoFont}"
+                       Watermark="duration &gt; 60&#10;!is_live" />
+              <TextBlock Classes="hint"
+                         Text="Příklady: duration &gt; 120 · view_count &gt; 1000 · title~='cats'" />
+            </StackPanel>
+
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Zastavit při splnění filtru" />
+              <TextBox Text="{Binding Options.BreakMatchFilters, Mode=TwoWay}"
+                       AcceptsReturn="True" Height="90" TextWrapping="Wrap"
+                       FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Jakmile některá položka filtru nevyhoví, stahování skončí." />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Waiting ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Čekání na živý přenos" />
+            <TextBlock Classes="hint" Text="U plánovaných streamů lze počkat, až začnou." />
+          </StackPanel>
+
+          <StackPanel Width="300" Spacing="4">
+            <TextBlock Classes="label" Text="Čekat na začátek (sekundy nebo rozsah)" />
+            <TextBox Text="{Binding Options.WaitForVideo, Mode=TwoWay}" Watermark="30 nebo 30-120" />
+            <TextBlock Classes="hint" Text="Prázdné = nečekat" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

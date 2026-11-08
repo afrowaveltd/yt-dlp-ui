@@ -1,0 +1,204 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.NetworkPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ Connection ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Připojení" />
+            <TextBlock Classes="hint" Text="Proxy, časové limity a chování sítě." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="330" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Proxy server" />
+              <TextBox Text="{Binding Options.Proxy, Mode=TwoWay}"
+                       Watermark="http://127.0.0.1:8080 nebo socks5://…" />
+              <TextBlock Classes="hint" Text="Prázdné = přímé připojení" />
+            </StackPanel>
+
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Časový limit (s)" />
+              <TextBox Text="{Binding Options.SocketTimeout, Mode=TwoWay, Converter={StaticResource IntText}}"
+                       Watermark="15" />
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vázat na IP adresu" />
+              <TextBox Text="{Binding Options.SourceAddress, Mode=TwoWay}" Watermark="192.168.1.10" />
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vydávat se za prohlížeč" />
+              <TextBox Text="{Binding Options.Impersonate, Mode=TwoWay}" Watermark="chrome" />
+              <TextBlock Classes="hint" Text="chrome, firefox, safari…" />
+            </StackPanel>
+
+            <StackPanel Width="280" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="JavaScript runtime" />
+              <TextBox Text="{Binding Options.JsRuntimes, Mode=TwoWay}" Watermark="node" />
+              <TextBlock Classes="hint" Text="deno, node, bun – prázdné = výchozí yt-dlp" />
+            </StackPanel>
+
+            <StackPanel Width="280" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Povolené vzdálené komponenty" />
+              <TextBox Text="{Binding Options.RemoteComponents, Mode=TwoWay}" Watermark="ejs:github" />
+            </StackPanel>
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Vynutit IPv4" MinWidth="200" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.ForceIpv4}" />
+            <CheckBox Content="Vynutit IPv6" MinWidth="200" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.ForceIpv6}" />
+            <CheckBox Content="Nekontrolovat HTTPS certifikáty" MinWidth="300" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.NoCheckCertificates}" />
+            <CheckBox Content="Starší TLS servery" MinWidth="240" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.LegacyServerConnect}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Speed ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Rychlost a spolehlivost" />
+            <TextBlock Classes="hint" Text="Omezení rychlosti, opakování pokusů a paralelní stahování částí." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Omezit rychlost" />
+              <TextBox Text="{Binding Options.LimitRate, Mode=TwoWay}" Watermark="2M" />
+              <TextBlock Classes="hint" Text="např. 500K" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Práh zpomalení" />
+              <TextBox Text="{Binding Options.ThrottledRate, Mode=TwoWay}" Watermark="100K" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Pokusů celkem" />
+              <TextBox Text="{Binding Options.Retries, Mode=TwoWay, Converter={StaticResource IntText}}" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Pokusů na část" />
+              <TextBox Text="{Binding Options.FragmentRetries, Mode=TwoWay, Converter={StaticResource IntText}}" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Pokusů na soubor" />
+              <TextBox Text="{Binding Options.FileAccessRetries, Mode=TwoWay, Converter={StaticResource IntText}}" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Pokusů extraktoru" />
+              <TextBox Text="{Binding Options.ExtractorRetries, Mode=TwoWay, Converter={StaticResource IntText}}" />
+            </StackPanel>
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Paralelní části" />
+              <TextBox Text="{Binding Options.ConcurrentFragments, Mode=TwoWay, Converter={StaticResource IntText}}" />
+              <TextBlock Classes="hint" Text="1 = výchozí, více zrychlí DASH/HLS" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Velikost bufferu" />
+              <TextBox Text="{Binding Options.BufferSize, Mode=TwoWay}" Watermark="1024" />
+            </StackPanel>
+            <StackPanel Width="180" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Velikost HTTP bloku" />
+              <TextBox Text="{Binding Options.HttpChunkSize, Mode=TwoWay}" Watermark="10M" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Politeness ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Pauzy mezi požadavky" />
+            <TextBlock Classes="hint" Text="Pomáhá, když server odmítá příliš mnoho požadavků za sebou." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Mezi požadavky (s)" />
+              <TextBox Text="{Binding Options.SleepRequests, Mode=TwoWay, Converter={StaticResource DoubleText}}" />
+            </StackPanel>
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Před stahováním (s)" />
+              <TextBox Text="{Binding Options.SleepInterval, Mode=TwoWay, Converter={StaticResource DoubleText}}" />
+            </StackPanel>
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Maximální pauza (s)" />
+              <TextBox Text="{Binding Options.MaxSleepInterval, Mode=TwoWay, Converter={StaticResource DoubleText}}" />
+            </StackPanel>
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Před titulky (s)" />
+              <TextBox Text="{Binding Options.SleepSubtitles, Mode=TwoWay, Converter={StaticResource DoubleText}}" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Headers / geo ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Hlavičky a zeměpisná omezení" />
+            <TextBlock Classes="hint" Text="Vlastní HTTP hlavičky pomohou u webů, které vyžadují konkrétní prohlížeč." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="400" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vlastní hlavičky (jedna na řádek)" />
+              <TextBox Text="{Binding Options.AddHeaders, Mode=TwoWay}"
+                       AcceptsReturn="True" Height="80" TextWrapping="Wrap"
+                       FontFamily="{DynamicResource MonoFont}"
+                       Watermark="Referer:https://example.com&#10;X-Custom:hodnota" />
+            </StackPanel>
+
+            <StackPanel Width="280" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Ověřovací proxy pro geo-omezení" />
+              <TextBox Text="{Binding Options.GeoVerificationProxy, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Předstíraná IP (XFF)" />
+              <TextBox Text="{Binding Options.XForwardedFor, Mode=TwoWay}" Watermark="CZ" />
+              <TextBlock Classes="hint" Text="kód země nebo IP rozsah" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ External downloader ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Externí stahovač" />
+            <TextBlock Classes="hint" Text="Například aria2c umí výrazně zrychlit stahování velkých souborů." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Program" />
+              <TextBox Text="{Binding Options.ExternalDownloader, Mode=TwoWay}" Watermark="aria2c" />
+              <TextBlock Classes="hint" Text="aria2c, axel, curl, wget, ffmpeg" />
+            </StackPanel>
+
+            <StackPanel Width="400" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Argumenty stahovače" />
+              <TextBox Text="{Binding Options.ExternalDownloaderArgs, Mode=TwoWay}"
+                       Watermark="aria2c:-x 16 -s 16" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Formát: název:argumenty" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

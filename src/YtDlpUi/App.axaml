@@ -1,0 +1,31 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="using:YtDlpUi.Converters"
+             x:Class="YtDlpUi.App"
+             RequestedThemeVariant="Dark">
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <conv:BoolToOpacityConverter x:Key="BoolToOpacity" />
+      <conv:EnumLabelConverter x:Key="EnumLabel" />
+      <conv:LogKindBrushConverter x:Key="LogKindBrush" />
+      <conv:IsNullConverter x:Key="IsNull" />
+      <conv:IsZeroConverter x:Key="IsZero" />
+      <conv:NotNullConverter x:Key="NotNull" />
+      <conv:AvailableBrushConverter x:Key="AvailableBrush" />
+      <conv:DownloadStateBrushConverter x:Key="StateBrush" />
+      <conv:InverseBoolConverter x:Key="InverseBool" />
+      <conv:StringNotEmptyConverter x:Key="StringNotEmpty" />
+      <conv:BytesConverter x:Key="Bytes" />
+      <conv:DurationConverter x:Key="Duration" />
+      <conv:IntTextConverter x:Key="IntText" />
+      <conv:DoubleTextConverter x:Key="DoubleText" />
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://yt-dlp-gui/Styles/AppStyles.axaml" />
+  </Application.Styles>
+
+</Application>

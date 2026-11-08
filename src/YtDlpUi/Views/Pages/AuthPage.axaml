@@ -1,0 +1,137 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.AuthPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <Border Classes="card" Background="{DynamicResource AccentSoftBrush}" BorderBrush="{DynamicResource AccentBrush}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="Přihlášení a cookies" Classes="h2" />
+          <TextBlock Classes="secondary"
+                     Text="Pro videa, která vyžadují přihlášení, věkové ověření nebo jsou dostupná jen předplatitelům. Nejjednodušší bývá načíst cookies z prohlížeče, ve kterém jste přihlášeni." />
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Cookies ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Cookies z prohlížeče" />
+            <TextBlock Classes="hint"
+                       Text="yt-dlp si půjčí přihlášení z vašeho prohlížeče. Prohlížeč přitom může být otevřený, u některých systémů je ale potřeba jej zavřít." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="330" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Načíst cookies z prohlížeče" />
+              <TextBox Text="{Binding Options.CookiesFromBrowser, Mode=TwoWay}" Watermark="firefox" />
+              <TextBlock Classes="hint"
+                         Text="firefox, chrome, chromium, brave, edge, opera, vivaldi, whale, safari" />
+            </StackPanel>
+
+            <StackPanel Spacing="4" Margin="0,0,12,12">
+              <TextBlock Classes="label" Text="Rychlá volba" />
+              <WrapPanel Orientation="Horizontal">
+                <Button Classes="tiny" Content="Firefox" Margin="0,0,6,6" Click="OnUseFirefoxClick" />
+                <Button Classes="tiny" Content="Chrome" Margin="0,0,6,6" Click="OnUseChromeClick" />
+                <Button Classes="tiny" Content="Chromium" Margin="0,0,6,6" Click="OnUseChromiumClick" />
+                <Button Classes="tiny" Content="Brave" Margin="0,0,6,6" Click="OnUseBraveClick" />
+                <Button Classes="tiny" Content="Vypnout" Margin="0,0,6,6" Click="OnClearBrowserClick" />
+              </WrapPanel>
+            </StackPanel>
+          </WrapPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Nebo soubor s cookies (Netscape formát)" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.CookiesFile, Mode=TwoWay}"
+                       Watermark="cookies.txt" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseCookiesClick" />
+            </Grid>
+            <TextBlock Classes="hint"
+                       Text="Tip: rozšíření „Get cookies.txt LOCALLY“ v prohlížeči umí soubor vytvořit." />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Credentials ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Jméno a heslo" />
+            <TextBlock Classes="hint"
+                       Text="Pro weby s přihlášením formulářem. Údaje se neukládají – při každém spuštění je potřeba je zadat znovu." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="260" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Uživatelské jméno" />
+              <TextBox Text="{Binding Options.Username, Mode=TwoWay}" Watermark="(nepovinné)" />
+            </StackPanel>
+
+            <StackPanel Width="260" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Heslo" />
+              <TextBox Text="{Binding Options.Password, Mode=TwoWay}" PasswordChar="●"
+                       Watermark="(nepovinné)" />
+            </StackPanel>
+
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Dvoufázový kód" />
+              <TextBox Text="{Binding Options.TwoFactor, Mode=TwoWay}" Watermark="123456" />
+            </StackPanel>
+
+            <StackPanel Width="240" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Heslo k videu" />
+              <TextBox Text="{Binding Options.VideoPassword, Mode=TwoWay}" PasswordChar="●" />
+              <TextBlock Classes="hint" Text="Některá videa mají vlastní heslo" />
+            </StackPanel>
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Použít soubor ~/.netrc" MinWidth="270" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.Netrc}" />
+            <StackPanel Width="320" Spacing="4">
+              <TextBox Text="{Binding Options.NetrcLocation, Mode=TwoWay}"
+                       Watermark="Jiné umístění .netrc (nepovinné)" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Certificates ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Klientský certifikát" />
+            <TextBlock Classes="hint" Text="Potřebuje jen málokterý web (firemní a placená úložiště)." />
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Soubor certifikátu (PEM)" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.ClientCertificate, Mode=TwoWay}" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseCertificateClick" />
+            </Grid>
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="380" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Soukromý klíč" />
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBox Grid.Column="0" Text="{Binding Options.ClientCertificateKey, Mode=TwoWay}" />
+                <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseCertificateKeyClick" />
+              </Grid>
+            </StackPanel>
+
+            <StackPanel Width="260" Spacing="4">
+              <TextBlock Classes="label" Text="Heslo ke klíči" />
+              <TextBox Text="{Binding Options.ClientCertificatePassword, Mode=TwoWay}" PasswordChar="●" />
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

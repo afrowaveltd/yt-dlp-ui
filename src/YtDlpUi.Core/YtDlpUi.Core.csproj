@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>YtDlpUi.Core</RootNamespace>
+    <AssemblyName>YtDlpUi.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="$(CommunityToolkitVersion)" />
+  </ItemGroup>
+
+</Project>

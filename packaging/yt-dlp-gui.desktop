@@ -1,0 +1,17 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=yt-dlp GUI
+GenericName=Video Downloader
+GenericName[cs]=Stahování videí
+Comment=Download videos and audio with a friendly interface
+Comment[cs]=Stahování videí a hudby v přátelském rozhraní
+Exec=yt-dlp-gui
+TryExec=yt-dlp-gui
+Icon=yt-dlp-gui
+Terminal=false
+Categories=AudioVideo;Video;Network;
+Keywords=yt-dlp;youtube;vimeo;download;video;audio;stahovani;
+Keywords[cs]=stahování;video;hudba;youtube;
+StartupNotify=true
+StartupWMClass=yt-dlp-gui

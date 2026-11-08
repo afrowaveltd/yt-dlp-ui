@@ -1,0 +1,152 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.FilesPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ Location & name ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Umístění a název souboru" />
+            <TextBlock Classes="hint"
+                       Text="Šablona názvu používá pole yt-dlp v hranatých závorkách, například %(title)s = název videa." />
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Cílová složka" />
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.OutputDirectory, Mode=TwoWay}" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseOutputClick" />
+              <Button Grid.Column="2" Content="Otevřít" Command="{Binding OpenOutputFolderCommand}" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Šablona názvu souboru (-o)" />
+            <TextBox Text="{Binding Options.OutputTemplate, Mode=TwoWay}"
+                     FontFamily="{DynamicResource MonoFont}" />
+            <TextBlock Classes="hint"
+                       Text="%(title)s = název · %(id)s = ID videa · %(ext)s = přípona · %(uploader)s = autor · %(upload_date)s = datum" />
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Rychlé šablony" />
+            <ItemsControl ItemsSource="{Binding OutputTemplatePresets}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Button Classes="tiny" Margin="0,0,6,6"
+                          Content="{Binding}"
+                          FontFamily="{DynamicResource MonoFont}"
+                          Command="{Binding $parent[UserControl].DataContext.UseOutputTemplateCommand}"
+                          CommandParameter="{Binding}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Dočasná složka pro rozpracované soubory" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.TempDirectory, Mode=TwoWay}"
+                       Watermark="Prázdné = stejná složka jako cílová" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseTempClick" />
+            </Grid>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Filenames ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Názvy souborů" />
+            <TextBlock Classes="hint" Text="Užitečné, když soubory přenášíte na jiný systém nebo disk." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Jen ASCII znaky bez mezer" MinWidth="300" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.RestrictFilenames}" />
+            <CheckBox Content="Názvy kompatibilní s Windows" MinWidth="300" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WindowsFilenames}" />
+          </WrapPanel>
+
+          <StackPanel Width="240" Spacing="4">
+            <TextBlock Classes="label" Text="Omezit délku názvu" />
+            <TextBox Text="{Binding Options.TrimFilenames, Mode=TwoWay, Converter={StaticResource IntText}}"
+                     Watermark="0 = bez omezení" />
+            <TextBlock Classes="hint" Text="Počet znaků bez přípony" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Overwrite ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Co s existujícími soubory" />
+            <TextBlock Classes="hint" Text="Výchozí chování nechá hotové video být a jen obnoví doprovodné soubory." />
+          </StackPanel>
+
+          <StackPanel Width="330" Spacing="4">
+            <TextBlock Classes="label" Text="Politika přepisu" />
+            <ComboBox ItemsSource="{Binding OverwriteOptions}"
+                      SelectedItem="{Binding Options.Overwrite, Mode=TwoWay}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Converter={StaticResource EnumLabel}}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Nepokračovat v přerušeném souboru" MinWidth="320" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.NoContinue}" />
+            <CheckBox Content="Nepoužívat soubory .part" MinWidth="320" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.NoPart}" />
+            <CheckBox Content="Nastavit čas souboru podle serveru" MinWidth="320" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.UseMtime}" />
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Cache & batch ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Cache a dávkové soubory" />
+            <TextBlock Classes="hint" Text="Cache zrychluje opakované spouštění. Dávkový soubor obsahuje seznam odkazů." />
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Složka cache" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.CacheDirectory, Mode=TwoWay}"
+                       Watermark="Prázdné = výchozí ~/.cache/yt-dlp" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseCacheClick" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Dávkový soubor s odkazy" />
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+              <TextBox Grid.Column="0" Text="{Binding Options.BatchFile, Mode=TwoWay}"
+                       Watermark="Soubor s jedním odkazem na řádek" />
+              <Button Grid.Column="1" Content="Procházet…" Click="OnBrowseBatchClick" />
+            </Grid>
+          </StackPanel>
+
+          <CheckBox Content="Vymazat cache před stahováním" IsChecked="{Binding Options.RemoveCache}" />
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

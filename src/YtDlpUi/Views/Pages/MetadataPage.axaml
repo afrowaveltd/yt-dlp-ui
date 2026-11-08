@@ -1,0 +1,189 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="YtDlpUi.Views.Pages.MetadataPage">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14">
+
+      <!-- ══════════ Subtitles ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Titulky" />
+            <TextBlock Classes="hint" Text="Uložit titulky jako samostatné soubory, nebo je rovnou vložit do videa." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Uložit titulky" MinWidth="200" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteSubs}" />
+            <CheckBox Content="Uložit automatické titulky" MinWidth="230" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteAutoSubs}" />
+            <CheckBox Content="Vložit titulky do videa" MinWidth="230" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.EmbedSubs}" />
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="290" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Jazyky titulků" />
+              <TextBox Text="{Binding Options.SubLangs, Mode=TwoWay}"
+                       Watermark="cs,en" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Kódy oddělené čárkou, „all“ = vše, „en.*“ = vše anglické" />
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Formát titulků" />
+              <ComboBox ItemsSource="{Binding SubtitleFormats}"
+                        SelectedItem="{Binding Options.SubFormat, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Převést titulky na" />
+              <TextBox Text="{Binding Options.ConvertSubs, Mode=TwoWay}" Watermark="srt" />
+              <TextBlock Classes="hint" Text="ass, lrc, srt, vtt" />
+            </StackPanel>
+          </WrapPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Rychlá volba jazyků" />
+            <WrapPanel Orientation="Horizontal" ItemHeight="32">
+              <ItemsControl ItemsSource="{Binding SubtitleLanguageQuickPicks}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Button Classes="tiny" Content="{Binding}" Margin="0,0,6,6"
+                            Command="{Binding $parent[UserControl].DataContext.UseSubtitleLanguagesCommand}"
+                            CommandParameter="{Binding}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </WrapPanel>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Thumbnails ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Náhledové obrázky" />
+            <TextBlock Classes="hint" Text="Uložit obal videa, nebo jej vložit jako přebal hudby." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Uložit náhledový obrázek" MinWidth="250" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteThumbnail}" />
+            <CheckBox Content="Uložit všechny velikosti" MinWidth="250" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteAllThumbnails}" />
+            <CheckBox Content="Vložit obrázek do souboru" MinWidth="250" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.EmbedThumbnail}" />
+          </WrapPanel>
+
+          <StackPanel Width="220" Spacing="4">
+            <TextBlock Classes="label" Text="Převést obrázky na" />
+            <TextBox Text="{Binding Options.ConvertThumbnails, Mode=TwoWay}" Watermark="jpg" />
+            <TextBlock Classes="hint" Text="jpg, png, webp" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ Metadata ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="Metadata a kapitoly" />
+            <TextBlock Classes="hint" Text="Název, autor, popis a kapitoly přímo v souboru." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Vložit metadata (název, autor…)" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.EmbedMetadata}" />
+            <CheckBox Content="Vložit kapitoly" MinWidth="230" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.EmbedChapters}" />
+            <CheckBox Content="Rozdělit podle kapitol" MinWidth="230" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.SplitChapters}" />
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <CheckBox Content="Uložit popis (.description)" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteDescription}" />
+            <CheckBox Content="Uložit metadata (.info.json)" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteInfoJson}" />
+            <CheckBox Content="Uložit komentáře" MinWidth="230" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WriteComments}" />
+            <CheckBox Content="Metadata i pro playlist" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.WritePlaylistMetafiles}" />
+            <CheckBox Content="Zapsat metadata do xattrs" MinWidth="280" Margin="0,0,16,6"
+                      IsChecked="{Binding Options.Xattrs}" />
+          </WrapPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="360" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Přepsat pole metadat" />
+              <TextBox Text="{Binding Options.ParseMetadata, Mode=TwoWay}"
+                       Watermark="%(artist)s:%(uploader)s" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Formát: ZDROJ:VÝSLEDNÉ_POLE" />
+            </StackPanel>
+
+            <StackPanel Width="300" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Zástupce odkazu (internet shortcut)" />
+              <ComboBox ItemsSource="{Binding LinkFileOptions}"
+                        SelectedItem="{Binding Options.LinkFile, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource EnumLabel}}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+          </WrapPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- ══════════ SponsorBlock ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="SponsorBlock" />
+            <TextBlock Classes="hint"
+                       Text="U videí na YouTube přeskočí nebo označí sponzorské pasáže. Kategorie pište čárkou, například sponsor,selfpromo,intro." />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="340" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Vystřihnout kategorie" />
+              <TextBox Text="{Binding Options.SponsorBlockRemove, Mode=TwoWay}"
+                       Watermark="sponsor,selfpromo" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Pasáže se z videa skutečně odstraní" />
+            </StackPanel>
+
+            <StackPanel Width="340" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="Označit kategorie kapitolami" />
+              <TextBox Text="{Binding Options.SponsorBlockMark, Mode=TwoWay}"
+                       Watermark="all,-preview" FontFamily="{DynamicResource MonoFont}" />
+              <TextBlock Classes="hint" Text="Pasáže zůstanou, jen se označí" />
+            </StackPanel>
+          </WrapPanel>
+
+          <StackPanel Spacing="4">
+            <TextBlock Classes="label" Text="Rychlé volby" />
+            <WrapPanel Orientation="Horizontal">
+              <Button Classes="tiny" Content="Vystřihnout sponsor" Margin="0,0,6,6"
+                      Command="{Binding UseSponsorBlockCommand}" CommandParameter="remove:sponsor" />
+              <Button Classes="tiny" Content="Vystřihnout sponsor + intro + outro" Margin="0,0,6,6"
+                      Command="{Binding UseSponsorBlockCommand}" CommandParameter="remove:sponsor,intro,outro" />
+              <Button Classes="tiny" Content="Označit vše" Margin="0,0,6,6"
+                      Command="{Binding UseSponsorBlockCommand}" CommandParameter="mark:all" />
+              <Button Classes="tiny" Content="Označit bez upoutávek" Margin="0,0,6,6"
+                      Command="{Binding UseSponsorBlockCommand}" CommandParameter="mark:all,-preview" />
+            </WrapPanel>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
