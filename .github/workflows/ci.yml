@@ -35,6 +35,31 @@ jobs:
           name: yt-dlp-gui-deb
           path: artifacts/*.deb
           if-no-files-found: error
+      - name: Build portable Linux archive
+        if: runner.os == 'Linux'
+        run: |
+          ./scripts/package-linux-tar.sh --from-publish
+          tar -tzf artifacts/*linux-*.tar.gz | grep 'yt-dlp-gui/yt-dlp-gui'
+      - name: Install RPM build tools
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+      - name: Build RPM package
+        if: runner.os == 'Linux'
+        run: |
+          ./scripts/package-rpm.sh --from-publish
+          rpm -qpi artifacts/*.rpm
+          rpm -qpl artifacts/*.rpm | grep '/usr/bin/yt-dlp-gui'
+      - name: Upload other Linux packages
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yt-dlp-gui-linux-rpm-tar
+          path: |
+            artifacts/*.rpm
+            artifacts/*.tar.gz
+          if-no-files-found: error
       - name: Windows portable release
         if: runner.os == 'Windows'
         shell: pwsh
@@ -47,4 +72,23 @@ jobs:
         with:
           name: yt-dlp-gui-windows-x64
           path: publish/win-x64/
+          if-no-files-found: error
+      - name: Install Inno Setup
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+      - name: Windows setup wizard
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          ./scripts/build-windows-installer.ps1 -FromPublish
+          if (-not (Get-ChildItem artifacts/yt-dlp-gui-setup-*.exe -ErrorAction SilentlyContinue)) {
+            throw 'Missing setup executable'
+          }
+      - name: Upload Windows setup wizard
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: yt-dlp-gui-windows-setup
+          path: artifacts/yt-dlp-gui-setup-*.exe
           if-no-files-found: error
