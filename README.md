@@ -1,387 +1,110 @@
 # yt-dlp GUI
 
-Přátelské grafické rozhraní pro [yt-dlp](https://github.com/yt-dlp/yt-dlp) na Linuxu (ale poběží i na Windows
-a macOS). Cílem je, aby video nebo hudbu zvládl stáhnout i někdo, kdo nikdy nepoužil terminál – a přitom aby
-v rozhraní našel téměř všechny volby, které yt-dlp nabízí.
+A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp)**, built with [Avalonia UI](https://avaloniaui.net/) and .NET 10. Paste a video or playlist URL, choose a preset, and manage downloads without memorizing command-line options. Advanced yt-dlp options remain accessible when you need them.
 
-Postaveno na [Avalonia UI](https://avaloniaui.net/) (.NET 10) – jde o skutečnou desktopovou aplikaci,
-ne o webovou stránku v prohlížeči.
+**Release status:** Preparing the first **0.1.0** release. The source code and CI test builds exist; **the public 0.1.0 GitHub Release has not been published yet**.
 
-## Ukázky
+**Documentation:** English (this page) · [Česky](Docs/README/cs.md) · [Documentation index](Docs/Documentation/en.md) · [Český rozcestník](Docs/Documentation/cs.md)
 
-Hlavní obrazovka – odkaz se naplní ze schránky, aplikace ukáže náhled videa a vy jen vyberete profil:
+## What you get
 
-<a href="screenshots/main_screen.png"><img src="screenshots/main_screen.png" width="840" alt="Hlavní obrazovka yt-dlp GUI"></a>
+- **Simple downloads:** clipboard URL detection, drag-and-drop, video/playlist analysis, thumbnails, quality presets (up to 4K), audio-only choices, queue and progress.
+- **Nine tabs:** Download, Format, Playlist, Subtitles & metadata, Network, Files, Authentication, Advanced and Tools.
+- **Power-user options:** format selection, conversions, subtitles, metadata, filters, proxies, filename templates, authentication/cookies, and a copyable yt-dlp command preview.
+- **External tools:** yt-dlp detection/update and FFmpeg detection; an optional Windows installer downloads yt-dlp and FFmpeg with SHA-256 verification.
+- **Localization:** language selector in the upper-right header beside the tool status indicators. English/Czech dictionaries, automatic discovery of new `Locales/*.json` files, instant switching and English fallback.
+- **Desktop packaging:** Windows x64 `setup.exe` and portable build; Linux `.deb`, `.rpm` and portable `.tar.gz`.
 
-Zbývajících osm karet pro jemnější nastavení:
+Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization is partial in this 0.1.0 candidate.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
 
-<table>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/format_screen.png"><img src="screenshots/format_screen.png" width="430" alt="Karta Formát"></a>
-      <br><sub><b>Formát</b> – výběr streamu, převody, střih a tabulka dostupných formátů</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/playlist_screen.png"><img src="screenshots/playlist_screen.png" width="430" alt="Karta Playlist"></a>
-      <br><sub><b>Playlist</b> – rozsahy položek, archiv, filtry a chování při chybách</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/titulky_screen.png"><img src="screenshots/titulky_screen.png" width="430" alt="Karta Titulky a metadata"></a>
-      <br><sub><b>Titulky a metadata</b> – titulky, obaly, kapitoly i SponsorBlock</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/sit_screen.png"><img src="screenshots/sit_screen.png" width="430" alt="Karta Síť"></a>
-      <br><sub><b>Síť</b> – proxy, limity rychlosti, opakování a hlavičky</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/soubory_screen.png"><img src="screenshots/soubory_screen.png" width="430" alt="Karta Soubory"></a>
-      <br><sub><b>Soubory</b> – šablona názvu, přepisování a cache</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/prihlaseni_screen.png"><img src="screenshots/prihlaseni_screen.png" width="430" alt="Karta Přihlášení"></a>
-      <br><sub><b>Přihlášení</b> – cookies z prohlížeče, údaje a certifikáty</sub>
-    </td>
-  </tr>
-  <tr>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/pokrocile_screen.png"><img src="screenshots/pokrocile_screen.png" width="430" alt="Karta Pokročilé"></a>
-      <br><sub><b>Pokročilé</b> – náhled přesného příkazu a vlastní argumenty</sub>
-    </td>
-    <td width="50%" align="center" valign="top">
-      <a href="screenshots/nastroje_screen.png"><img src="screenshots/nastroje_screen.png" width="430" alt="Karta Nástroje"></a>
-      <br><sub><b>Nástroje</b> – instalace a aktualizace yt-dlp, ffmpeg, nastavení</sub>
-    </td>
-  </tr>
-</table>
+## Screenshots
 
-<sub>Screenshoty jsou z tmavého motivu. Světlý režim zapnete tlačítkem ☀ vpravo nahoře nebo přepínačem
-na kartě <b>Nástroje</b>. Kliknutím na obrázek se otevře v plném rozlišení.</sub>
+[![Main window, URL and presets](screenshots/main_screen.png)](screenshots/main_screen.png)
 
-## Co aplikace umí
+| | |
+|---|---|
+| [![Format tab](screenshots/format_screen.png)](screenshots/format_screen.png) **Format** | [![Playlist tab](screenshots/playlist_screen.png)](screenshots/playlist_screen.png) **Playlist** |
+| [![Subtitles and metadata tab](screenshots/titulky_screen.png)](screenshots/titulky_screen.png) **Subtitles & metadata** | [![Network tab](screenshots/sit_screen.png)](screenshots/sit_screen.png) **Network** |
+| [![Files tab](screenshots/soubory_screen.png)](screenshots/soubory_screen.png) **Files** | [![Authentication tab](screenshots/prihlaseni_screen.png)](screenshots/prihlaseni_screen.png) **Authentication** |
+| [![Advanced tab](screenshots/pokrocile_screen.png)](screenshots/pokrocile_screen.png) **Advanced** | [![Tools tab](screenshots/nastroje_screen.png)](screenshots/nastroje_screen.png) **Tools** |
 
-**Pro začátečníky**
+Screenshots illustrate the interface at the time they were captured; newer language and installer controls may differ. Click an image for its full size.
 
-- Odkaz se **sám naplní ze schránky**, jakmile si jej někam zkopírujete – stačí otevřít aplikaci.
-- Tlačítko **Analyzovat** ukáže název, autora, délku, obal videa i seznam dostupných formátů.
-- Místo technických zkratek si vyberete **hotový profil**: nejlepší kvalita, 4K, Full HD, 720p nebo jen zvuk
-  (MP3, M4A, Opus, FLAC, WAV).
-- **Fronta stahování** – přidávejte odkazy průběžně, aplikace je stahuje jeden po druhém.
-- Živý **průběh**: procenta, rychlost, zbývající čas, velikost.
-- Srozumitelné **chybové zprávy** v češtině místo surového výstupu yt-dlp.
-- Pokud yt-dlp v systému chybí, aplikace jej **nabídne stáhnout a nainstalovat** jedním kliknutím.
-- Přetažení odkazu z prohlížeče přímo do okna také funguje.
+## Install or run
 
-**Pro pokročilé**
+### Windows 10/11 (x64)
 
-Devět karet pokrývá prakticky celý `yt-dlp --help`:
+Download the **`yt-dlp-gui-windows-setup`** CI artifact, extract the ZIP, then run `yt-dlp-gui-setup-0.1.0-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers two **independent, initially selected** options: install yt-dlp and install FFmpeg. Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear either checkbox or install the tools later. Setup is a per-user install without elevation.
 
-| Karta | Co obsahuje |
-| --- | --- |
-| **Stáhnout** | odkaz, analýza, profily kvality, cílová složka, spuštění |
-| **Formát** | `-f`, `-S`, kontejner při slučování, multistream, extrakce zvuku, převod/remux, střih (`--download-sections`), tabulka dostupných formátů |
-| **Playlist** | chování playlistu, `-I` rozsahy, pořadí, archiv (`--download-archive`), limity, filtry (velikost, datum, `--match-filters`), živé přenosy |
-| **Titulky a metadata** | titulky a jejich jazyky/formáty, vkládání do videa, obaly, metadata, kapitoly, SponsorBlock |
-| **Síť** | proxy, časové limity, IPv4/IPv6, limit rychlosti, opakování, paralelní části, hlavičky, geo-omezení, externí stahovač (aria2c…) |
-| **Soubory** | šablona názvu (`-o`) s rychlými předvolbami, dočasná složka, ASCII/Win názvy, politika přepisu, cache, dávkový soubor |
-| **Přihlášení** | cookies z prohlížeče, soubor cookies, jméno/heslo, 2FA, `.netrc`, klientský certifikát |
-| **Pokročilé** | náhled přesného příkazu, vlastní argumenty, konfigurace yt-dlp, diagnostika, obnovení výchozích hodnot |
-| **Nástroje** | stav a instalace yt-dlp, aktualizace, ffmpeg, nastavení aplikace |
+A **`yt-dlp-gui-windows-x64`** portable build is also produced. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
 
-**Náhled příkazu.** Na kartě *Pokročilé* je vždy vidět přesný příkaz, který se spustí – můžete si jej
-zkopírovat a naučit se tak pracovat s yt-dlp v terminálu.
+### Debian / Ubuntu, Fedora / openSUSE, other Linux
 
-**Co v rozhraní není?** Velmi vzácné volby (Adobe Pass `--ap-*`, `--alias`, `--compat-options`, simulace
-`-s`) – ty lze vložit do pole **Vlastní argumenty**, které se přidá na konec příkazu.
-
-## Požadavky
-
-- **yt-dlp** – pokud chybí, aplikace jej nabídne nainstalovat (karta *Nástroje*).
-- **ffmpeg** – potřeba pro slučování videa se zvukem a pro převod do MP3/MP4. Nainstalujte z vašeho
-  správce balíčků, např. `sudo apt install ffmpeg`, `sudo dnf install ffmpeg`, `sudo pacman -S ffmpeg`.
-
-Pro běh ze zdrojových kódů dále **.NET SDK 10**.
-
-## Rychlý start
-
-```bash
-git clone https://github.com/afrowaveltd/yt-dlp-ui.git && cd yt-dlp-ui
-
-# 1) sestavení
-dotnet build YtDlpUi.slnx
-
-# 2) spuštění
-dotnet run --project src/YtDlpUi/YtDlpUi.csproj
-```
-
-Nebo si vytvořte sestavení, které nepotřebuje .NET v systému:
-
-```bash
-./scripts/build.sh               # složka aplikace -> publish/
-./publish/yt-dlp-gui
-
-./scripts/build.sh --single-file # jeden přenosný soubor -> publish/yt-dlp-gui
-```
-
-Výchozí je složka aplikace, protože je spolehlivější: jednosouborové sestavení si při startu musí
-rozbalit nativní knihovny do cache adresáře a na systémech s domovským adresářem jen pro čtení
-(vzdálené servery, kontejnery) selže.
-
-## Instalace do systému
-
-```bash
-./scripts/install.sh
-```
-
-Skript aplikaci sestaví a nainstaluje do `~/.local/opt/yt-dlp-gui`, vytvoří příkaz `~/.local/bin/yt-dlp-gui`
-a položku v nabídce aplikací (`~/.local/share/applications/yt-dlp-gui.desktop`) včetně ikony.
-Práva správce nejsou potřeba. Odinstalace: `./scripts/install.sh --uninstall`.
-
-Předpokladem je, že `~/.local/bin` máte v `PATH` (na většině distribucí bývá).
-
-## Debian / Ubuntu (.deb)
-
-Balíček je self-contained (nevyžaduje .NET runtime) a instaluje aplikaci do
-`/opt/yt-dlp-gui`, spouštěcí příkaz do `/usr/bin/yt-dlp-gui` a ikonu do nabídky aplikací:
-
-```bash
-./scripts/package-deb.sh
-sudo apt install ./artifacts/yt-dlp-gui_1.0.0_amd64.deb
-```
-
-Na ARM64 se vytvoří balíček s příponou `_arm64.deb`. Verze se přebírá z
-`Directory.Build.props`. Aplikace doporučuje systémové balíčky `yt-dlp` a
-`ffmpeg`, ale může používat i vlastní instalaci yt-dlp. Obojí je externí
-program; **není součástí .deb**. Instalace přes `apt` typicky instaluje také
-doporučené závislosti. Instalace do domovského adresáře přes
-`./scripts/install.sh` zůstává dostupná.
-
-## Windows Setup.exe – jednoduchý instalační průvodce
-
-Uživatelé Windows x64 mohou místo přenosné varianty spustit klasický
-instalační program s nabídkou Start, volitelným zástupcem na ploše a
-standardním odinstalováním. Není potřeba administrátorský účet ani
-předchozí instalace .NET.
-
-Průvodce má **dvě samostatné, standardně zaškrtnuté volby**:
-
-- **Nainstalovat yt-dlp** – program nutný pro samotné stahování videí.
-- **Nainstalovat FFmpeg** – doporučený pro slučování obrazu a zvuku a pro převody.
-
-Obě volby lze vypnout. U již fungujících nástrojů se další kopie
-nestahují. Jinak se vybrané nástroje stahují od vydavatelů přes HTTPS
-a ověřují kontrolním součtem SHA-256 podle zveřejněných kontrolních
-součtů. Je potřeba připojení k internetu. Externí nástroje nejsou
-součástí instalačního EXE a mají vlastní licence.
-
-Když stahování některého nástroje selže, GUI zůstává nainstalováno.
-Uživatel dostane upozornění a může instalaci zopakovat na kartě Nástroje.
-Záznam instalace: %LOCALAPPDATA%\yt-dlp-ui\logs\dependency-install.log.
-
-Nástroje zůstávají při odinstalaci GUI v adresáři
-%LOCALAPPDATA%\yt-dlp-ui\tools, protože je může uživatel využívat i
-samostatně. V případě potřeby je lze ručně odstranit.
-
-Pro sestavení instalátoru je potřeba Inno Setup 6
-(https://jrsoftware.org/isinfo.php):
-
-~~~powershell
-.\scripts\build-windows-installer.ps1
-~~~
-
-Výstup: artifacts/yt-dlp-gui-setup-1.0.0-win-x64.exe.
-Pro Windows ARM64 zatím používejte přenosné sestavení.
-
-## Windows 10/11
-
-yt-dlp je na Windows oficiálně dostupné jako samostatné `yt-dlp.exe`.
-Windows sestavení aplikace vytvoříte v PowerShellu:
-
-```powershell
-.\\scripts\\build-windows.ps1
-.\\publish\\win-x64\\yt-dlp-gui.exe
-```
-
-Výsledek obsahuje .NET runtime. Alternativně lze použít
-`-Runtime win-arm64` pro Windows ARM64.
-
-Na kartě **Nástroje** umí aplikace stáhnout yt-dlp bez Pythonu.
-Pro Windows x64 je tam také tlačítko pro instalaci `ffmpeg.exe` a
-`ffprobe.exe` z oficiálního odkazu FFmpeg na Gyan.dev, včetně ověření SHA-256.
-Nástroje se ukládají pod `%LOCALAPPDATA%\\yt-dlp-ui\\tools` a nevyžadují
-změny systémového PATH ani administrátorská oprávnění.
-
-FFmpeg z této distribuce má vlastní licenci (GPLv3); MIT licence našeho
-grafického rozhraní se na externí binární soubory nevztahuje.
-
-## Další distribuce Linuxu
-
-Vedle balíčku DEB podporujeme RPM (Fedora, openSUSE a příbuzné systémy)
-a přenosný archiv tar.gz pro distribuce bez našeho balíčku.
+Download the corresponding CI artifact from [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions), then use your distribution's package manager:
 
 ~~~bash
-./scripts/package-rpm.sh
-./scripts/package-linux-tar.sh
+sudo apt install ./yt-dlp-gui_0.1.0_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.1.0-1.x86_64.rpm # Fedora-style RPM
 ~~~
 
-RPM vyžaduje nástroj rpmbuild (na Fedoře typicky balíček rpm-build).
-Stejně jako DEB doporučuje systémové balíčky yt-dlp a ffmpeg, ale
-nestahuje je vlastním postinstalačním skriptem. Správce balíčků
-závislosti vyhodnocuje podle distribuce. Přenosný archiv umožňuje
-spustit GUI bez systémové instalace; externí nástroje se řeší zvlášť
-v systému nebo prostřednictvím karty Nástroje.
+Package filenames depend on version and architecture. DEB/RPM **recommend** `yt-dlp` and `ffmpeg` but do not bundle them or run hidden download scripts. Package-manager behavior differs by distribution. For other Linux systems, unpack the portable `tar.gz` and run `./yt-dlp-gui/yt-dlp-gui`. An existing compatible .NET runtime is **not** required by the self-contained builds.
 
-## Lokalizace
+For a per-user Linux installation from source, run `./scripts/install.sh`; for removal, `./scripts/install.sh --uninstall`.
 
-Rozhraní nyní postupně přechází na jednoduchý dictionaryless JSON model.
-`src/YtDlpUi.Core/Locales/en.json` obsahuje anglické klíče i hodnoty,
-`cs.json` obsahuje české překlady. Chybějící překlad vrací anglický klíč.
-Překladové řetězce se používají pomocí `{loc:Tr Key='Download'}` v XAML.
-Jazyk lze změnit přímo na kartě **Nástroje** bez restartu a volba se uloží
-do `settings.json`. Při prvním spuštění se používá jazyk systému, pokud je
-dostupný, jinak angličtina.
+**All pre-release builds are test artifacts, not signed production releases.** See [Installation](Docs/Installation/en.md) for exact build commands, dependencies and platform limitations.
 
-V první fázi jsou lokalizovány hlavní okno a vybrané části karet
-**Stáhnout** a **Nástroje**. Další karty a dynamické zprávy zatím
-zůstávají v češtině.
+## Build from source
 
-### Automatické načítání jazyků
+Install the **.NET 10 SDK** (see `global.json`) and clone the repository:
 
-Výběr jazyka je **vpravo nahoře vedle indikátorů yt-dlp a FFmpeg**.
-Nabídka není pevně omezena na češtinu a angličtinu: čte dostupné
-`Locales/*.json` z projektu a při běhu také z těchto složek:
+~~~bash
+git clone https://github.com/afrowaveltd/yt-dlp-ui.git
+cd yt-dlp-ui
+dotnet restore YtDlpUi.slnx
+dotnet build YtDlpUi.slnx -c Release
+dotnet run --project src/YtDlpUi/YtDlpUi.csproj
+dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
+~~~
 
-- `Locales/` vedle spuštěné aplikace, například `/opt/yt-dlp-gui/Locales/`.
-- **Linux:** `~/.config/yt-dlp-ui/Locales/` (nebo `$XDG_CONFIG_HOME/yt-dlp-ui/Locales/`).
-- **Windows:** `%LOCALAPPDATA%\\yt-dlp-ui\\Locales\\`.
+`yt-dlp` is required to download; `ffmpeg` / `ffprobe` are needed for merging and many conversion workflows. Use the **Tools** tab to check their status or choose custom paths.
 
-Například vytvořením souboru `pt-BR.json` s obsahem:
+## Localization in one minute
 
-```json
+The language selector is in the **top-right header** next to the yt-dlp/FFmpeg indicators. Choose your language and it updates already localized controls immediately.
+
+To add a translation without rebuilding, create a JSON dictionary such as `pt-BR.json` in:
+
+- Linux: `~/.config/yt-dlp-ui/Locales/` (or `$XDG_CONFIG_HOME/yt-dlp-ui/Locales/`)
+- Windows: `%LOCALAPPDATA%\yt-dlp-ui\Locales\`
+- Alternatively: `Locales/` next to the application executable
+
+~~~json
 {
   "Download": "Baixar",
   "About": "Sobre"
 }
-```
+~~~
 
-získáte v nabídce jazyk **Português (Brasil) (pt-BR)**, bez úprav C#
-a bez překompilování. Seznam souborů se znovu načítá při otevření
-rozbalovací nabídky, takže funguje i přidání za běhu. Chybějící klíče
-zůstávají v angličtině. Nesprávný JSON se bezpečně ignoruje.
-Soubor v uživatelské složce má přednost před slovníkem zabaleným s aplikací.
+Reopen the language selector to rescan files. Filenames are culture codes (e.g. `fr.json`, `pt-BR.json`); keys are English UI strings. Missing or empty translations fall back to the English key. Custom dictionaries take precedence over bundled ones. More: [Localization](Docs/Localization/en.md).
 
-Při vývoji stačí přidat nový `src/YtDlpUi.Core/Locales/<jazyk>.json`.
-Nový JSON se při sestavení automaticky zahrne mezi zdroje i do výstupního
-adresáře. Kód načítání není potřeba měnit. Datová vrstva zůstává
-oddělená pro budoucí přechod na UnderstandMe.
+## Documentation
 
-## Jak aplikaci používat
+| Topic | English | Česky |
+|---|---|---|
+| Documentation index | [Index](Docs/Documentation/en.md) | [Rozcestník](Docs/Documentation/cs.md) |
+| Getting started | [Guide](Docs/Getting-Started/en.md) | [Průvodce](Docs/Getting-Started/cs.md) |
+| Installation and packages | [Install](Docs/Installation/en.md) | [Instalace](Docs/Installation/cs.md) |
+| Features and workflow | [Features](Docs/Features/en.md) | [Funkce](Docs/Features/cs.md) |
+| Localization | [Locales](Docs/Localization/en.md) | [Jazyky](Docs/Localization/cs.md) |
+| Configuration and storage | [Settings](Docs/Configuration/en.md) | [Nastavení](Docs/Configuration/cs.md) |
+| Troubleshooting | [Help](Docs/Troubleshooting/en.md) | [Řešení problémů](Docs/Troubleshooting/cs.md) |
+| Development and verification | [Development](Docs/Development-and-Verification/en.md) | [Vývoj](Docs/Development-and-Verification/cs.md) |
+| 0.1.0 preparation | [Release checklist](Docs/Release-0.1.0/en.md) | [Kontrolní seznam](Docs/Release-0.1.0/cs.md) |
 
-1. Zkopírujte si odkaz na video kdekoliv (v prohlížeči, v aplikaci…).
-2. Otevřete yt-dlp GUI – odkaz se sám objeví v poli *Odkaz na video* a rovnou se analyzuje.
-3. Vyberte profil (např. *Full HD (1080p)* nebo *Jen zvuk – MP3*).
-4. Zkontrolujte složku, kam se má soubor uložit.
-5. Stiskněte **Stáhnout**.
+## License, privacy and attribution
 
-Hotový soubor otevřete tlačítkem **Otevřít složku**.
+The **GUI source code** is licensed under [MIT](LICENSE). [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [FFmpeg](https://ffmpeg.org/) are separate third-party projects with their **own licenses**; installing their binaries does not change the GUI license. No application telemetry or ads are included. Metadata lookup, downloads, dependency setup and update checks can still contact their respective online services when requested or enabled.
 
-### Klávesové zkratky
+Remembered download options deliberately omit supported password and 2FA fields. Treat downloaded files, cookies and logs according to your own privacy needs. Download only media you are authorized to access and respect site terms.
 
-| Zkratka | Akce |
-| --- | --- |
-| `Ctrl+L` | skočit do pole s odkazem |
-| `F5` | analyzovat odkaz |
-| `Ctrl+Enter` | stáhnout |
-
-## Kde se co ukládá
-
-| Co | Kde |
-| --- | --- |
-| Nastavení aplikace a poslední volby | `~/.config/yt-dlp-ui/settings.json` |
-| Stažené soubory | výchozí složka *Stažené* (zjistí se z `user-dirs.dirs`), lze změnit |
-| yt-dlp nainstalované aplikací | `~/.local/bin/yt-dlp` |
-
-Hesla a 2FA kódy se **nikdy neukládají** na disk.
-
-## Řešení problémů
-
-- **„yt-dlp není nainstalováno“** – otevřete kartu *Nástroje* a stiskněte *Stáhnout a nainstalovat*.
-  Případně nainstalujte z terminálu: `pipx install yt-dlp`.
-- **„Nelze sloučit video a zvuk“** – chybí ffmpeg. Nainstalujte jej (viz *Požadavky*).
-- **Video vyžaduje přihlášení** – karta *Přihlášení* → *Načíst cookies z prohlížeče* → vyberte prohlížeč,
-  ve kterém jste přihlášeni.
-- **Něco nefunguje a nevím proč** – karta *Pokročilé* → zapněte *Podrobný výstup (verbose)*, zopakujte akci
-  a podívejte se do logu ve spodní části okna. Tlačítkem *Kopírovat* jej snadno přenesete jinam.
-- **Aplikace se nespustí na virtuálním stroji** – zkuste `YTDLP_GUI_SOFTWARE_RENDER=1 ./publish/yt-dlp-gui`
-  (vypne hardwarové vykreslování OpenGL).
-- **Chci vidět, proč se něco chová divně** – `YTDLP_GUI_TRACE=1` vypíše do terminálu varování Avalonia UI.
-- **Jednosouborové sestavení hlásí `Failed to determine location for extracting embedded files`** –
-  nastavte zapisovatelný adresář: `DOTNET_BUNDLE_EXTRACT_BASE_DIR=/tmp/dotnet ./publish/yt-dlp-gui`,
-  nebo použijte výchozí (složkové) sestavení.
-
-## Struktura projektu
-
-```
-src/
-  YtDlpUi.Core/          # vše bez UI – testovatelné samostatně
-    Models/              # DownloadOptions (všechny volby), MediaInfo, AppSettings
-    Services/            # YtDlpArgumentBuilder, DownloadEngine, ProgressParser,
-                         # MetadataService, ToolLocator, YtDlpInstaller, SettingsStore
-  YtDlpUi/               # Avalonia UI
-    Views/               # MainWindow + jedna stránka na každou kartu
-    ViewModels/          # MainWindowViewModel, ToolchainViewModel, DownloadItemViewModel
-    Converters/, Styles/ # převodníky a vizuální styl
-scripts/                 # sestavení a instalace pro Windows i Linux
-packaging/windows/       # instalační průvodce Inno Setup
-packaging/               # položka nabídky aplikací
-```
-
-Klíčové místo pro přidání další volby yt-dlp:
-
-1. vlastnost v `DownloadOptions`,
-2. její namapování na přepínač v `YtDlpArgumentBuilder`,
-3. ovládací prvek v příslušné stránce.
-
-## Vývoj
-
-```bash
-dotnet build YtDlpUi.slnx
-dotnet run --project src/YtDlpUi/YtDlpUi.csproj
-```
-
-### Když `dotnet` hlásí „Read-only file system“
-
-Pokud jsou `~/.nuget` nebo `~/.dotnet` jen pro čtení, použijte přiložený pomocný skript, který
-přesune cache do složky projektu:
-
-```bash
-source ./.local-build-env.sh
-dotnet build YtDlpUi.slnx
-```
-
-Poznámka: projekt záměrně **nevypíná** trimming při publikaci (`PublishTrimmed=false`), protože vazby
-v XAML jsou reflexní a ořez by je rozbil. Kompilované vazby (`x:DataType`) by šly zapnout, ale přidaly by
-velké množství boilerplate do devíti stránek.
-
-## Ověření změn
-
-```bash
-dotnet build YtDlpUi.slnx -c Release
-dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
-```
-
-Smoke testy pokrývají přepínání jazyků, chybějící překlady a předávání cesty
-k FFmpeg. GitHub Actions navíc sestaví Linux i Windows variantu a ověří
-strukturu balíčku `.deb`. V reálném prostředí je stále potřeba ověřit
-samotné stahování a instalaci nástrojů.
-
-## Licence a poděkování
-
-Zdrojový kód aplikace je dostupný pod licencí [MIT](LICENSE). Můžete jej používat, upravovat a šířit za podmínek uvedených v licenci.
-
-Aplikace je pouze rozhraní – veškerou práci odvádí [yt-dlp](https://github.com/yt-dlp/yt-dlp) a
-[ffmpeg](https://ffmpeg.org/). Respektujte prosím autorská práva a podmínky služeb jednotlivých webů;
-stahujte jen obsah, ke kterému máte právo.
+This is a **0.1.0 release candidate in preparation**, not an announcement that a tagged GitHub Release has shipped. See [release readiness](Docs/Release-0.1.0/en.md).
