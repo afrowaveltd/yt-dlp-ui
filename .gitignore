@@ -16,3 +16,5 @@ artifacts/
 
 # OS
 .DS_Store
+
+.fake
