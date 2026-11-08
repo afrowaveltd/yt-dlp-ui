@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using YtDlpUi.Core.Models;
+using YtDlpUi.Core.Localization;
 using YtDlpUi.Core.Services;
 
 namespace YtDlpUi.ViewModels;
@@ -30,6 +31,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         _settingsStore = new SettingsStore();
         Settings = _settingsStore.Load();
+        SimpleLocalizer.Instance.SetLanguage(Settings.Language);
 
         Options = (Settings.RememberOptions
                       ? SettingsStore.RestoreOptions(Settings.LastOptionsJson)
@@ -969,11 +971,24 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         ScheduleAutosave();
     }
 
+    /// <summary>Switch to English without restarting the application.</summary>
+    [RelayCommand]
+    private void UseEnglish() => Settings.Language = "en";
+
+    /// <summary>Switch to Czech without restarting the application.</summary>
+    [RelayCommand]
+    private void UseCzech() => Settings.Language = "cs";
+
     private void OnSettingsChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(AppSettings.DarkTheme))
         {
             ApplyTheme();
+        }
+
+        if (e.PropertyName == nameof(AppSettings.Language))
+        {
+            SimpleLocalizer.Instance.SetLanguage(Settings.Language);
         }
 
         ScheduleAutosave();

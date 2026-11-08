@@ -1,10 +1,11 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:loc="using:YtDlpUi.Localization"
         xmlns:vm="using:YtDlpUi.ViewModels"
         xmlns:pages="using:YtDlpUi.Views.Pages"
         x:Class="YtDlpUi.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="yt-dlp GUI – stahování videí"
+        Title="{loc:Tr Key='yt-dlp GUI - Video downloader'}"
         Width="1320" Height="880"
         MinWidth="1040" MinHeight="700"
         WindowStartupLocation="CenterScreen"
@@ -28,7 +29,7 @@
           </Border>
           <StackPanel VerticalAlignment="Center" Spacing="1">
             <TextBlock Text="yt-dlp GUI" Classes="h1" />
-            <TextBlock Classes="hint" Text="Přátelské rozhraní pro stahování videí a hudby" />
+            <TextBlock Classes="hint" Text="{loc:Tr Key='A friendly way to download videos and music'}" />
           </StackPanel>
         </StackPanel>
 
@@ -74,11 +75,11 @@
       <Border Grid.Column="0" Classes="surface" Padding="0" ClipToBounds="True">
         <TabControl Margin="6,6,6,0" SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}">
 
-          <TabItem Header="Stáhnout">
+          <TabItem Header="{loc:Tr Key='Download'}">
             <pages:DownloadPage />
           </TabItem>
 
-          <TabItem Header="Formát">
+          <TabItem Header="{loc:Tr Key='Format'}">
             <pages:FormatPage />
           </TabItem>
 
@@ -86,27 +87,27 @@
             <pages:PlaylistPage />
           </TabItem>
 
-          <TabItem Header="Titulky a metadata">
+          <TabItem Header="{loc:Tr Key='Subtitles and metadata'}">
             <pages:MetadataPage />
           </TabItem>
 
-          <TabItem Header="Síť">
+          <TabItem Header="{loc:Tr Key='Network'}">
             <pages:NetworkPage />
           </TabItem>
 
-          <TabItem Header="Soubory">
+          <TabItem Header="{loc:Tr Key='Files'}">
             <pages:FilesPage />
           </TabItem>
 
-          <TabItem Header="Přihlášení">
+          <TabItem Header="{loc:Tr Key='Login'}">
             <pages:AuthPage />
           </TabItem>
 
-          <TabItem Header="Pokročilé">
+          <TabItem Header="{loc:Tr Key='Advanced'}">
             <pages:AdvancedPage />
           </TabItem>
 
-          <TabItem Header="Nástroje">
+          <TabItem Header="{loc:Tr Key='Tools'}">
             <pages:ToolsPage />
           </TabItem>
 
@@ -119,12 +120,12 @@
 
           <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
             <StackPanel Grid.Column="0" Spacing="2">
-              <TextBlock Text="Fronta stahování" Classes="h2" />
+              <TextBlock Text="{loc:Tr Key='Download queue'}" Classes="h2" />
               <TextBlock Text="{Binding QueueSummary}" Classes="hint" />
             </StackPanel>
-            <Button Grid.Column="1" Classes="ghost tiny" Content="Vyčistit"
+            <Button Grid.Column="1" Classes="ghost tiny" Content="{loc:Tr Key='Clear'}"
                     Command="{Binding ClearFinishedCommand}"
-                    ToolTip.Tip="Odstranit hotové a chybné položky" />
+                    ToolTip.Tip="{loc:Tr Key='Remove finished and failed items'}" />
           </Grid>
 
           <ListBox Grid.Row="1"
@@ -175,15 +176,15 @@
                                    Foreground="{DynamicResource ErrorBrush}" MaxLines="2" />
                       </StackPanel>
                       <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,4,0,0">
-                        <Button Classes="ghost tiny" Content="Složka"
+                        <Button Classes="ghost tiny" Content="{loc:Tr Key='Folder'}"
                                 Command="{Binding $parent[Window].DataContext.OpenItemFolderCommand}"
                                 CommandParameter="{Binding}"
                                 IsVisible="{Binding FilePath, Converter={StaticResource StringNotEmpty}}" />
-                        <Button Classes="ghost tiny" Content="Znovu"
+                        <Button Classes="ghost tiny" Content="{loc:Tr Key='Retry'}"
                                 Command="{Binding $parent[Window].DataContext.RetryQueueItemCommand}"
                                 CommandParameter="{Binding}"
                                 IsVisible="{Binding IsFinished}" />
-                        <Button Classes="ghost tiny" Content="Odebrat"
+                        <Button Classes="ghost tiny" Content="{loc:Tr Key='Remove'}"
                                 Command="{Binding $parent[Window].DataContext.RemoveQueueItemCommand}"
                                 CommandParameter="{Binding}" />
                       </StackPanel>
@@ -196,7 +197,7 @@
 
           <TextBlock Grid.Row="1" Classes="hint" Margin="4,20,4,0"
                      IsVisible="{Binding Queue.Count, Converter={StaticResource IsZero}}"
-                     Text="Zatím nic ke stažení. Vložte odkaz vlevo a stiskněte „Stáhnout“." />
+                     Text="{loc:Tr Key='Nothing to download yet. Paste a link on the left and press Download.'}" />
 
           <ProgressBar Grid.Row="2" Margin="0,10,0,0"
                        Minimum="0" Maximum="100"
@@ -227,13 +228,13 @@
         </StackPanel>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Spacing="8">
-          <Button Content="⬇  Stáhnout" Classes="primary"
+          <Button Content="{loc:Tr Key='⬇  Download'}" Classes="primary"
                   Command="{Binding DownloadCommand}"
                   IsVisible="{Binding Url, Converter={StaticResource StringNotEmpty}}"
                   ToolTip.Tip="Stáhnout zadaný odkaz (Ctrl+Enter)" />
-          <Button Content="Otevřít složku" Classes="ghost"
+          <Button Content="{loc:Tr Key='Open folder'}" Classes="ghost"
                   Command="{Binding OpenOutputFolderCommand}" />
-          <Button Content="Zrušit" Classes="danger"
+          <Button Content="{loc:Tr Key='Cancel'}" Classes="danger"
                   Command="{Binding CancelAllCommand}"
                   IsVisible="{Binding IsQueueRunning}" />
         </StackPanel>
@@ -255,11 +256,11 @@
             BorderThickness="1" CornerRadius="12">
       <Grid RowDefinitions="Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="14,8,10,4">
-          <TextBlock Grid.Column="0" Text="Výstup yt-dlp" Classes="section" VerticalAlignment="Center" />
+          <TextBlock Grid.Column="0" Text="{loc:Tr Key='yt-dlp output'}" Classes="section" VerticalAlignment="Center" />
           <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4">
-            <Button Classes="ghost tiny" Content="Kopírovat" Click="OnCopyLogClick"
-                    ToolTip.Tip="Zkopírovat celý výstup do schránky" />
-            <Button Classes="ghost tiny" Content="Vymazat" Command="{Binding ClearLogCommand}" />
+            <Button Classes="ghost tiny" Content="{loc:Tr Key='Copy'}" Click="OnCopyLogClick"
+                    ToolTip.Tip="{loc:Tr Key='Copy all output to the clipboard'}" />
+            <Button Classes="ghost tiny" Content="{loc:Tr Key='Clear log'}" Command="{Binding ClearLogCommand}" />
           </StackPanel>
         </Grid>
 
