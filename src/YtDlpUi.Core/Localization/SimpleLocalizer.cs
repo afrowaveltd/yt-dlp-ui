@@ -1,26 +1,47 @@
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Text.Json;
+using YtDlpUi.Core.Services;
 
 namespace YtDlpUi.Core.Localization;
 
+/// <summary>Language discovered from a JSON dictionary (for example cs or pt-BR).</summary>
+public sealed record LanguageOption(string Code, string DisplayName);
+
 /// <summary>
-/// Tiny dictionaryless JSON localization service. English sentences are the keys.
-/// No format strings, hidden network calls, or dependencies on the UI framework.
+/// Minimal dictionaryless localizer: English sentences are the keys and the fallback.
+/// Discovers embedded and on-disk Locales/*.json without hard-coded language choices.
 /// </summary>
 public sealed class SimpleLocalizer
 {
+    private const string Prefix = "YtDlpUi.Core.Locales.";
+    private const string Suffix = ".json";
     private readonly Dictionary<string, LocalizedText> _texts = new(StringComparer.Ordinal);
+    private readonly string _userLocaleDirectory;
+    private Dictionary<string, Dictionary<string, string>> _catalog = new(StringComparer.OrdinalIgnoreCase);
     private Dictionary<string, string> _translations = new(StringComparer.Ordinal);
+    private IReadOnlyList<LanguageOption> _availableLanguages = Array.Empty<LanguageOption>();
 
-    /// <summary>Shared, UI-thread-owned service.</summary>
+    /// <summary>Shared localizer; use from the UI thread.</summary>
     public static SimpleLocalizer Instance { get; } = new();
 
-    /// <summary>Active language (currently "en" or "cs").</summary>
+    /// <summary>
+    /// The optional directory overrides the standard user configuration Locales folder.
+    /// Useful for tests and user-defined languages without rebuilding the application.
+    /// </summary>
+    public SimpleLocalizer(string? userLocaleDirectory = null)
+    {
+        _userLocaleDirectory = userLocaleDirectory ?? Path.Combine(UserPaths.ConfigDirectory, "Locales");
+        RefreshLanguages();
+    }
+
+    /// <summary>Currently selected language code.</summary>
     public string Language { get; private set; } = "en";
 
-    /// <summary>Cached, observable translation for a text key.</summary>
+    /// <summary>Valid languages available in embedded and filesystem dictionaries.</summary>
+    public IReadOnlyList<LanguageOption> AvailableLanguages => _availableLanguages;
+
+    /// <summary>Cached, observable translation for an English key.</summary>
     public LocalizedText For(string english)
     {
         if (!_texts.TryGetValue(english, out var entry))
@@ -32,7 +53,7 @@ public sealed class SimpleLocalizer
         return entry;
     }
 
-    /// <summary>Translate using a strict English fallback.</summary>
+    /// <summary>Missing or empty translations fall back to the English key.</summary>
     public string Translate(string? english) =>
         english is null ? string.Empty :
         _translations.TryGetValue(english, out var translated) && !string.IsNullOrEmpty(translated)
@@ -40,55 +61,184 @@ public sealed class SimpleLocalizer
             : english;
 
     /// <summary>
-    /// Select a language; "system" uses the OS UI culture. Unknown languages fall back
-    /// to English. Call from the UI thread so PropertyChanged handlers can update views.
+    /// Scan bundled resources, application-local Locales, and the user's Locales folder.
+    /// Later valid dictionaries override earlier ones; malformed files are ignored.
+    /// Call from the UI thread, including when reopening the language selector.
+    /// </summary>
+    public void RefreshLanguages()
+    {
+        var catalog = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        var assembly = typeof(SimpleLocalizer).Assembly;
+        foreach (var resource in assembly.GetManifestResourceNames())
+        {
+            if (!resource.StartsWith(Prefix, StringComparison.Ordinal) ||
+                !resource.EndsWith(Suffix, StringComparison.OrdinalIgnoreCase) ||
+                !TryCulture(resource[Prefix.Length..^Suffix.Length], out var code))
+            {
+                continue;
+            }
+
+            using var stream = assembly.GetManifestResourceStream(resource);
+            if (stream is not null && TryRead(stream, out var values))
+            {
+                catalog[code] = values;
+            }
+        }
+
+        AddFiles(catalog, Path.Combine(AppContext.BaseDirectory, "Locales"));
+        AddFiles(catalog, _userLocaleDirectory);
+        catalog.TryAdd("en", new Dictionary<string, string>(StringComparer.Ordinal));
+        _catalog = catalog;
+        _availableLanguages = catalog.Keys.Select(code =>
+        {
+            var culture = CultureInfo.GetCultureInfo(code);
+            var name = culture.NativeName;
+            var nativeName = string.IsNullOrEmpty(name) ? code : char.ToUpper(name[0], culture) + name[1..];
+            return new LanguageOption(code, $"{nativeName} ({code})");
+        }).OrderBy(item => item.Code == "en" ? 0 : 1)
+          .ThenBy(item => item.DisplayName, StringComparer.CurrentCultureIgnoreCase)
+          .ToArray();
+
+        SetLanguage(Language);
+    }
+
+    /// <summary>
+    /// Resolve full culture first (pt-BR), then parent (pt); use OS language when
+    /// the setting is "system". Unknown languages fall back to English.
     /// </summary>
     public void SetLanguage(string? language)
     {
         var requested = string.IsNullOrWhiteSpace(language) ||
                         string.Equals(language, "system", StringComparison.OrdinalIgnoreCase)
-            ? CultureInfo.CurrentUICulture.TwoLetterISOLanguageName
-            : language.Split('-', '_')[0];
+            ? CultureInfo.CurrentUICulture.Name
+            : language.Trim();
 
-        Language = string.Equals(requested, "cs", StringComparison.OrdinalIgnoreCase) ? "cs" : "en";
-        _translations = LoadDictionary(Language);
-
-        foreach (var (key, value) in _texts)
+        while (!string.IsNullOrEmpty(requested))
         {
-            value.SetValue(Translate(key));
+            if (_catalog.TryGetValue(requested, out var dictionary))
+            {
+                Language = _catalog.Keys.First(code =>
+                    string.Equals(code, requested, StringComparison.OrdinalIgnoreCase));
+                _translations = Language.Equals("en", StringComparison.OrdinalIgnoreCase)
+                    ? new Dictionary<string, string>(StringComparer.Ordinal)
+                    : dictionary;
+                RefreshBindings();
+                return;
+            }
+
+            var separator = requested.LastIndexOf('-');
+            if (separator < 0)
+            {
+                break;
+            }
+
+            requested = requested[..separator];
+        }
+
+        Language = "en";
+        _translations = new Dictionary<string, string>(StringComparer.Ordinal);
+        RefreshBindings();
+    }
+
+    private void RefreshBindings()
+    {
+        foreach (var (key, text) in _texts)
+        {
+            text.SetValue(Translate(key));
         }
     }
 
-    private static Dictionary<string, string> LoadDictionary(string language)
+    private static void AddFiles(
+        Dictionary<string, Dictionary<string, string>> catalog, string directory)
     {
-        var result = new Dictionary<string, string>(StringComparer.Ordinal);
-        var assembly = typeof(SimpleLocalizer).Assembly;
-        var name = $"YtDlpUi.Core.Locales.{language}.json";
-        using var stream = assembly.GetManifestResourceStream(name);
-        if (stream is null)
+        try
         {
-            return result;
-        }
-
-        using var json = JsonDocument.Parse(stream);
-        if (json.RootElement.ValueKind != JsonValueKind.Object)
-        {
-            return result;
-        }
-
-        foreach (var item in json.RootElement.EnumerateObject())
-        {
-            if (item.Value.ValueKind == JsonValueKind.String)
+            if (!Directory.Exists(directory))
             {
-                result[item.Name] = item.Value.GetString() ?? string.Empty;
+                return;
+            }
+
+            foreach (var file in Directory.EnumerateFiles(directory, "*.json", SearchOption.TopDirectoryOnly))
+            {
+                if (!TryCulture(Path.GetFileNameWithoutExtension(file), out var code))
+                {
+                    continue;
+                }
+
+                try
+                {
+                    if (new FileInfo(file).Length > 4 * 1024 * 1024)
+                    {
+                        continue;
+                    }
+
+                    using var stream = File.OpenRead(file);
+                    if (TryRead(stream, out var values))
+                    {
+                        catalog[code] = values;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Optional external file may be malformed, missing or inaccessible.
+                }
             }
         }
+        catch (Exception)
+        {
+            // An inaccessible external directory must not prevent startup.
+        }
+    }
 
-        return result;
+    private static bool TryCulture(string name, out string code)
+    {
+        code = string.Empty;
+        if (string.IsNullOrEmpty(name) || name.Length > 32 ||
+            name.Any(character => !(char.IsAsciiLetterOrDigit(character) || character == '-')))
+        {
+            return false;
+        }
+
+        try
+        {
+            code = CultureInfo.GetCultureInfo(name).Name;
+            return !string.IsNullOrEmpty(code);
+        }
+        catch (CultureNotFoundException)
+        {
+            return false;
+        }
+    }
+
+    private static bool TryRead(Stream stream, out Dictionary<string, string> values)
+    {
+        values = new Dictionary<string, string>(StringComparer.Ordinal);
+        try
+        {
+            using var document = JsonDocument.Parse(stream);
+            if (document.RootElement.ValueKind != JsonValueKind.Object)
+            {
+                return false;
+            }
+
+            foreach (var property in document.RootElement.EnumerateObject())
+            {
+                if (property.Value.ValueKind == JsonValueKind.String)
+                {
+                    values[property.Name] = property.Value.GetString() ?? string.Empty;
+                }
+            }
+
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
     }
 }
 
-/// <summary>Observable translation string, updated when the language changes.</summary>
+/// <summary>Observable translation, changed in-place when language switches.</summary>
 public sealed class LocalizedText : INotifyPropertyChanged
 {
     internal LocalizedText(string key, string value)
