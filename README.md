@@ -246,9 +246,37 @@ dostupný, jinak angličtina.
 
 V první fázi jsou lokalizovány hlavní okno a vybrané části karet
 **Stáhnout** a **Nástroje**. Další karty a dynamické zprávy zatím
-zůstávají v češtině. Pro přidání nového jazyka stačí přidat JSON a jeho
-dvoupísmenný jazyk do `SimpleLocalizer`; data i UI jsou oddělená pro
-budoucí přechod na UnderstandMe.
+zůstávají v češtině.
+
+### Automatické načítání jazyků
+
+Výběr jazyka je **vpravo nahoře vedle indikátorů yt-dlp a FFmpeg**.
+Nabídka není pevně omezena na češtinu a angličtinu: čte dostupné
+`Locales/*.json` z projektu a při běhu také z těchto složek:
+
+- `Locales/` vedle spuštěné aplikace, například `/opt/yt-dlp-gui/Locales/`.
+- **Linux:** `~/.config/yt-dlp-ui/Locales/` (nebo `$XDG_CONFIG_HOME/yt-dlp-ui/Locales/`).
+- **Windows:** `%LOCALAPPDATA%\\yt-dlp-ui\\Locales\\`.
+
+Například vytvořením souboru `pt-BR.json` s obsahem:
+
+```json
+{
+  "Download": "Baixar",
+  "About": "Sobre"
+}
+```
+
+získáte v nabídce jazyk **Português (Brasil) (pt-BR)**, bez úprav C#
+a bez překompilování. Seznam souborů se znovu načítá při otevření
+rozbalovací nabídky, takže funguje i přidání za běhu. Chybějící klíče
+zůstávají v angličtině. Nesprávný JSON se bezpečně ignoruje.
+Soubor v uživatelské složce má přednost před slovníkem zabaleným s aplikací.
+
+Při vývoji stačí přidat nový `src/YtDlpUi.Core/Locales/<jazyk>.json`.
+Nový JSON se při sestavení automaticky zahrne mezi zdroje i do výstupního
+adresáře. Kód načítání není potřeba měnit. Datová vrstva zůstává
+oddělená pro budoucí přechod na UnderstandMe.
 
 ## Jak aplikaci používat
 
