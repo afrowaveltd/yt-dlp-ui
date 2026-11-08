@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- Only internet permission. Android DownloadManager writes directly to Downloads;
+       storage/media super-permissions and MANAGE_EXTERNAL_STORAGE are not required. -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <application android:label="Afrowave yt-dlp" android:usesCleartextTraffic="false" />
+</manifest>
