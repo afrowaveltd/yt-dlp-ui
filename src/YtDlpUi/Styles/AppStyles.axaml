@@ -275,6 +275,43 @@
     <Setter Property="OffContent" Value="" />
   </Style>
 
+  <!-- ===================== Semantic colour classes =====================
+       Declared as classes so the colour comes from a DynamicResource and therefore
+       follows the active theme. A converter-returned brush would stay stuck on the
+       palette that was active when the item was first rendered. -->
+
+  <Style Selector="TextBlock.st-app">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.st-muted">
+    <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.st-warning">
+    <Setter Property="Foreground" Value="{DynamicResource WarningBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.st-error">
+    <Setter Property="Foreground" Value="{DynamicResource ErrorBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.st-success">
+    <Setter Property="Foreground" Value="{DynamicResource SuccessBrush}" />
+  </Style>
+
+  <Style Selector="TextBlock.st-accent">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+  </Style>
+
+  <Style Selector="Ellipse.dot-ok">
+    <Setter Property="Fill" Value="{DynamicResource SuccessBrush}" />
+  </Style>
+
+  <Style Selector="Ellipse.dot-missing">
+    <Setter Property="Fill" Value="{DynamicResource ErrorBrush}" />
+  </Style>
+
   <!-- ===================== Progress ===================== -->
   <Style Selector="ProgressBar">
     <Setter Property="Background" Value="{DynamicResource TrackBrush}" />

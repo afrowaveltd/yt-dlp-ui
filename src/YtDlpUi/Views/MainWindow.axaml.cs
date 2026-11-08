@@ -70,8 +70,6 @@ public partial class MainWindow : Window
             {
                 Height = _viewModel.Settings.WindowHeight;
             }
-
-            ApplyThemeVariant();
         }
     }
 
@@ -127,18 +125,6 @@ public partial class MainWindow : Window
             .FirstOrDefault(candidate => candidate.Name == "UrlBox");
 
         box?.Focus();
-    }
-
-    private void ApplyThemeVariant()
-    {
-        if (_viewModel is null)
-        {
-            return;
-        }
-
-        RequestedThemeVariant = _viewModel.Settings.DarkTheme
-            ? Avalonia.Styling.ThemeVariant.Dark
-            : Avalonia.Styling.ThemeVariant.Light;
     }
 
     private async Task PollClipboardAsync()

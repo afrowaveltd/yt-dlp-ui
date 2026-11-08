@@ -69,7 +69,13 @@ else
 fi
 
 cd "$ROOT"
-rm -rf "$OUT"
+
+# Some filesystems (network shares, FUSE mounts) refuse to remove a directory even when it is
+# empty, so clear the contents first and only then try to drop the directory itself.
+if [ -d "$OUT" ]; then
+  find "$OUT" -mindepth 1 -delete 2>/dev/null || true
+  rmdir "$OUT" 2>/dev/null || true
+fi
 dotnet publish src/YtDlpUi/YtDlpUi.csproj "${PUBLISH_ARGS[@]}"
 
 rm -f "$OUT"/*.pdb

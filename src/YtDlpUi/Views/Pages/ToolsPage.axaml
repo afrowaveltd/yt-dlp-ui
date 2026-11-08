@@ -10,7 +10,8 @@
         <StackPanel Spacing="12">
           <Grid ColumnDefinitions="Auto,*,Auto">
             <Ellipse Grid.Column="0" Width="12" Height="12" Margin="0,0,12,0" VerticalAlignment="Center"
-                     Fill="{Binding Toolchain.YtDlpAvailable, Converter={StaticResource AvailableBrush}}" />
+                     Classes.dot-ok="{Binding Toolchain.YtDlpAvailable}"
+                     Classes.dot-missing="{Binding !Toolchain.YtDlpAvailable}" />
             <StackPanel Grid.Column="1" Spacing="2">
               <TextBlock Classes="h2" Text="yt-dlp" />
               <TextBlock Classes="hint" Text="{Binding Toolchain.YtDlpLocationText}"
@@ -110,7 +111,8 @@
         <StackPanel Spacing="12">
           <Grid ColumnDefinitions="Auto,*,Auto">
             <Ellipse Grid.Column="0" Width="12" Height="12" Margin="0,0,12,0" VerticalAlignment="Center"
-                     Fill="{Binding Toolchain.FfmpegAvailable, Converter={StaticResource AvailableBrush}}" />
+                     Classes.dot-ok="{Binding Toolchain.FfmpegAvailable}"
+                     Classes.dot-missing="{Binding !Toolchain.FfmpegAvailable}" />
             <StackPanel Grid.Column="1" Spacing="2">
               <TextBlock Classes="h2" Text="ffmpeg" />
               <TextBlock Classes="hint" Text="{Binding Toolchain.FfmpegLocationText}"

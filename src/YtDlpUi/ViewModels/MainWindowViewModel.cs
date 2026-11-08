@@ -71,6 +71,9 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
         AddLog("Vítejte! Vložte odkaz na video a stiskněte „Analyzovat“ nebo rovnou „Stáhnout“.", LogKind.App);
 
+        // Apply the remembered theme before the first window is shown.
+        ApplyTheme();
+
         // Make sure the configuration file exists right away so it can be inspected or edited.
         ScheduleAutosave();
 
@@ -209,6 +212,12 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     /// <summary>Timestamp of the last clipboard poll, used by the window timer.</summary>
     public bool ClipboardWatchingEnabled => Settings.AutoFillFromClipboard && Settings.WatchClipboardContinuously;
+
+    /// <summary>Glyph for the theme button: a sun while the dark theme is active.</summary>
+    public string ThemeGlyph => Settings.DarkTheme ? "☀" : "🌙";
+
+    /// <summary>Tooltip for the theme button.</summary>
+    public string ThemeTooltip => Settings.DarkTheme ? "Přepnout na světlý režim" : "Přepnout na tmavý režim";
 
     /// <summary>True when the welcome card should be visible.</summary>
     public bool ShowWelcome => !Settings.FirstRunCompleted;
@@ -1044,12 +1053,17 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     private void ApplyTheme()
     {
+        // The variant must be set on the application: a window-level variant would win and
+        // make the theme button look dead once a window had pinned its own value.
         if (Avalonia.Application.Current is { } app)
         {
             app.RequestedThemeVariant = Settings.DarkTheme
                 ? Avalonia.Styling.ThemeVariant.Dark
                 : Avalonia.Styling.ThemeVariant.Light;
         }
+
+        OnPropertyChanged(nameof(ThemeGlyph));
+        OnPropertyChanged(nameof(ThemeTooltip));
     }
 
     /// <summary>Set the output filename template from a ready-made choice.</summary>
@@ -1244,6 +1258,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
     {
         Settings.DarkTheme = !Settings.DarkTheme;
         ApplyTheme();
+        AddLog(Settings.DarkTheme ? "Zapnut tmavý režim." : "Zapnut světlý režim.", LogKind.App);
     }
 
     /// <summary>Jump to the tools tab so the user can install yt-dlp.</summary>

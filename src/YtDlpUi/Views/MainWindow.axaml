@@ -38,7 +38,8 @@
           <Border Classes="pill" ToolTip.Tip="{Binding Toolchain.YtDlpLocationText}">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <Ellipse Width="8" Height="8" VerticalAlignment="Center"
-                       Fill="{Binding Toolchain.YtDlpAvailable, Converter={StaticResource AvailableBrush}}" />
+                       Classes.dot-ok="{Binding Toolchain.YtDlpAvailable}"
+                       Classes.dot-missing="{Binding !Toolchain.YtDlpAvailable}" />
               <TextBlock Classes="mono" VerticalAlignment="Center">
                 <TextBlock.Text>
                   <MultiBinding StringFormat="yt-dlp {0}">
@@ -53,13 +54,15 @@
           <Border Classes="pill" ToolTip.Tip="{Binding Toolchain.FfmpegLocationText}">
             <StackPanel Orientation="Horizontal" Spacing="8">
               <Ellipse Width="8" Height="8" VerticalAlignment="Center"
-                       Fill="{Binding Toolchain.FfmpegAvailable, Converter={StaticResource AvailableBrush}}" />
+                       Classes.dot-ok="{Binding Toolchain.FfmpegAvailable}"
+                       Classes.dot-missing="{Binding !Toolchain.FfmpegAvailable}" />
               <TextBlock Classes="mono" Text="ffmpeg" VerticalAlignment="Center" />
             </StackPanel>
           </Border>
 
-          <Button Classes="ghost" Command="{Binding ToggleThemeCommand}" ToolTip.Tip="Přepnout světlý / tmavý režim">
-            <TextBlock Text="◐" FontSize="15" />
+          <Button Classes="ghost" Command="{Binding ToggleThemeCommand}"
+                  ToolTip.Tip="{Binding ThemeTooltip}">
+            <TextBlock Text="{Binding ThemeGlyph}" FontSize="15" />
           </Button>
         </StackPanel>
       </Grid>
@@ -149,8 +152,12 @@
                                FontWeight="Medium" MaxLines="2" TextTrimming="CharacterEllipsis" />
                     <TextBlock Grid.Row="0" Grid.Column="1"
                                Text="{Binding StateText}"
-                               Classes="hint" VerticalAlignment="Top"
-                               Foreground="{Binding State, Converter={StaticResource StateBrush}}" />
+                               FontSize="11.5" VerticalAlignment="Top"
+                               Classes.st-success="{Binding StateSuccess}"
+                               Classes.st-error="{Binding StateError}"
+                               Classes.st-muted="{Binding StateMuted}"
+                               Classes.st-accent="{Binding StateAccent}"
+                               Classes.st-warning="{Binding StateWarning}" />
 
                     <ProgressBar Grid.Row="1" Grid.ColumnSpan="2"
                                  Classes="tiny" Margin="0,8,0,6"
@@ -276,7 +283,10 @@
                            Foreground="{DynamicResource TextMutedBrush}" Margin="0,0,8,0" />
                 <TextBlock Grid.Column="2" Text="{Binding Text}" Classes="mono"
                            TextWrapping="NoWrap"
-                           Foreground="{Binding Kind, Converter={StaticResource LogKindBrush}}" />
+                           Classes.st-app="{Binding IsApp}"
+                           Classes.st-warning="{Binding IsWarning}"
+                           Classes.st-error="{Binding IsError}"
+                           Classes.st-muted="{Binding IsDebug}" />
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>

@@ -101,59 +101,7 @@ public sealed class EnumLabelConverter : IValueConverter
         BindingOperations.DoNothing;
 }
 
-/// <summary>Colours log lines by their kind.</summary>
-public sealed class LogKindBrushConverter : IValueConverter
-{
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        var key = value switch
-        {
-            LogKind.Error => "ErrorBrush",
-            LogKind.Warning => "WarningBrush",
-            LogKind.Debug => "TextMutedBrush",
-            LogKind.App => "AccentBrush",
-            _ => "TextSecondaryBrush",
-        };
 
-        if (Application.Current?.TryGetResource(key, null, out var brush) == true && brush is IBrush found)
-        {
-            return found;
-        }
-
-        return Brushes.Gray;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        BindingOperations.DoNothing;
-}
-
-/// <summary>Colours queue items by their state.</summary>
-public sealed class DownloadStateBrushConverter : IValueConverter
-{
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        var key = value switch
-        {
-            DownloadState.Completed => "SuccessBrush",
-            DownloadState.Failed => "ErrorBrush",
-            DownloadState.Cancelled => "TextMutedBrush",
-            DownloadState.Downloading => "AccentBrush",
-            DownloadState.Analyzing => "AccentBrush",
-            DownloadState.Queued => "WarningBrush",
-            _ => "TextSecondaryBrush",
-        };
-
-        if (Application.Current?.TryGetResource(key, null, out var brush) == true && brush is IBrush found)
-        {
-            return found;
-        }
-
-        return Brushes.Gray;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        BindingOperations.DoNothing;
-}
 
 /// <summary>True when the value is null, used for indeterminate progress bars.</summary>
 public sealed class IsNullConverter : IValueConverter
@@ -185,23 +133,6 @@ public sealed class IsZeroConverter : IValueConverter
         BindingOperations.DoNothing;
 }
 
-/// <summary>Green dot for available tools, red for missing ones.</summary>
-public sealed class AvailableBrushConverter : IValueConverter
-{
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        var key = value is true ? "SuccessBrush" : "ErrorBrush";
-        if (Application.Current?.TryGetResource(key, null, out var brush) == true && brush is IBrush found)
-        {
-            return found;
-        }
-
-        return Brushes.Gray;
-    }
-
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) =>
-        BindingOperations.DoNothing;
-}
 
 /// <summary>Formats byte counts.</summary>
 public sealed class BytesConverter : IValueConverter

@@ -26,11 +26,22 @@ public enum LogKind
     Debug,
 }
 
-/// <summary>One line in the shared log pane.</summary>
+/// <summary>
+/// One line in the shared log pane. The <c>Is…</c> flags drive style classes so the
+/// colour follows the active theme instead of being baked in by a converter.
+/// </summary>
 public sealed record LogLine(string Text, LogKind Kind)
 {
     /// <summary>Timestamp shown in front of the message.</summary>
     public string Stamp { get; } = DateTime.Now.ToString("HH:mm:ss");
+
+    public bool IsApp => Kind == LogKind.App;
+
+    public bool IsWarning => Kind == LogKind.Warning;
+
+    public bool IsError => Kind == LogKind.Error;
+
+    public bool IsDebug => Kind == LogKind.Debug;
 }
 
 /// <summary>A single URL waiting in, or passing through, the download queue.</summary>
@@ -97,6 +108,21 @@ public sealed partial class DownloadItemViewModel : ObservableObject
     /// <summary>True when the item finished successfully.</summary>
     public bool IsFinished => State is DownloadState.Completed or DownloadState.Failed or DownloadState.Cancelled;
 
+    /// <summary>Style-class flag: finished successfully.</summary>
+    public bool StateSuccess => State == DownloadState.Completed;
+
+    /// <summary>Style-class flag: failed.</summary>
+    public bool StateError => State == DownloadState.Failed;
+
+    /// <summary>Style-class flag: cancelled.</summary>
+    public bool StateMuted => State == DownloadState.Cancelled;
+
+    /// <summary>Style-class flag: actively working.</summary>
+    public bool StateAccent => IsRunning;
+
+    /// <summary>Style-class flag: waiting in the queue.</summary>
+    public bool StateWarning => State == DownloadState.Queued;
+
     /// <summary>True while the item is actively being worked on.</summary>
     public bool IsRunning => State is DownloadState.Downloading or DownloadState.PostProcessing or DownloadState.Analyzing;
 
@@ -145,6 +171,11 @@ public sealed partial class DownloadItemViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(IsRunning));
         OnPropertyChanged(nameof(IsFinished));
+        OnPropertyChanged(nameof(StateSuccess));
+        OnPropertyChanged(nameof(StateError));
+        OnPropertyChanged(nameof(StateMuted));
+        OnPropertyChanged(nameof(StateAccent));
+        OnPropertyChanged(nameof(StateWarning));
         StatusText = value switch
         {
             DownloadState.Queued => "Ve frontě",

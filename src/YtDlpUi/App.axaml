@@ -8,12 +8,9 @@
     <ResourceDictionary>
       <conv:BoolToOpacityConverter x:Key="BoolToOpacity" />
       <conv:EnumLabelConverter x:Key="EnumLabel" />
-      <conv:LogKindBrushConverter x:Key="LogKindBrush" />
       <conv:IsNullConverter x:Key="IsNull" />
       <conv:IsZeroConverter x:Key="IsZero" />
       <conv:NotNullConverter x:Key="NotNull" />
-      <conv:AvailableBrushConverter x:Key="AvailableBrush" />
-      <conv:DownloadStateBrushConverter x:Key="StateBrush" />
       <conv:InverseBoolConverter x:Key="InverseBool" />
       <conv:StringNotEmptyConverter x:Key="StringNotEmpty" />
       <conv:BytesConverter x:Key="Bytes" />
