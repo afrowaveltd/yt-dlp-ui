@@ -61,11 +61,24 @@
             </StackPanel>
           </Border>
 
-          <!-- Language picker: populated from available Locales/*.json dictionaries. -->
-          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-            <TextBlock Text="🌐" FontSize="16" VerticalAlignment="Center" Margin="0,0,12,0"
-                       ToolTip.Tip="{loc:Tr Key='Interface language'}" />
-            <ComboBox Width="175"
+          <!-- Language picker. A vector globe avoids emoji font glyph clipping on Linux.
+               Grid columns reserve 30px for the icon and 18px of empty space before the ComboBox. -->
+          <Grid ColumnDefinitions="30,18,175" VerticalAlignment="Center">
+            <Canvas Grid.Column="0" Width="24" Height="24"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    ToolTip.Tip="{loc:Tr Key='Interface language'}">
+              <Ellipse Canvas.Left="2" Canvas.Top="2" Width="20" Height="20"
+                       Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.6" />
+              <Ellipse Canvas.Left="7" Canvas.Top="2" Width="10" Height="20"
+                       Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.6" />
+              <Line StartPoint="2,12" EndPoint="22,12"
+                    Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.6" />
+              <Line StartPoint="4,7" EndPoint="20,7"
+                    Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.6" />
+              <Line StartPoint="4,17" EndPoint="20,17"
+                    Stroke="{DynamicResource TextSecondaryBrush}" StrokeThickness="1.6" />
+            </Canvas>
+            <ComboBox Grid.Column="2" Width="175"
                       ItemsSource="{Binding AvailableLanguages}"
                       SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"
                       DropDownOpened="OnLanguageDropDownOpened"
@@ -77,7 +90,7 @@
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>
-          </StackPanel>
+          </Grid>
 
           <Button Classes="ghost" Command="{Binding ToggleThemeCommand}"
                   ToolTip.Tip="{Binding ThemeTooltip}">
