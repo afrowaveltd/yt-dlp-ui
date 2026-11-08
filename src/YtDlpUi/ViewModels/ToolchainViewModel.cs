@@ -12,6 +12,7 @@ public sealed partial class ToolchainViewModel : ObservableObject
 {
     private readonly AppSettings _settings;
     private readonly YtDlpInstaller _installer;
+    private readonly FfmpegInstaller _ffmpegInstaller = new();
     private readonly StringBuilder _log = new();
     private CancellationTokenSource? _installCts;
 
@@ -56,6 +57,9 @@ public sealed partial class ToolchainViewModel : ObservableObject
 
     /// <summary>Hint about a newer yt-dlp release.</summary>
     [ObservableProperty] public partial string? UpdateHint { get; private set; }
+
+    /// <summary>True if the official Windows x64 FFmpeg ZIP can be installed.</summary>
+    public bool CanInstallFfmpeg => FfmpegInstaller.IsSupported;
 
     /// <summary>True when yt-dlp is missing, so the install card should be prominent.</summary>
     public bool YtDlpMissing => !YtDlpAvailable;
@@ -141,6 +145,45 @@ public sealed partial class ToolchainViewModel : ObservableObject
         catch (Exception ex)
         {
             AppendLog($"Instalace se nezdařila: {ex.Message}");
+        }
+        finally
+        {
+            InstallProgress = null;
+            IsBusy = false;
+            OnPropertyChanged(nameof(CanDownload));
+        }
+    }
+
+    /// <summary>Install a verified FFmpeg/FFprobe pair into the user's private folder.</summary>
+    [RelayCommand]
+    private async Task InstallFfmpegAsync()
+    {
+        if (IsBusy || !CanInstallFfmpeg)
+        {
+            return;
+        }
+
+        IsBusy = true;
+        ClearLog();
+        InstallProgress = 0;
+        _installCts?.Dispose();
+        _installCts = new CancellationTokenSource();
+        try
+        {
+            AppendLog("Downloading and verifying FFmpeg for Windows…");
+            var progress = new Progress<DownloadProgress>(p => InstallProgress = p.Percent);
+            var path = await _ffmpegInstaller.InstallAsync(progress, _installCts.Token).ConfigureAwait(true);
+            _settings.FfmpegPath = path;
+            await RefreshAsync().ConfigureAwait(true);
+            AppendLog(FfmpegAvailable ? "FFmpeg and ffprobe installed successfully." : "FFmpeg was installed but could not be started.");
+        }
+        catch (OperationCanceledException)
+        {
+            AppendLog("FFmpeg installation cancelled.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"FFmpeg installation failed: {ex.Message}");
         }
         finally
         {

@@ -996,6 +996,14 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     private void OnToolchainChanged()
     {
+        // Pass the private FFmpeg location explicitly to yt-dlp when necessary.
+        if (string.IsNullOrWhiteSpace(Options.FfmpegLocation) &&
+            Toolchain.FfmpegAvailable &&
+            !string.IsNullOrWhiteSpace(Toolchain.FfmpegLocationText))
+        {
+            Options.FfmpegLocation = Toolchain.FfmpegLocationText;
+        }
+
         AnalyzeCommand.NotifyCanExecuteChanged();
         DownloadCommand.NotifyCanExecuteChanged();
         EnqueueCommand.NotifyCanExecuteChanged();
