@@ -71,6 +71,7 @@ Success in CI confirms compilation and package generation, **not** that every Wi
 - If behavior is not verified, label it **planned**, **unverified** or **manual-test required**.
 - Keep package versions and examples aligned with `Directory.Build.props`. A Git tag or release is a separate publication step.
 - Update both languages whenever features, configuration, build scripts or tests change.
+- Follow the [MAJOR.MINOR.PATCH release policy](../Versioning/en.md); all 0.x releases are GitHub pre-releases.
 
 ## Proposed manual test matrix
 

@@ -99,7 +99,8 @@ Reopen the language selector to rescan files. Filenames are culture codes (e.g. 
 | Configuration and storage | [Settings](Docs/Configuration/en.md) | [Nastavení](Docs/Configuration/cs.md) |
 | Troubleshooting | [Help](Docs/Troubleshooting/en.md) | [Řešení problémů](Docs/Troubleshooting/cs.md) |
 | Development and verification | [Development](Docs/Development-and-Verification/en.md) | [Vývoj](Docs/Development-and-Verification/cs.md) |
-| 0.1.0 preparation | [Release checklist](Docs/Release-0.1.0/en.md) | [Kontrolní seznam](Docs/Release-0.1.0/cs.md) |
+| Versioning and release policy | [Versioning](Docs/Versioning/en.md) | [Verzování](Docs/Versioning/cs.md) |
+| First release status | [Release checklist](Docs/Release-0.1.0/en.md) | [Kontrolní seznam](Docs/Release-0.1.0/cs.md) |
 
 ## License, privacy and attribution
 

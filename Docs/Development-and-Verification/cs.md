@@ -71,6 +71,7 @@ Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test ka
 - Pokud funkce není ověřená, označ ji jako **plánovanou**, **neověřenou** nebo **k ručnímu testu**.
 - Verze v dokumentaci i příkladech se řídí `Directory.Build.props`. Git tag či release je samostatný krok.
 - Při změnách funkcí, konfigurace, skriptů či testů aktualizuj oba jazyky.
+- Dodržuj [pravidla MAJOR.MINOR.PATCH](../Versioning/cs.md); všechna vydání 0.x jsou na GitHubu pre-release.
 
 ## Doporučené ruční testování
 
