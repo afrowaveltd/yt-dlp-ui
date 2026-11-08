@@ -96,10 +96,11 @@ function Install-YtDlp {
             throw
         }
         Write-InstallLog "Installed working yt-dlp to $path"
+        # A backup may only be removed after the new executable has been verified.
+        Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
     } finally {
         Remove-Item -LiteralPath $download -Force -ErrorAction SilentlyContinue
-        # Leave a backup if cleanup is blocked; never delete a working installation.
-        Remove-Item -LiteralPath $backup -Force -ErrorAction SilentlyContinue
+        # Preserve an old backup if rollback failed, for manual recovery.
     }
 }
 
