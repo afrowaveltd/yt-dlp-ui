@@ -132,7 +132,7 @@ internal static class DocumentationChecks
         Require(template is not null && (string?)template.Attribute("DataType") == "models:MediaEntry",
             "Playlist preview DataTemplate must target MediaEntry, not LogLine or another model");
 
-        var modelNamespace = (string?)view.Root?.GetNamespaceOfPrefix("models");
+        var modelNamespace = view.Root?.GetNamespaceOfPrefix("models")?.NamespaceName;
         Require(modelNamespace == "using:YtDlpUi.Core.Models",
             "Playlist preview models prefix must resolve to YtDlpUi.Core.Models");
 
