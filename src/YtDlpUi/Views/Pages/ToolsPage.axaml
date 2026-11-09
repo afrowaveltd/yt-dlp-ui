@@ -150,6 +150,52 @@
         </StackPanel>
       </Border>
 
+      <!-- ══════════ Deno JavaScript runtime ══════════ -->
+      <Border Classes="card">
+        <StackPanel Spacing="12">
+          <Grid ColumnDefinitions="Auto,*,Auto">
+            <Ellipse Grid.Column="0" Width="12" Height="12" Margin="0,0,12,0"
+                     VerticalAlignment="Center"
+                     Classes.dot-ok="{Binding Toolchain.DenoAvailable}"
+                     Classes.dot-missing="{Binding !Toolchain.DenoAvailable}" />
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Classes="h2" Text="Deno" />
+              <TextBlock Classes="hint" Text="{Binding Toolchain.DenoLocationText}"
+                         TextTrimming="CharacterEllipsis" MaxLines="2" />
+            </StackPanel>
+            <Border Grid.Column="2" Classes="pill" VerticalAlignment="Center">
+              <TextBlock Classes="mono" Text="{Binding Toolchain.DenoVersionText}" />
+            </Border>
+          </Grid>
+
+          <Border Classes="cardAlt" Padding="10"
+                  Background="{DynamicResource WarningSoftBrush}"
+                  BorderBrush="{DynamicResource WarningBrush}"
+                  IsVisible="{Binding Toolchain.DenoMissing}">
+            <StackPanel Spacing="4">
+              <TextBlock FontWeight="SemiBold" Text="{loc:Tr Key='Deno is not installed'}" />
+              <TextBlock Classes="hint" TextWrapping="Wrap"
+                         Text="{loc:Tr Key='Deno 2.3+ is recommended for YouTube JavaScript challenges. You can install a personal copy without administrator privileges.'}" />
+            </StackPanel>
+          </Border>
+
+          <WrapPanel Orientation="Horizontal">
+            <Button Classes="primary"
+                    Content="{loc:Tr Key='Install Deno for Windows / Linux'}"
+                    Command="{Binding Toolchain.InstallDenoCommand}"
+                    IsEnabled="{Binding Toolchain.IsBusy, Converter={StaticResource InverseBool}}"
+                    IsVisible="{Binding Toolchain.CanInstallDeno}"
+                    Margin="0,0,8,8" />
+            <Button Content="{loc:Tr Key='Check again'}"
+                    Command="{Binding Toolchain.RefreshCommand}"
+                    Margin="0,0,8,8" />
+          </WrapPanel>
+
+          <TextBlock Classes="hint" TextWrapping="Wrap"
+                     Text="{loc:Tr Key='Uses the official Deno release and its SHA-256 checksum. Installs in your user folder; on Linux no sudo is needed. Deno is optional.'}" />
+        </StackPanel>
+      </Border>
+
       <!-- ══════════ App settings ══════════ -->
       <Border Classes="card">
         <StackPanel Spacing="12">

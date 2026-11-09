@@ -61,6 +61,16 @@
             </StackPanel>
           </Border>
 
+          <!-- Deno / JavaScript runtime status -->
+          <Border Classes="pill" ToolTip.Tip="{Binding Toolchain.DenoLocationText}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                       Classes.dot-ok="{Binding Toolchain.DenoAvailable}"
+                       Classes.dot-missing="{Binding !Toolchain.DenoAvailable}" />
+              <TextBlock Classes="mono" Text="Deno" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
           <!-- Language picker. A vector globe avoids emoji font glyph clipping on Linux.
                Grid columns reserve 30px for the icon and 18px of empty space before the ComboBox. -->
           <Grid ColumnDefinitions="30,18,175" VerticalAlignment="Center">
