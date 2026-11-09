@@ -29,22 +29,49 @@ function Write-InstallLog([string]$Message) {
     Add-Content -LiteralPath $logFile -Value ("[{0}] {1}" -f (Get-Date -Format 's'), $Message) -Encoding UTF8
 }
 
+function Get-PublisherSha256([string]$ChecksumText, [string]$FileName) {
+    $digestPattern = '^[0-9a-fA-F]{64}$'
+    $matchesFound = [System.Collections.Generic.List[string]]::new()
+    $algorithm = @()
+    $hash = @()
+    $publishedPath = @()
+    foreach ($line in ($ChecksumText -split "\r?\n")) {
+        $value = $line.Trim()
+        if ($value -match '^([0-9a-fA-F]{64})(?:\s+\*?(.+))?$') {
+            $entryName = $Matches[2]
+            if (-not $entryName -or $entryName -ceq $FileName) {
+                $matchesFound.Add($Matches[1])
+            }
+            continue
+        }
+        # Official Windows Deno sidecars use PowerShell Get-FileHash output.
+        if ($value -match '^(Algorithm|Hash|Path)\s*:\s*(.*?)\s*$') {
+            switch ($Matches[1].ToLowerInvariant()) {
+                'algorithm' { $algorithm += $Matches[2] }
+                'hash' { $hash += $Matches[2] }
+                'path' { $publishedPath += $Matches[2] }
+            }
+        }
+    }
+    if ($algorithm.Count -gt 0 -or $hash.Count -gt 0 -or $publishedPath.Count -gt 0) {
+        if ($algorithm.Count -ne 1 -or $hash.Count -ne 1 -or $publishedPath.Count -ne 1 -or
+            $algorithm[0] -ne 'SHA256' -or $hash[0] -cnotmatch $digestPattern -or
+            [IO.Path]::GetFileName($publishedPath[0].Replace('/', '\')) -ine $FileName) {
+            throw "Invalid or mismatched PowerShell publisher checksum for $FileName."
+        }
+        $matchesFound.Add($hash[0])
+    }
+    if ($matchesFound.Count -ne 1) {
+        throw "Missing or ambiguous publisher SHA-256 checksum for $FileName."
+    }
+    return $matchesFound[0].ToUpperInvariant()
+}
+
 function Get-VerifiedDownload([string]$Uri, [string]$ChecksumUri, [string]$FileName) {
     $headers = @{'User-Agent'='yt-dlp-ui installer'}
     $hashText = [string](Invoke-WebRequest -Uri $ChecksumUri -UseBasicParsing -Headers $headers).Content
-    $escapedName = [regex]::Escape($FileName)
-    $match = [regex]::Match($hashText, "(?mi)^([0-9a-f]{64})\s+\*?$escapedName\s*$")
-    if (-not $match.Success) {
-        if ($FileName -ne 'ffmpeg-release-essentials.zip' -and
-            $FileName -ne 'deno-x86_64-pc-windows-msvc.zip') {
-            throw "Publisher checksum entry for $FileName was not found."
-        }
-        # Gyan's .sha256 may contain only a hexadecimal hash or a full filename.
-        $match = [regex]::Match($hashText, '(?i)\b([0-9a-f]{64})\b')
-        if (-not $match.Success) { throw 'Publisher FFmpeg checksum was not found.' }
-    }
+    $expected = Get-PublisherSha256 $hashText $FileName
 
-    $expected = $match.Groups[1].Value.ToUpperInvariant()
     $tempFile = Join-Path $tools ("download-" + [guid]::NewGuid().ToString('N') +
         [IO.Path]::GetExtension($FileName))
     try {
