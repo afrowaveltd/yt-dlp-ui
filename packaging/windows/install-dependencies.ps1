@@ -67,14 +67,25 @@ function Get-PublisherSha256([string]$ChecksumText, [string]$FileName) {
     return $matchesFound[0].ToUpperInvariant()
 }
 
+function Read-PublisherChecksum([string]$Path) {
+    # IWR.Content on Windows PowerShell can be byte[] for GitHub release assets.
+    # Casting it to [string] does not decode the file and loses the hash lines.
+    # Download the exact bytes and decode as strict UTF-8 instead.
+    $utf8 = New-Object System.Text.UTF8Encoding($false, $true)
+    return [IO.File]::ReadAllText($Path, $utf8)
+}
+
 function Get-VerifiedDownload([string]$Uri, [string]$ChecksumUri, [string]$FileName) {
     $headers = @{'User-Agent'='yt-dlp-ui installer'}
-    $hashText = [string](Invoke-WebRequest -Uri $ChecksumUri -UseBasicParsing -Headers $headers).Content
-    $expected = Get-PublisherSha256 $hashText $FileName
-
+    $checksumFile = Join-Path $tools ("checksum-" + [guid]::NewGuid().ToString('N') + '.txt')
     $tempFile = Join-Path $tools ("download-" + [guid]::NewGuid().ToString('N') +
         [IO.Path]::GetExtension($FileName))
     try {
+        # Consistently handle text/plain and application/octet-stream sidecars.
+        Invoke-WebRequest -Uri $ChecksumUri -OutFile $checksumFile -UseBasicParsing -Headers $headers
+        $hashText = Read-PublisherChecksum $checksumFile
+        $expected = Get-PublisherSha256 $hashText $FileName
+
         Invoke-WebRequest -Uri $Uri -OutFile $tempFile -UseBasicParsing -Headers $headers
         $actual = (Get-FileHash -LiteralPath $tempFile -Algorithm SHA256).Hash.ToUpperInvariant()
         if ($actual -ne $expected) { throw "SHA-256 verification failed for $FileName." }
@@ -84,6 +95,9 @@ function Get-VerifiedDownload([string]$Uri, [string]$ChecksumUri, [string]$FileN
     catch {
         Remove-Item -LiteralPath $tempFile -Force -ErrorAction SilentlyContinue
         throw
+    }
+    finally {
+        Remove-Item -LiteralPath $checksumFile -Force -ErrorAction SilentlyContinue
     }
 }
 
