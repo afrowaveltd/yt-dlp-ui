@@ -207,6 +207,31 @@ if (DenoInstaller.IsSupported)
         "Deno installer must read matching named publisher checksum");
     Require(DenoInstaller.PublishedSha256(digest, checksumAsset!) == digest,
         "Deno installer must also accept a bare official SHA-256 sidecar");
+    var windowsSidecar = "Algorithm : SHA256\nHash      : " + digest +
+        "\nPath      : C:\\a\\deno\\release\\" + checksumAsset;
+    Require(DenoInstaller.PublishedSha256(windowsSidecar, checksumAsset!) == digest,
+        "Deno installer must accept official Windows PowerShell Get-FileHash sidecars");
+    bool windowsRejected = false;
+    try
+    {
+        DenoInstaller.PublishedSha256(windowsSidecar.Replace("SHA256", "SHA512"), checksumAsset!);
+    }
+    catch (InvalidDataException)
+    {
+        windowsRejected = true;
+    }
+    Require(windowsRejected, "Reject PowerShell sidecars using a different checksum algorithm");
+    windowsRejected = false;
+    try
+    {
+        DenoInstaller.PublishedSha256(windowsSidecar.Replace(checksumAsset!, "wrong.zip"), checksumAsset!);
+    }
+    catch (InvalidDataException)
+    {
+        windowsRejected = true;
+    }
+    Require(windowsRejected, "Reject PowerShell sidecars for a different archive");
+
     bool rejected = false;
     try
     {
