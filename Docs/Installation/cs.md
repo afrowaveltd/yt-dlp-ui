@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-**[Veřejné opravné vydání 0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)** už obsahuje instalační soubory i jejich SHA-256 součty. Artifacts v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) slouží k průběžnému vývoji; veřejné preview binárky **nejsou digitálně podepsané**. Návody na vlastní sestavení spouštěj z kořene repozitáře.
+**[Veřejné opravné vydání 0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6)** už obsahuje instalační soubory i jejich SHA-256 součty. Artifacts v [GitHub Actions](https://github.com/afrowaveltd/yt-dlp-ui/actions) slouží k průběžnému vývoji; veřejné preview binárky **nejsou digitálně podepsané**. Návody na vlastní sestavení spouštěj z kořene repozitáře.
 
 ## Podporované platformy
 
@@ -26,7 +26,7 @@
 
 ## Windows x64: instalační průvodce
 
-Z [v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5) stáhni Windows instalační EXE a spusť `yt-dlp-gui-setup-0.1.5-win-x64.exe`.
+Z [v0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6) stáhni Windows instalační EXE a spusť `yt-dlp-gui-setup-0.1.6-win-x64.exe`.
 
 Průvodce Inno Setup:
 1. **Vyžádá souhlas správce prostřednictvím UAC** a nainstaluje program pro všechny uživatele do `%ProgramFiles%\yt-dlp-gui`.
@@ -42,7 +42,7 @@ Deno je volitelné a stahuje se jen po výběru položky v průvodci. Nejde o so
 
 ### Přenosná verze Windows
 
-Soubor `yt-dlp-gui_0.1.5_win-x64_portable.zip` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
+Soubor `yt-dlp-gui_0.1.6_win-x64_portable.zip` obsahuje kompletní složku včetně `yt-dlp-gui.exe`. Rozbal celou složku a spusť EXE; nepřesouvej samotný EXE bez knihoven.
 
 ### Sestavení ve Windows
 
@@ -57,7 +57,7 @@ S nainstalovaným [Inno Setup 6](https://jrsoftware.org/isinfo.php):
 .\scripts\build-windows-installer.ps1
 ~~~
 
-Vznikne `artifacts/yt-dlp-gui-setup-0.1.5-win-x64.exe`. Pro přenosnou verzi ARM64:
+Vznikne `artifacts/yt-dlp-gui-setup-0.1.6-win-x64.exe`. Pro přenosnou verzi ARM64:
 
 ~~~powershell
 .\scripts\build-windows.ps1 -Runtime win-arm64
@@ -67,10 +67,10 @@ Vznikne `artifacts/yt-dlp-gui-setup-0.1.5-win-x64.exe`. Pro přenosnou verzi ARM
 
 ~~~bash
 ./scripts/package-deb.sh
-sudo apt install ./artifacts/yt-dlp-gui_0.1.5_amd64.deb
+sudo apt install ./artifacts/yt-dlp-gui_0.1.6_amd64.deb
 ~~~
 
-Balíček instaluje program do `/opt/yt-dlp-gui`, spouštěč `/usr/bin/yt-dlp-gui` a položku nabídky aplikací. **Doporučuje** balíčky `yt-dlp` a `ffmpeg`; podle nastavení může APT doporučené balíčky přidat. Instalační hook nestahuje žádný externí program ze sítě. **Od v0.1.5** je Deno volitelné: na kartě Nástroje → Deno → Nainstalovat Deno pro Windows / Linux stáhneš uživatelskou kopii ověřenou pomocí SHA-256 do `~/.deno/bin` (nebo `$DENO_INSTALL/bin`). Bez `sudo`, změny správce balíčků či PATH.
+Balíček instaluje program do `/opt/yt-dlp-gui`, spouštěč `/usr/bin/yt-dlp-gui` a položku nabídky aplikací. **Doporučuje** balíčky `yt-dlp` a `ffmpeg`; podle nastavení může APT doporučené balíčky přidat. Instalační hook nestahuje žádný externí program ze sítě. **Od v0.1.6** je Deno volitelné: na kartě Nástroje → Deno → Nainstalovat Deno pro Windows / Linux stáhneš uživatelskou kopii ověřenou pomocí SHA-256 do `~/.deno/bin` (nebo `$DENO_INSTALL/bin`). Bez `sudo`, změny správce balíčků či PATH.
 
 Odinstalace: `sudo apt remove yt-dlp-gui`.
 
@@ -78,7 +78,7 @@ Odinstalace: `sudo apt remove yt-dlp-gui`.
 
 ~~~bash
 ./scripts/package-rpm.sh              # potřebuje rpmbuild
-sudo dnf install ./artifacts/yt-dlp-gui-0.1.5-1.x86_64.rpm
+sudo dnf install ./artifacts/yt-dlp-gui-0.1.6-1.x86_64.rpm
 ~~~
 
 Na openSUSE lze použít odpovídající `zypper install ./...rpm`. Aplikace se umístí do `/opt/yt-dlp-gui` se spouštěčem v `/usr/bin`; balíček doporučuje yt-dlp a FFmpeg. RPM se **vytváří na Ubuntu runneru**, proto před vydáním ověř instalaci také na skutečné cílové distribuci.
@@ -87,7 +87,7 @@ Na openSUSE lze použít odpovídající `zypper install ./...rpm`. Aplikace se 
 
 ~~~bash
 ./scripts/package-linux-tar.sh
-tar -xzf artifacts/yt-dlp-gui_0.1.5_linux-x86_64.tar.gz
+tar -xzf artifacts/yt-dlp-gui_0.1.6_linux-x86_64.tar.gz
 ./yt-dlp-gui/yt-dlp-gui
 ~~~
 

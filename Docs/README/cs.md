@@ -2,7 +2,7 @@
 
 Přívětivé **multiplatformní grafické rozhraní pro [yt-dlp](https://github.com/yt-dlp/yt-dlp)** vytvořené v [Avalonia UI](https://avaloniaui.net/) a .NET 10. Stačí vložit odkaz na video nebo playlist, vybrat profil a spravovat stahování bez memorování přepínačů příkazové řádky. Pokročilé volby yt-dlp přitom zůstávají dostupné.
 
-**Stav vydání:** **[v0.1.5 – opravné vydání](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)** je dostupné pro Windows x64 a Linux x64. Jde o komunitní pre-release; uvítáme zpětnou vazbu a hlášení chyb.
+**Stav vydání:** **[v0.1.6 – opravné vydání](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6)** je dostupné pro Windows x64 a Linux x64. Jde o komunitní pre-release; uvítáme zpětnou vazbu a hlášení chyb.
 
 **Dokumentace:** [English](en.md) · Česky (tato stránka) · [Rozcestník](../Documentation/cs.md) · [Documentation index](../Documentation/en.md)
 
@@ -15,7 +15,15 @@ Přívětivé **multiplatformní grafické rozhraní pro [yt-dlp](https://github
 - **Jazyky:** výběr vpravo nahoře u stavu nástrojů. Anglický a český slovník, automatické načítání `Locales/*.json`, okamžitý přepínač a anglický fallback.
 - **Distribuce:** Windows x64 `setup.exe` a portable; Linux `.deb`, `.rpm` a přenosný `.tar.gz`.
 
-Část pokročilých karet, zpráv a dialogů dosud obsahuje české texty. **Lokalizace je i ve verzi 0.1.5 jen částečná.** Úspěšné sestavení balíčku ještě neznamená, že byly ručně otestovány všechny scénáře instalace a stahování.
+Část pokročilých karet, zpráv a dialogů dosud obsahuje české texty. **Lokalizace je i ve verzi 0.1.6 jen částečná.** Úspěšné sestavení balíčku ještě neznamená, že byly ručně otestovány všechny scénáře instalace a stahování.
+
+## Oprava ve verzi 0.1.6
+
+- Opravena chyba, kdy se v playlistu **stále zobrazoval název třídy `MediaEntry`** i po úpravě šablony ve v0.1.5.
+- Šablona seznamu se teď použije bez podmínky `DataType`. Záložní text navíc obsahuje **pořadí, název a délku**, i když Avalonia zvolí výchozí zobrazení.
+- Přidán **skutečný headless UI test Avalonie**, který načte zkompilovanou kartu Stáhnout a kontroluje zobrazené názvy. Test běží na Windows i Linuxu.
+
+[Poznámky 0.1.6](../Release-0.1.6/cs.md) · [English notes](../Release-0.1.6/en.md)
 
 ## Oprava ve verzi 0.1.5
 
@@ -82,24 +90,24 @@ Snímky představují stav aplikace při pořízení a nemusí obsahovat nejnov�
 
 ### Windows 10/11 (x64)
 
-Z [vydání v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5) stáhni **Windows instalační EXE** a spusť `yt-dlp-gui-setup-0.1.5-win-x64.exe`. Průvodce vytvoří zástupce v nabídce Start, umožní běžnou odinstalaci a nabídne tři **nezávislé, ve výchozím stavu zaškrtnuté** položky: nainstalovat yt-dlp, FFmpeg a Deno (doporučeno pro YouTube). Stahování vyžaduje internet a používá kontrolní součty SHA-256 od vydavatelů. Libovolnou volbu lze vypnout a nástroje doplnit později. Instalátor nyní **žádá administrátorské oprávnění přes UAC** a instaluje program do Program Files pro všechny uživatele. Volitelné yt-dlp, FFmpeg a Deno putují do společného ProgramData a GUI je rozpozná i bez admin práv. Starší instalaci pro jednoho uživatele doporučujeme odinstalovat, aby nevznikly duplicitní zástupci.
+Z [vydání v0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6) stáhni **Windows instalační EXE** a spusť `yt-dlp-gui-setup-0.1.6-win-x64.exe`. Průvodce vytvoří zástupce v nabídce Start, umožní běžnou odinstalaci a nabídne tři **nezávislé, ve výchozím stavu zaškrtnuté** položky: nainstalovat yt-dlp, FFmpeg a Deno (doporučeno pro YouTube). Stahování vyžaduje internet a používá kontrolní součty SHA-256 od vydavatelů. Libovolnou volbu lze vypnout a nástroje doplnit později. Instalátor nyní **žádá administrátorské oprávnění přes UAC** a instaluje program do Program Files pro všechny uživatele. Volitelné yt-dlp, FFmpeg a Deno putují do společného ProgramData a GUI je rozpozná i bez admin práv. Starší instalaci pro jednoho uživatele doporučujeme odinstalovat, aby nevznikly duplicitní zástupci.
 
-V release najdeš i přenosný balíček **`yt-dlp-gui_0.1.5_win-x64_portable.zip`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
+V release najdeš i přenosný balíček **`yt-dlp-gui_0.1.6_win-x64_portable.zip`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
 
 ### Debian / Ubuntu, Fedora / openSUSE, další Linux
 
-Stáhni odpovídající balíček DEB nebo RPM z [v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5) a použij správce balíčků distribuce:
+Stáhni odpovídající balíček DEB nebo RPM z [v0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6) a použij správce balíčků distribuce:
 
 ~~~bash
-sudo apt install ./yt-dlp-gui_0.1.5_amd64.deb    # Debian/Ubuntu x64
-sudo dnf install ./yt-dlp-gui-0.1.5-1.x86_64.rpm # Fedora / RPM
+sudo apt install ./yt-dlp-gui_0.1.6_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.1.6-1.x86_64.rpm # Fedora / RPM
 ~~~
 
 Názvy balíčků se liší podle verze a architektury. DEB/RPM **doporučují** systémové balíčky `yt-dlp` a `ffmpeg`, ale nepřibalují je a nespouštějí skryté skripty pro stahování. Rozhoduje politika správce balíčků. Na jiných distribucích rozbal přenosný `tar.gz` a spusť `./yt-dlp-gui/yt-dlp-gui`. Sestavení obsahují vlastní .NET runtime.
 
 Pro uživatelskou instalaci z kódu je tu `./scripts/install.sh`, odinstalace `./scripts/install.sh --uninstall`.
 
-**v0.1.5 je veřejný, nepodepsaný pre-release.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
+**v0.1.6 je veřejný, nepodepsaný pre-release.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
 
 ## Sestavení ze zdrojových kódů
 
@@ -149,6 +157,7 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 | Vývoj a ověřování | [Vývoj](../Development-and-Verification/cs.md) | [Development](../Development-and-Verification/en.md) |
 | Verzování a vydávání | [Verzování](../Versioning/cs.md) | [Versioning](../Versioning/en.md) |
 | Android (experimentální) | [Android](../Android/cs.md) | [Android](../Android/en.md) |
+| Opravy 0.1.6 | [Poznámky](../Release-0.1.6/cs.md) | [Release notes](../Release-0.1.6/en.md) |
 | Opravy 0.1.5 | [Poznámky](../Release-0.1.5/cs.md) | [Release notes](../Release-0.1.5/en.md) |
 | Opravy 0.1.4 | [Poznámky](../Release-0.1.4/cs.md) | [Release notes](../Release-0.1.4/en.md) |
 | Opravy 0.1.3 | [Poznámky](../Release-0.1.3/cs.md) | [Release notes](../Release-0.1.3/en.md) |
@@ -160,4 +169,4 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 
 Zapamatované volby stahování záměrně vynechávají podporovaná pole hesel a 2FA. Se staženými soubory, cookies a logy nakládej podle svých požadavků na soukromí. Stahuj jen obsah, ke kterému máš oprávnění, a respektuj podmínky služeb.
 
-**[v0.1.5 už je veřejně vydaná](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)** jako opravné komunitní vydání. Viz [stav vydání a zbývající testy](../Release-0.1.5/cs.md).
+**[v0.1.6 už je veřejně vydaná](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6)** jako opravné komunitní vydání. Viz [stav vydání a zbývající testy](../Release-0.1.6/cs.md).
