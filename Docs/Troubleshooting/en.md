@@ -17,7 +17,7 @@ Check `ffmpeg -version` and, for relevant operations, `ffprobe -version`. Window
 This message comes from yt-dlp, not from the GUI or FFmpeg. YouTube may omit some formats without a supported JavaScript runtime. **Deno (version 2.3.0 or newer)** is the recommended runtime, enabled by default in yt-dlp.
 
 - Windows: install Deno with the new **Install Deno** checkbox in our UAC Setup, or run `winget install --id DenoLand.Deno -e`. Restart the GUI afterward.
-- Windows and Linux: on the **Tools** page, see the Deno status, version and path, and use **Install Deno for Windows / Linux** to install a personal verified copy without administrator rights.
+- In development builds after v0.1.3, Windows and Linux: on the **Tools** page, see the Deno status, version and path, and use **Install Deno for Windows / Linux** to install a personal verified copy without administrator rights.
 - Linux: GUI launches now detect Deno in `~/.deno/bin`, `~/.local/bin`, `~/bin`, `DENO_INSTALL/bin` and PATH even when the desktop environment does not inherit your shell profile. Alternatively, install Deno from its official packages and verify `~/.deno/bin/deno --version`.
 - The GUI can automatically locate the Deno executable inside Windows ProgramData, user-local locations or PATH, even if the directory is not in PATH.
 - An explicit `--js-runtimes node` (Node 22+) or `--js-runtimes deno:/full/path` is also available through advanced yt-dlp options.

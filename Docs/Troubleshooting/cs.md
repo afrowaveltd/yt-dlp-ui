@@ -17,7 +17,7 @@ Prověř `ffmpeg -version` a pro odpovídající operace také `ffprobe -version
 Jde o upozornění ze samotného yt-dlp, nikoliv o problém FFmpeg či GUI. Bez kompatibilního JavaScript prostředí mohou některé formáty YouTube chybět. **Doporučeno je Deno 2.3.0 nebo novější**, které yt-dlp podporuje automaticky.
 
 - Windows: v novém setupu zaškrtni **Nainstalovat Deno**, nebo použij PowerShell: `winget install --id DenoLand.Deno -e`. Pak restartuj GUI.
-- Windows i Linux: na kartě **Nástroje** uvidíš stav, verzi a cestu Deno; přes **Nainstalovat Deno pro Windows / Linux** lze nainstalovat ověřenou uživatelskou kopii bez práv správce.
+- Ve vývojových sestaveních po v0.1.3 (Windows a Linux): na kartě **Nástroje** uvidíš stav, verzi a cestu Deno; přes **Nainstalovat Deno pro Windows / Linux** lze nainstalovat ověřenou uživatelskou kopii bez práv správce.
 - Linux: grafická aplikace nyní hledá Deno také v `~/.deno/bin`, `~/.local/bin`, `~/bin`, `DENO_INSTALL/bin` a PATH, i když menu nenačte tvůj shell profil. Můžeš Deno nainstalovat rovněž ze zdrojů vydavatele a ověřit `~/.deno/bin/deno --version`.
 - GUI automaticky vyhledá Deno i ve společném Windows ProgramData, osobních složkách nebo PATH; umí předat absolutní cestu.
 - Pokročilí uživatelé mohou nastavit `--js-runtimes node` (Node 22+) nebo `--js-runtimes deno:/cesta/k/deno`.

@@ -70,7 +70,7 @@ This compiles the setup EXE to `artifacts/yt-dlp-gui-setup-0.1.3-win-x64.exe`. F
 sudo apt install ./artifacts/yt-dlp-gui_0.1.3_amd64.deb
 ~~~
 
-The package installs into `/opt/yt-dlp-gui`, creates the `/usr/bin/yt-dlp-gui` launcher and a desktop menu entry. It **recommends** `yt-dlp` and `ffmpeg`; APT may install recommended dependencies depending on its configuration. It does not run network dependency downloads in a post-install hook. **Deno is optional:** open Tools → Deno → Install Deno for Windows / Linux to download a SHA-256-verified user-private copy into `~/.deno/bin` (or `$DENO_INSTALL/bin`). No `sudo`, package-manager modification or PATH change is needed.
+The package installs into `/opt/yt-dlp-gui`, creates the `/usr/bin/yt-dlp-gui` launcher and a desktop menu entry. It **recommends** `yt-dlp` and `ffmpeg`; APT may install recommended dependencies depending on its configuration. It does not run network dependency downloads in a post-install hook. **In development builds after v0.1.3**, Deno is optional: open Tools → Deno → Install Deno for Windows / Linux to download a SHA-256-verified user-private copy into `~/.deno/bin` (or `$DENO_INSTALL/bin`). No `sudo`, package-manager modification or PATH change is needed.
 
 To remove the package: `sudo apt remove yt-dlp-gui`.
 
