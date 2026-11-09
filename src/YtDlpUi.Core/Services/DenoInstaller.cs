@@ -51,9 +51,20 @@ public sealed class DenoInstaller : IDisposable
     }
 
     /// <summary>Personal install folder, discoverable without PATH changes.</summary>
-    public static string DefaultInstallPath => OperatingSystem.IsWindows()
-        ? Path.Combine(UserPaths.LocalBinDirectory, "deno.exe")
-        : Path.Combine(UserPaths.Home, ".deno", "bin", "deno");
+    public static string DefaultInstallPath
+    {
+        get
+        {
+            if (OperatingSystem.IsWindows())
+                return Path.Combine(UserPaths.LocalBinDirectory, "deno.exe");
+
+            var prefix = Environment.GetEnvironmentVariable("DENO_INSTALL");
+            var root = string.IsNullOrWhiteSpace(prefix)
+                ? Path.Combine(UserPaths.Home, ".deno")
+                : ToolLocator.ExpandHome(prefix.Trim());
+            return Path.Combine(root, "bin", "deno");
+        }
+    }
 
     /// <summary>Parse publisher SHA256 sidecar (bare hash or matching filename).</summary>
     public static string PublishedSha256(string checksum, string asset)
@@ -126,9 +137,12 @@ public sealed class DenoInstaller : IDisposable
         var directory = Path.GetDirectoryName(DefaultInstallPath)!;
         Directory.CreateDirectory(directory);
         var target = DefaultInstallPath;
-        var staging = Path.Combine(directory, ".deno-stage-" + Guid.NewGuid().ToString("N"));
+        // Windows requires .exe extension to execute and validate the staged binary.
+        var staging = Path.Combine(directory, ".deno-stage-" + Guid.NewGuid().ToString("N")
+            + (OperatingSystem.IsWindows() ? ".exe" : string.Empty));
         var backup = Path.Combine(directory, ".deno-backup-" + Guid.NewGuid().ToString("N"));
         bool oldMoved = false;
+        bool installedSuccessfully = false;
         try
         {
             var checksumUrl = new Uri(ReleaseRoot + asset + ".sha256sum");
@@ -216,14 +230,16 @@ public sealed class DenoInstaller : IDisposable
                 throw;
             }
 
+            installedSuccessfully = true;
             return target;
         }
         finally
         {
             if (File.Exists(archivePath)) File.Delete(archivePath);
             if (File.Exists(staging)) File.Delete(staging);
-            // Leave a backup if cleanup would fail; it may be needed for recovery.
-            if (oldMoved && File.Exists(backup))
+            // Never delete the old binary if rollback failed. Preserve it on disk
+            // for manual recovery; remove backups only after a verified install.
+            if (installedSuccessfully && oldMoved && File.Exists(backup))
             {
                 try { File.Delete(backup); } catch (IOException) { } catch (UnauthorizedAccessException) { }
             }
