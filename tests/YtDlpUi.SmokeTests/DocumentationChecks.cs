@@ -57,6 +57,7 @@ internal static class DocumentationChecks
 
         VerifyLanguagePickerLayout(root);
         VerifyDenoUiLayout(root);
+        VerifyPlaylistPreviewTemplate(root);
 
         Console.WriteLine($"Documentation smoke checks passed: {topics.Length} bilingual topics and local links.");
     }
@@ -112,6 +113,34 @@ internal static class DocumentationChecks
         Require(toolPage.Descendants(avalonia + "TextBlock").Any(element =>
                 (string?)element.Attribute("Text") == "Deno"),
             "Tools must contain a titled Deno section");
+    }
+
+    /// <summary>
+    /// Guard the playlist preview against falling back to MediaEntry.ToString().
+    /// Avalonia's typed DataTemplate must match the actual collection item type.
+    /// </summary>
+    private static void VerifyPlaylistPreviewTemplate(string root)
+    {
+        XNamespace avalonia = "https://github.com/avaloniaui";
+        var path = Path.Combine(root, "src", "YtDlpUi", "Views", "Pages", "DownloadPage.axaml");
+        var view = XDocument.Load(path);
+        var playlist = view.Descendants(avalonia + "ListBox").SingleOrDefault(element =>
+            ((string?)element.Attribute("ItemsSource"))?.Contains("PlaylistEntries", StringComparison.Ordinal) == true);
+
+        Require(playlist is not null, "Download page must show the analysed playlist entries");
+        var template = playlist!.Descendants(avalonia + "DataTemplate").SingleOrDefault();
+        Require(template is not null && (string?)template.Attribute("DataType") == "models:MediaEntry",
+            "Playlist preview DataTemplate must target MediaEntry, not LogLine or another model");
+
+        var modelNamespace = (string?)view.Root?.GetNamespaceOfPrefix("models");
+        Require(modelNamespace == "using:YtDlpUi.Core.Models",
+            "Playlist preview models prefix must resolve to YtDlpUi.Core.Models");
+
+        var bindings = template!.Descendants(avalonia + "TextBlock")
+            .Attributes("Text").Select(attribute => attribute.Value).ToArray();
+        Require(bindings.Any(binding => binding.Contains("Binding Display", StringComparison.Ordinal)) &&
+                bindings.Any(binding => binding.Contains("Binding Duration", StringComparison.Ordinal)),
+            "Playlist preview must display MediaEntry.Display and formatted Duration");
     }
 
     private static void ValidateLocalLinks(string markdown)
