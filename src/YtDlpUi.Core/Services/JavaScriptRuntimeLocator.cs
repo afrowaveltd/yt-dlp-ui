@@ -70,8 +70,60 @@ public static class JavaScriptRuntimeLocator
                 return userDeno;
             }
         }
+        else
+        {
+            // The official Deno installer uses ~/.deno/bin by default. GUI
+            // launchers often do not import PATH additions from .bashrc/.profile.
+            // DENO_INSTALL is the install prefix (not the executable itself).
+            var customInstall = Environment.GetEnvironmentVariable("DENO_INSTALL");
+            if (!string.IsNullOrWhiteSpace(customInstall))
+            {
+                var expanded = ToolLocator.ExpandHome(customInstall.Trim());
+                var candidate = Path.Combine(expanded, "bin", executable);
+                if (IsRunnableUnixBinary(candidate))
+                {
+                    return Path.GetFullPath(candidate);
+                }
+            }
+
+            foreach (var candidate in new[]
+            {
+                Path.Combine(UserPaths.Home, ".deno", "bin", executable),
+                Path.Combine(UserPaths.LocalBinDirectory, executable),
+                Path.Combine(UserPaths.Home, "bin", executable),
+            })
+            {
+                if (IsRunnableUnixBinary(candidate))
+                {
+                    return Path.GetFullPath(candidate);
+                }
+            }
+        }
 
         // Deno installed by winget, a distro package manager, or the user.
         return ToolLocator.FindOnPath(executable);
+    }
+
+    /// <summary>
+    /// Respect Unix execute permissions instead of advertising an ordinary
+    /// downloaded file as a working runtime. PATH lookup already does this.
+    /// </summary>
+    private static bool IsRunnableUnixBinary(string path)
+    {
+        try
+        {
+            if (!File.Exists(path))
+            {
+                return false;
+            }
+
+            var mode = File.GetUnixFileMode(path);
+            return (mode & (UnixFileMode.UserExecute | UnixFileMode.GroupExecute |
+                UnixFileMode.OtherExecute)) != 0;
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or PlatformNotSupportedException)
+        {
+            return false;
+        }
     }
 }
