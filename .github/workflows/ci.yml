@@ -22,6 +22,8 @@ jobs:
         run: dotnet build YtDlpUi.slnx -c Release
       - name: Smoke tests
         run: dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release --no-build
+      - name: Headless Avalonia UI checks
+        run: dotnet run --project tests/YtDlpUi.UiSmokeTests/YtDlpUi.UiSmokeTests.csproj -c Release --no-build
       - name: Debian package
         if: runner.os == 'Linux'
         run: |

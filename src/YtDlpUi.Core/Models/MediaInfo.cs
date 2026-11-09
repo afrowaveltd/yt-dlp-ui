@@ -84,6 +84,17 @@ public sealed class MediaEntry
 
     /// <summary>Position plus title, for list display.</summary>
     public string Display => $"{Index}. {Title ?? "(bez názvu)"}";
+
+    /// <summary>
+    /// Plain-text representation for generic list controls and accessibility.
+    /// This is also the fallback if Avalonia does not apply the explicit item template.
+    /// </summary>
+    public string PreviewText => Duration is > 0 && double.IsFinite(Duration.Value)
+        ? $"{Display}  ·  {Formatting.Duration(Duration)}"
+        : Display;
+
+    /// <summary>Avoid leaking the CLR type name when a UI control uses default item rendering.</summary>
+    public override string ToString() => PreviewText;
 }
 
 /// <summary>Everything the GUI shows after analysing a link.</summary>

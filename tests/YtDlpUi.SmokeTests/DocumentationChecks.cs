@@ -116,8 +116,8 @@ internal static class DocumentationChecks
     }
 
     /// <summary>
-    /// Guard the playlist preview against falling back to MediaEntry.ToString().
-    /// Avalonia's typed DataTemplate must match the actual collection item type.
+    /// Guard the playlist preview against a restrictive DataType matcher.
+    /// The directly assigned ItemTemplate must apply to every playlist entry.
     /// </summary>
     private static void VerifyPlaylistPreviewTemplate(string root)
     {
@@ -129,12 +129,10 @@ internal static class DocumentationChecks
 
         Require(playlist is not null, "Download page must show the analysed playlist entries");
         var template = playlist!.Descendants(avalonia + "DataTemplate").SingleOrDefault();
-        Require(template is not null && (string?)template.Attribute("DataType") == "models:MediaEntry",
-            "Playlist preview DataTemplate must target MediaEntry, not LogLine or another model");
-
-        var modelNamespace = view.Root?.GetNamespaceOfPrefix("models")?.NamespaceName;
-        Require(modelNamespace == "using:YtDlpUi.Core.Models",
-            "Playlist preview models prefix must resolve to YtDlpUi.Core.Models");
+        // When ItemTemplate is set directly it should not have a DataType matcher.
+        // The type matcher previously prevented item rendering in packaged builds.
+        Require(template is not null && template.Attribute("DataType") is null,
+            "Explicit playlist ItemTemplate must be unconditional (no DataType selector)");
 
         var bindings = template!.Descendants(avalonia + "TextBlock")
             .Attributes("Text").Select(attribute => attribute.Value).ToArray();
