@@ -231,6 +231,14 @@ if (DenoInstaller.IsSupported)
     Require(rejected, "Duplicate checksum entries must fail closed");
 }
 
+// Generic item templates must never expose CLR class names to end users.
+var playlistEntry = new MediaEntry { Index = 3, Title = "C# 11 and .NET 7", Duration = 125 };
+Require(playlistEntry.Display == "3. C# 11 and .NET 7", "Playlist entry display title/position");
+Require(playlistEntry.ToString() == "3. C# 11 and .NET 7  ·  2:05",
+    "Playlist entry fallback must display human-readable title and duration");
+Require(new MediaEntry { Index = 4 }.ToString() == "4. (bez názvu)",
+    "Playlist fallback should remain useful when a title/duration is unavailable");
+
 await HardeningSmokeChecks.VerifyAsync();
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");
