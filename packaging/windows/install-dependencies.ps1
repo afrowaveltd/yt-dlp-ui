@@ -71,7 +71,7 @@ function Read-PublisherChecksum([string]$Path) {
     # IWR.Content on Windows PowerShell can be byte[] for GitHub release assets.
     # Casting it to [string] does not decode the file and loses the hash lines.
     # Download the exact bytes and decode as strict UTF-8 instead.
-    $utf8 = New-Object System.Text.UTF8Encoding($false, $true)
+    $utf8 = [System.Text.UTF8Encoding]::new($false, $true)
     return [IO.File]::ReadAllText($Path, $utf8)
 }
 
