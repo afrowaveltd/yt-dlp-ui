@@ -8,7 +8,7 @@
     <InvariantGlobalization>false</InvariantGlobalization>
     <AvaloniaVersion>11.3.22</AvaloniaVersion>
     <CommunityToolkitVersion>8.4.2</CommunityToolkitVersion>
-    <Version>0.1.3</Version>
+    <Version>0.1.4</Version>
     <Authors>yt-dlp-ui</Authors>
     <Product>yt-dlp GUI</Product>
   </PropertyGroup>

@@ -24,9 +24,9 @@ The **download destination** is user-selectable. On Linux the initial guess foll
 
 Language setting `system` uses the current UI culture when a matching JSON exists, otherwise English; an explicit selection is stored as a language code.
 
-For YouTube, the GUI automatically discovers Deno in the machine-wide tools folder, the per-user tools folder or the system PATH, and passes it to yt-dlp. An explicit JavaScript runtime option in the Network tab or extra arguments always takes precedence. The official standalone yt-dlp.exe already bundles yt-dlp-ejs challenge scripts.
+For YouTube, the GUI automatically discovers Deno in the machine-wide tools folder, the per-user tools folder, `DENO_INSTALL/bin`, `~/.deno/bin` or the system PATH, and passes it to yt-dlp. An explicit JavaScript runtime option in the Network tab or extra arguments always takes precedence. The official standalone yt-dlp.exe already bundles yt-dlp-ejs challenge scripts.
 
-The **Tools** tab lets you override detected tool paths if they are installed outside standard directories. The header shows their detection status. The application attempts to resolve runnable tools, not merely check for a filename.
+The **Tools** tab lets you override yt-dlp and FFmpeg paths, and shows Deno detection, version and path with an optional per-user installer on supported Windows/Linux systems. The header shows the status of all three tools. The application attempts to resolve runnable tools, not merely check for a filename.
 
 ## Security and privacy scope
 

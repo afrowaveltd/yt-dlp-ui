@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.3** má devět karet:
+Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.4** má devět karet:
 
 | Karta | Účel |
 |---|---|
@@ -14,7 +14,7 @@ Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé vo
 | **Soubory** | Šablony názvů, cílové/dočasné složky, přepisování, cache a volby názvů |
 | **Přihlášení** | Cookies ze souboru/prohlížeče, přihlašovací údaje, `.netrc` a certifikáty |
 | **Pokročilé** | Náhled vytvořeného příkazu, dodatečné argumenty, diagnostika a reset |
-| **Nástroje** | Vyhledání/instalace/aktualizace yt-dlp, FFmpeg a nastavení aplikace |
+| **Nástroje** | Vyhledání/instalace/aktualizace yt-dlp, detekce a instalace FFmpeg a Deno na podporovaných systémech Windows/Linux, nastavení aplikace |
 
 Některé speciální přepínače yt-dlp zůstávají v poli **vlastní argumenty** místo samostatného ovládacího prvku. GUI předává argumenty externímu yt-dlp; podporu webových služeb určuje jeho aktuální verze.
 
@@ -36,7 +36,7 @@ Na pravé straně je fronta stahování, průběh a ovládání opakování/odst
 
 ## Horní lišta a zkratky
 
-Nahoře je **stav yt-dlp a FFmpeg**. Vedle indikátorů je 🌐 **výběr jazyka**, následovaný ovladačem tmavého/světlého motivu. Nabídka vzniká z JSON slovníků, nikoliv pevně daných dvou jazyků. Viz [Lokalizace](../Localization/cs.md).
+Nahoře je **stav yt-dlp, FFmpeg a Deno**. Vedle indikátorů je 🌐 **výběr jazyka**, následovaný ovladačem tmavého/světlého motivu. Nabídka vzniká z JSON slovníků, nikoliv pevně daných dvou jazyků. Viz [Lokalizace](../Localization/cs.md).
 
 | Zkratka | Akce |
 |---|---|

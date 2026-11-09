@@ -24,7 +24,7 @@ Předvolby aplikace jsou v souboru JSON, odděleně od binárek yt-dlp a FFmpeg.
 
 Volba jazyka `system` používá systémové prostředí, pokud existuje odpovídající JSON, jinak angličtinu. Ručně vybraný jazyk se ukládá jako kód.
 
-Pro YouTube GUI automaticky vyhledá Deno ve společné složce nástrojů, uživatelské složce či PATH a předá jej programu yt-dlp. Výslovně nastavený JavaScript runtime na kartě Síť nebo další parametry mají přednost. Oficiální samostatné yt-dlp.exe už obsahuje EJS skripty.
+Pro YouTube GUI automaticky vyhledá Deno ve společné složce nástrojů, uživatelské složce, `DENO_INSTALL/bin`, `~/.deno/bin` či PATH a předá jej programu yt-dlp. Výslovně nastavený JavaScript runtime na kartě Síť nebo další parametry mají přednost. Oficiální samostatné yt-dlp.exe už obsahuje EJS skripty.
 
 Na kartě **Nástroje** lze nastavit vlastní cesty pro programy mimo běžné složky. V hlavičce je jejich detekovaný stav. Aplikace se snaží ověřit, že je program opravdu spustitelný; nekontroluje jen existenci souboru.
 

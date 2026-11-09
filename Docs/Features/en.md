@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.3 maintenance preview** contains nine tabs:
+The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.4 maintenance preview** contains nine tabs:
 
 | Tab | Purpose |
 |---|---|
@@ -14,7 +14,7 @@ The interface is designed to be friendly for a first download while keeping adva
 | **Files** | Filename/output templates, destination/temp folders, overwrites, cache and filename options |
 | **Authentication** | Browser/file cookies, credentials, `.netrc` and certificate-related yt-dlp switches |
 | **Advanced** | Generated command preview, extra arguments, diagnostics and option reset |
-| **Tools** | Locate/install/update yt-dlp, detect/install FFmpeg when supported, application settings |
+| **Tools** | Locate/install/update yt-dlp, detect/install FFmpeg, detect/install Deno on supported Windows/Linux systems, application settings |
 
 Some specialized yt-dlp flags remain in the **custom arguments** area rather than having a dedicated control. A GUI option maps to arguments passed to the installed external yt-dlp version; available website support is controlled by yt-dlp.
 
@@ -36,7 +36,7 @@ The right side of the window shows the queue, with progress and controls for ret
 
 ## Header and UI controls
 
-The header contains **yt-dlp and FFmpeg status indicators**. The 🌐 **language selector** is beside them, followed by the light/dark theme control. Languages come from JSON dictionaries, not a hard-coded two-language menu. See [Localization](../Localization/en.md).
+The header contains **yt-dlp, FFmpeg and Deno status indicators**. The 🌐 **language selector** is beside them, followed by the light/dark theme control. Languages come from JSON dictionaries, not a hard-coded two-language menu. See [Localization](../Localization/en.md).
 
 | Shortcut | Action |
 |---|---|

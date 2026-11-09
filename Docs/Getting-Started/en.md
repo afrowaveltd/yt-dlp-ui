@@ -13,13 +13,13 @@ The Windows setup and Linux DEB/RPM/tar files are self-contained: you do **not**
 
 ## 2. Choose a distribution
 
-- **Windows x64:** download the setup executable from [v0.1.3](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.3) and run it. Leave the independent **Install yt-dlp** and **Install FFmpeg** boxes checked for the simplest first run.
+- **Windows x64:** download the setup executable from [v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4) and run it. Leave the independent **Install yt-dlp**, **Install FFmpeg** and **Install Deno** boxes checked for the simplest first run.
 - **Debian/Ubuntu:** install the matching `.deb` with `sudo apt install ./filename.deb`; the package manager may install recommended dependencies.
 - **Fedora/openSUSE:** use the matching `.rpm` with the appropriate package manager.
 - **Other Linux:** unpack the `.tar.gz` archive and launch the included executable; install external tools separately as needed.
 - **Developers:** clone the source and run the commands in [Development and verification](../Development-and-Verification/en.md).
 
-Prefer the published **[v0.1.3 pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.3)** for downloads. GitHub Actions artifacts are for development and testing.
+Prefer the published **[v0.1.4 pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4)** for downloads. GitHub Actions artifacts are for development and testing.
 
 ## 3. First download
 
@@ -30,7 +30,7 @@ Prefer the published **[v0.1.3 pre-release](https://github.com/afrowaveltd/yt-dl
 5. Select the output folder and click **Download**, or **Add to queue** to queue more links.
 6. Follow progress; use **Open folder** when finished.
 
-The header indicates whether yt-dlp and FFmpeg were detected. Open **Tools** when either is missing. The **language dropdown** is at the upper-right, next to the status indicators.
+The header indicates whether yt-dlp, FFmpeg and Deno were detected. Open **Tools** when either is missing. The **language dropdown** is at the upper-right, next to the status indicators.
 
 ## 4. Useful shortcuts
 

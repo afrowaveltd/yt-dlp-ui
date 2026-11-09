@@ -1,0 +1,144 @@
+# Publish the v0.1.4 maintenance prerelease exactly once from a reviewed main commit.
+name: Publish v0.1.4 preview
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'publish-v0.1.4-prerelease')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and smoke tests
+        run: |
+          dotnet build YtDlpUi.slnx -c Release
+          dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release --no-build
+      - name: Package Debian and portable Linux
+        run: |
+          ./scripts/package-deb.sh
+          dpkg-deb --info artifacts/*.deb
+          dpkg-deb --contents artifacts/*.deb | grep 'usr/bin/yt-dlp-gui'
+          dpkg-deb --contents artifacts/*.deb | grep 'opt/yt-dlp-gui/Locales/en.json'
+          ./scripts/package-linux-tar.sh --from-publish
+          tar -tzf artifacts/*.tar.gz | grep 'yt-dlp-gui/yt-dlp-gui'
+      - name: Install RPM toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+      - name: Package RPM
+        run: |
+          ./scripts/package-rpm.sh --from-publish
+          rpm -qpi artifacts/*.rpm
+          rpm -qpl artifacts/*.rpm | grep '/usr/bin/yt-dlp-gui'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-v0.1.4-linux
+          path: |
+            artifacts/*.deb
+            artifacts/*.rpm
+            artifacts/*.tar.gz
+          if-no-files-found: error
+
+  windows:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'publish-v0.1.4-prerelease')
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build and smoke tests
+        shell: pwsh
+        run: |
+          dotnet build YtDlpUi.slnx -c Release
+          if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
+          dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release --no-build
+          if ($LASTEXITCODE -ne 0) { throw 'Smoke tests failed.' }
+      - name: Portable Windows x64
+        shell: pwsh
+        run: |
+          ./scripts/build-windows.ps1
+          if (-not (Test-Path 'publish/win-x64/yt-dlp-gui.exe')) { throw 'Missing executable.' }
+          if (-not (Test-Path 'publish/win-x64/Locales/en.json')) { throw 'Missing locales.' }
+          New-Item -ItemType Directory -Force artifacts | Out-Null
+          Compress-Archive -Path 'publish/win-x64/*' -DestinationPath 'artifacts/yt-dlp-gui_0.1.4_win-x64_portable.zip'
+      - name: Verify global UAC setup and PowerShell syntax
+        shell: pwsh
+        run: ./scripts/test-windows-installer.ps1
+      - name: Install Inno Setup
+        shell: pwsh
+        run: choco install innosetup --no-progress -y
+      - name: Compile Windows setup
+        shell: pwsh
+        run: |
+          ./scripts/build-windows-installer.ps1 -FromPublish
+          if (-not (Test-Path 'artifacts/yt-dlp-gui-setup-0.1.4-win-x64.exe')) {
+            throw 'Missing setup executable.'
+          }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-v0.1.4-windows
+          path: |
+            artifacts/yt-dlp-gui_0.1.4_win-x64_portable.zip
+            artifacts/yt-dlp-gui-setup-0.1.4-win-x64.exe
+          if-no-files-found: error
+
+  publish:
+    needs: [linux, windows]
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'publish-v0.1.4-prerelease')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-v0.1.4-*
+          path: dist
+          merge-multiple: true
+      - name: Check asset completeness and SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/yt-dlp-gui_0.1.4_amd64.deb
+          test -f dist/yt-dlp-gui-0.1.4-1.x86_64.rpm
+          test -f dist/yt-dlp-gui_0.1.4_linux-x86_64.tar.gz
+          test -f dist/yt-dlp-gui-setup-0.1.4-win-x64.exe
+          test -f dist/yt-dlp-gui_0.1.4_win-x64_portable.zip
+          count="$(find dist -maxdepth 1 -type f | wc -l)"
+          test "$count" -eq 5
+          (cd dist && sha256sum *.deb *.rpm *.tar.gz *.exe *.zip > SHA256SUMS.txt)
+          cat dist/SHA256SUMS.txt
+      - name: Create draft prerelease with assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view v0.1.4 >/dev/null 2>&1; then
+            echo "::error::v0.1.4 release already exists, refusing to overwrite."
+            exit 1
+          fi
+          gh release create v0.1.4 dist/* \
+            --target "$GITHUB_SHA" \
+            --title "yt-dlp GUI 0.1.4 — Deno controls and Linux runtime discovery" \
+            --notes-file RELEASE_NOTES_0.1.4.md \
+            --draft \
+            --prerelease
+      - name: Publish after attachments are uploaded
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release edit v0.1.4 --draft=false --prerelease
+          gh release view v0.1.4 --json url,isDraft,isPrerelease,tagName,assets

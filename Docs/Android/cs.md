@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [Verzování](../Versioning/cs.md)
 
-Aplikace pro Android má **vlastní dotykové rozhraní Avalonia 12** a od desktopové verze přebírá pouze nezávislé jádro `YtDlpUi.Core`. Mobilní projekt používá Avalonia 12.1.4 nezávisle na desktopové Avalonia 11; sdílené jádro na Avalonia nezávisí. Jde o experimentální **vývojový prototyp 0.2.0**, nikoli o součást vydaného desktopového [v0.1.3](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.3).
+Aplikace pro Android má **vlastní dotykové rozhraní Avalonia 12** a od desktopové verze přebírá pouze nezávislé jádro `YtDlpUi.Core`. Mobilní projekt používá Avalonia 12.1.4 nezávisle na desktopové Avalonia 11; sdílené jádro na Avalonia nezávisí. Jde o experimentální **vývojový prototyp 0.2.0**, nikoli o součást vydaného desktopového [v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4).
 
 ## Co už umí
 
@@ -44,4 +44,4 @@ dotnet build YtDlpUi.Android.slnx -c Debug -p:AndroidPackageFormat=apk
 
 Před veřejným vydáním ověříme nativní runtime i licence na skutečném telefonu. Zvolená knihovna je MIT, yt-dlp používá Unlicense, Chaquopy MIT a Python licenci PSF; viz [upstream licence](https://github.com/ffmpegkit-maintained/yt-dlp-android/blob/main/THIRD-PARTY-NOTICES.txt). Podporujeme jen arm64-v8a a x86_64. Žádné aktualizace spouštěním stažených EXE. Dále potřebujeme ověřit reálné stahování, doplnit rušení, mobilní překlady, licenčně prověřit FFmpeg a případně implementovat foreground service.
 
-[Repozitář](https://github.com/afrowaveltd/yt-dlp-ui) · [Desktop release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.3)
+[Repozitář](https://github.com/afrowaveltd/yt-dlp-ui) · [Desktop release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4)
