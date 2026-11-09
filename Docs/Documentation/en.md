@@ -2,7 +2,7 @@
 
 **Language:** English · [Česky](cs.md) · [Repository README](../../README.md)
 
-This index covers the published **0.1.4 community maintenance pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
+This index covers the published **0.1.5 community maintenance pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
 
 ## User guides
 
@@ -18,11 +18,12 @@ This index covers the published **0.1.4 community maintenance pre-release** and 
 7. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
 8. [Versioning and release policy](../Versioning/en.md) — PATCH fixes, MINOR previews, stable v1+, Git tags and release rules.
 9. [Android prototype](../Android/en.md) — separate touch interface, shared core, direct HTTPS downloads; not part of v0.1.0.
-10. [Release 0.1.4 fixes](../Release-0.1.4/en.md) — Deno status indicators, Tools installer and Linux discovery.
-11. [Release 0.1.3 fixes](../Release-0.1.3/en.md) — YouTube JavaScript runtime and optional Deno setup.
-12. [Release 0.1.2 fixes](../Release-0.1.2/en.md) — Windows UAC setup and shared tool fixes.
-13. [Release 0.1.1 fixes](../Release-0.1.1/en.md) — historical desktop patch and tests.
-14. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
+10. [Release 0.1.5 fix](../Release-0.1.5/en.md) — playlist titles and durations in the analysis preview.
+11. [Release 0.1.4 fixes](../Release-0.1.4/en.md) — Deno status indicators, Tools installer and Linux discovery.
+12. [Release 0.1.3 fixes](../Release-0.1.3/en.md) — YouTube JavaScript runtime and optional Deno setup.
+13. [Release 0.1.2 fixes](../Release-0.1.2/en.md) — Windows UAC setup and shared tool fixes.
+14. [Release 0.1.1 fixes](../Release-0.1.1/en.md) — historical desktop patch and tests.
+15. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
 
 ## Localized README
 

@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.4 maintenance preview** contains nine tabs:
+The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.5 maintenance preview** contains nine tabs:
 
 | Tab | Purpose |
 |---|---|
@@ -31,6 +31,8 @@ A clipboard watcher and automatic analysis can be enabled or disabled in applica
 ## Advanced path
 
 Use the **Format**, **Playlist**, **Subtitles & metadata**, **Network**, **Files** and **Authentication** tabs to choose detailed yt-dlp behavior. The **Advanced** tab displays a copyable preview of the resulting command and accepts extra arguments for less common switches. Be careful with custom flags and authentication data.
+
+After analyzing a playlist, the Download tab previews each entry with its position, title and duration when known.
 
 The right side of the window shows the queue, with progress and controls for retry/removal. The log helps diagnose failed downloads.
 

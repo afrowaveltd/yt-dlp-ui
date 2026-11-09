@@ -1,6 +1,6 @@
 ; Machine-wide installer for yt-dlp GUI, with UAC elevation. Compiled by scripts/build-windows-installer.ps1.
 #ifndef AppVersion
-  #define AppVersion "0.1.4"
+  #define AppVersion "0.1.5"
 #endif
 #define RepoRoot AddBackslash(SourcePath) + "..\.."
 

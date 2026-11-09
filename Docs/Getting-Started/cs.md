@@ -13,13 +13,13 @@ Balíčky Windows a Linux DEB/RPM/tar obsahují vlastní runtime .NET. K běhu t
 
 ## 2. Volba instalace
 
-- **Windows x64:** z [v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4) stáhni instalační EXE a spusť průvodce. Pro nejjednodušší start nech zaškrtnuté tři nezávislé volby **Instalovat yt-dlp**, **Instalovat FFmpeg** a **Instalovat Deno**.
+- **Windows x64:** z [v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5) stáhni instalační EXE a spusť průvodce. Pro nejjednodušší start nech zaškrtnuté tři nezávislé volby **Instalovat yt-dlp**, **Instalovat FFmpeg** a **Instalovat Deno**.
 - **Debian/Ubuntu:** odpovídající `.deb` nainstaluj přes `sudo apt install ./soubor.deb`; správce balíčků může nainstalovat i doporučené závislosti.
 - **Fedora/openSUSE:** použij `.rpm` a správce balíčků příslušné distribuce.
 - **Jiné distribuce Linuxu:** rozbal `.tar.gz`, spusť obsažený program a podle potřeby doplň externí nástroje.
 - **Vývojáři:** naklonuj repozitář a použij postup v [Vývoji a ověřování](../Development-and-Verification/cs.md).
 
-Pro běžné stažení používej zveřejněný **[pre-release v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4)**. Artifacts v GitHub Actions slouží k vývoji a testování.
+Pro běžné stažení používej zveřejněný **[pre-release v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)**. Artifacts v GitHub Actions slouží k vývoji a testování.
 
 ## 3. První stažení
 

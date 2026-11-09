@@ -2,7 +2,7 @@
 
 A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp)**, built with [Avalonia UI](https://avaloniaui.net/) and .NET 10. Paste a video or playlist URL, choose a preset, and manage downloads without memorizing command-line options. Advanced yt-dlp options remain accessible when you need them.
 
-**Release status:** **[v0.1.4 — maintenance pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
+**Release status:** **[v0.1.5 — maintenance pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
 
 **Documentation:** English (this page) · [Česky](../README/cs.md) · [Documentation index](../Documentation/en.md) · [Český rozcestník](../Documentation/cs.md)
 
@@ -15,7 +15,16 @@ A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt
 - **Localization:** language selector in the upper-right header beside the tool status indicators. English/Czech dictionaries, automatic discovery of new `Locales/*.json` files, instant switching and English fallback.
 - **Desktop packaging:** Windows x64 `setup.exe` and portable build; Linux `.deb`, `.rpm` and portable `.tar.gz`.
 
-Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.1.4.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.1.5.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+
+## Fix in 0.1.5
+
+- Fixed the **playlist preview list** displaying `YtDlpUi.Core.Models.MediaEntry` instead of the videos' names.
+- Each playlist entry now shows its **position, title and duration** (when known).
+- Corrected the Avalonia `DataTemplate` model from `LogLine` to `MediaEntry` and added a regression smoke test.
+- This is a **display-only correction**: playlist downloading, queue behavior and video format selection are unchanged.
+
+[0.1.5 release notes](../Release-0.1.5/en.md) · [České poznámky](../Release-0.1.5/cs.md)
 
 ## Changes in 0.1.4
 
@@ -73,24 +82,24 @@ Screenshots illustrate the interface at the time they were captured; newer langu
 
 ### Windows 10/11 (x64)
 
-Download **the Windows setup EXE** from [v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4) and run `yt-dlp-gui-setup-0.1.4-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
+Download **the Windows setup EXE** from [v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5) and run `yt-dlp-gui-setup-0.1.5-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
 
-A **`yt-dlp-gui_0.1.4_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
+A **`yt-dlp-gui_0.1.5_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
 
 ### Debian / Ubuntu, Fedora / openSUSE, other Linux
 
-Download the matching **DEB or RPM** from [v0.1.4](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4), then use your distribution's package manager:
+Download the matching **DEB or RPM** from [v0.1.5](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5), then use your distribution's package manager:
 
 ~~~bash
-sudo apt install ./yt-dlp-gui_0.1.4_amd64.deb    # Debian/Ubuntu x64
-sudo dnf install ./yt-dlp-gui-0.1.4-1.x86_64.rpm # Fedora-style RPM
+sudo apt install ./yt-dlp-gui_0.1.5_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.1.5-1.x86_64.rpm # Fedora-style RPM
 ~~~
 
 Package filenames depend on version and architecture. DEB/RPM **recommend** `yt-dlp` and `ffmpeg` but do not bundle them or run hidden download scripts. Package-manager behavior differs by distribution. For other Linux systems, unpack the portable `tar.gz` and run `./yt-dlp-gui/yt-dlp-gui`. An existing compatible .NET runtime is **not** required by the self-contained builds.
 
 For a per-user Linux installation from source, run `./scripts/install.sh`; for removal, `./scripts/install.sh --uninstall`.
 
-**v0.1.4 is a published, unsigned pre-release.** See [Installation](../Installation/en.md) for exact build commands, dependencies and platform limitations.
+**v0.1.5 is a published, unsigned pre-release.** See [Installation](../Installation/en.md) for exact build commands, dependencies and platform limitations.
 
 ## Build from source
 
@@ -140,6 +149,7 @@ Reopen the language selector to rescan files. Filenames are culture codes (e.g. 
 | Development and verification | [Development](../Development-and-Verification/en.md) | [Vývoj](../Development-and-Verification/cs.md) |
 | Versioning and release policy | [Versioning](../Versioning/en.md) | [Verzování](../Versioning/cs.md) |
 | Android prototype (experimental) | [Android](../Android/en.md) | [Android](../Android/cs.md) |
+| Patch 0.1.5 | [Release notes](../Release-0.1.5/en.md) | [Opravy](../Release-0.1.5/cs.md) |
 | Patch 0.1.4 | [Release notes](../Release-0.1.4/en.md) | [Opravy](../Release-0.1.4/cs.md) |
 | Patch 0.1.3 | [Release notes](../Release-0.1.3/en.md) | [Opravy](../Release-0.1.3/cs.md) |
 | Previous patch 0.1.1 | [History](../Release-0.1.1/en.md) | [Historie](../Release-0.1.1/cs.md) |
@@ -150,4 +160,4 @@ The **GUI source code** is licensed under [MIT](../../LICENSE). [yt-dlp](https:/
 
 Remembered download options deliberately omit supported password and 2FA fields. Treat downloaded files, cookies and logs according to your own privacy needs. Download only media you are authorized to access and respect site terms.
 
-**[v0.1.4 is published](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.4)** as a maintenance pre-release. See [release status and outstanding tests](../Release-0.1.4/en.md).
+**[v0.1.5 is published](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.5)** as a maintenance pre-release. See [release status and outstanding tests](../Release-0.1.5/en.md).

@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.4** má devět karet:
+Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.5** má devět karet:
 
 | Karta | Účel |
 |---|---|
@@ -31,6 +31,8 @@ Sledování schránky a automatickou analýzu lze vypnout či zapnout v nastaven
 ## Pokročilá cesta
 
 Karty **Formát**, **Playlist**, **Titulky a metadata**, **Síť**, **Soubory** a **Přihlášení** umožňují podrobněji nastavit yt-dlp. Karta **Pokročilé** zobrazuje kopírovatelný příkaz a dovoluje zadat vlastní argumenty. S hesly, cookies a dalšími údaji zacházej opatrně.
+
+Po analýze playlistu se na kartě Stáhnout zobrazí položky s pořadím, názvem a dostupnou délkou videa.
 
 Na pravé straně je fronta stahování, průběh a ovládání opakování/odstranění. Log pomáhá s diagnostikou neúspěšných stahování.
 
