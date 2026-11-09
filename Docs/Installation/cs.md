@@ -70,7 +70,7 @@ Vznikne `artifacts/yt-dlp-gui-setup-0.1.3-win-x64.exe`. Pro přenosnou verzi ARM
 sudo apt install ./artifacts/yt-dlp-gui_0.1.3_amd64.deb
 ~~~
 
-Balíček instaluje program do `/opt/yt-dlp-gui`, spouštěč `/usr/bin/yt-dlp-gui` a položku nabídky aplikací. **Doporučuje** balíčky `yt-dlp` a `ffmpeg`; podle nastavení může APT doporučené balíčky přidat. Instalační hook nestahuje žádný externí program ze sítě.
+Balíček instaluje program do `/opt/yt-dlp-gui`, spouštěč `/usr/bin/yt-dlp-gui` a položku nabídky aplikací. **Doporučuje** balíčky `yt-dlp` a `ffmpeg`; podle nastavení může APT doporučené balíčky přidat. Instalační hook nestahuje žádný externí program ze sítě. **Ve vývojových sestaveních po v0.1.3** je Deno volitelné: na kartě Nástroje → Deno → Nainstalovat Deno pro Windows / Linux stáhneš uživatelskou kopii ověřenou pomocí SHA-256 do `~/.deno/bin` (nebo `$DENO_INSTALL/bin`). Bez `sudo`, změny správce balíčků či PATH.
 
 Odinstalace: `sudo apt remove yt-dlp-gui`.
 

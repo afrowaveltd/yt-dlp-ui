@@ -165,6 +165,72 @@ finally
     Directory.Delete(denoDir, recursive: true);
 }
 
+// Linux runtime discovery must also work from a GUI session without .bashrc PATH.
+if (OperatingSystem.IsLinux())
+{
+    var originalInstall = Environment.GetEnvironmentVariable("DENO_INSTALL");
+    var originalPath = Environment.GetEnvironmentVariable("PATH");
+    var prefix = Path.Combine(Path.GetTempPath(), "afrowave-deno-discovery-" + Guid.NewGuid().ToString("N"));
+    try
+    {
+        var bin = Path.Combine(prefix, "bin");
+        Directory.CreateDirectory(bin);
+        var executable = Path.Combine(bin, "deno");
+        File.WriteAllText(executable, "test fixture");
+        File.SetUnixFileMode(executable, UnixFileMode.UserRead | UnixFileMode.UserWrite |
+            UnixFileMode.UserExecute);
+        Environment.SetEnvironmentVariable("DENO_INSTALL", prefix);
+        Environment.SetEnvironmentVariable("PATH", "/usr/bin:/bin");
+        Require(DenoInstaller.DefaultInstallPath == Path.Combine(prefix, "bin", "deno"),
+            "Linux per-user Deno installation must honor DENO_INSTALL");
+        Require(JavaScriptRuntimeLocator.FindDenoExecutable() == Path.GetFullPath(executable),
+            "Linux GUI should find Deno in DENO_INSTALL even when PATH does not include it");
+        File.SetUnixFileMode(executable, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        Require(JavaScriptRuntimeLocator.FindDenoExecutable() != Path.GetFullPath(executable),
+            "Linux discovery must ignore a non-executable file");
+    }
+    finally
+    {
+        Environment.SetEnvironmentVariable("DENO_INSTALL", originalInstall);
+        Environment.SetEnvironmentVariable("PATH", originalPath);
+        Directory.Delete(prefix, recursive: true);
+    }
+}
+
+// Accept only a properly matched, unambiguous vendor checksum.
+var checksumAsset = DenoInstaller.AssetName();
+if (DenoInstaller.IsSupported)
+{
+    Require(checksumAsset is not null, "Supported OS must choose an official Deno ZIP");
+    const string digest = "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef";
+    Require(DenoInstaller.PublishedSha256(digest + "  " + checksumAsset, checksumAsset!) == digest,
+        "Deno installer must read matching named publisher checksum");
+    Require(DenoInstaller.PublishedSha256(digest, checksumAsset!) == digest,
+        "Deno installer must also accept a bare official SHA-256 sidecar");
+    bool rejected = false;
+    try
+    {
+        DenoInstaller.PublishedSha256(digest + "  wrong.zip", checksumAsset!);
+    }
+    catch (InvalidDataException)
+    {
+        rejected = true;
+    }
+
+    Require(rejected, "Never accept an unrelated Deno package checksum");
+    rejected = false;
+    try
+    {
+        DenoInstaller.PublishedSha256(digest + "\n" + digest, checksumAsset!);
+    }
+    catch (InvalidDataException)
+    {
+        rejected = true;
+    }
+
+    Require(rejected, "Duplicate checksum entries must fail closed");
+}
+
 await HardeningSmokeChecks.VerifyAsync();
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");

@@ -7,12 +7,13 @@ using YtDlpUi.Core.Services;
 
 namespace YtDlpUi.ViewModels;
 
-/// <summary>Detects, installs and updates the yt-dlp / ffmpeg toolchain shown on the tools page.</summary>
+/// <summary>Detects, installs and updates yt-dlp, FFmpeg and Deno tools.</summary>
 public sealed partial class ToolchainViewModel : ObservableObject
 {
     private readonly AppSettings _settings;
     private readonly YtDlpInstaller _installer;
     private readonly FfmpegInstaller _ffmpegInstaller = new();
+    private readonly DenoInstaller _denoInstaller = new();
     private readonly StringBuilder _log = new();
     private CancellationTokenSource? _installCts;
 
@@ -46,6 +47,15 @@ public sealed partial class ToolchainViewModel : ObservableObject
     /// <summary>Path of ffmpeg.</summary>
     [ObservableProperty] public partial string FfmpegLocationText { get; private set; } = "hledám…";
 
+    /// <summary>True if Deno 2.3+ is installed and can run.</summary>
+    [ObservableProperty] public partial bool DenoAvailable { get; private set; }
+
+    /// <summary>Detected Deno version or a missing-version marker.</summary>
+    [ObservableProperty] public partial string DenoVersionText { get; private set; } = "–";
+
+    /// <summary>Path to the detected Deno JavaScript runtime.</summary>
+    [ObservableProperty] public partial string DenoLocationText { get; private set; } = "searching…";
+
     /// <summary>True while a detection or install operation runs.</summary>
     [ObservableProperty] public partial bool IsBusy { get; private set; }
 
@@ -61,13 +71,19 @@ public sealed partial class ToolchainViewModel : ObservableObject
     /// <summary>True if the official Windows x64 FFmpeg ZIP can be installed.</summary>
     public bool CanInstallFfmpeg => FfmpegInstaller.IsSupported;
 
+    /// <summary>True when the current OS/architecture supports managed Deno installation.</summary>
+    public bool CanInstallDeno => DenoInstaller.IsSupported;
+
+    /// <summary>Whether the suggested JavaScript runtime is absent.</summary>
+    public bool DenoMissing => !DenoAvailable;
+
     /// <summary>True when yt-dlp is missing, so the install card should be prominent.</summary>
     public bool YtDlpMissing => !YtDlpAvailable;
 
     /// <summary>Convenience flag for enabling download buttons.</summary>
     public bool CanDownload => YtDlpAvailable && !IsBusy;
 
-    /// <summary>Probe the system for yt-dlp and ffmpeg.</summary>
+    /// <summary>Probe the system for yt-dlp, FFmpeg and Deno.</summary>
     public async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
         IsBusy = true;
@@ -94,7 +110,13 @@ public sealed partial class ToolchainViewModel : ObservableObject
             FfmpegVersionText = ffmpegStatus.Version ?? "–";
             FfmpegLocationText = ffmpegStatus.Path ?? "nenalezeno";
 
+            var denoStatus = await DenoInstaller.LocateAsync(cancellationToken).ConfigureAwait(true);
+            DenoAvailable = denoStatus.Found;
+            DenoVersionText = denoStatus.Version ?? "–";
+            DenoLocationText = denoStatus.Path ?? denoStatus.Message ?? "not found";
+
             CommandChanged?.Invoke(this, EventArgs.Empty);
+            OnPropertyChanged(nameof(DenoMissing));
             OnPropertyChanged(nameof(YtDlpMissing));
             OnPropertyChanged(nameof(CanDownload));
         }
@@ -184,6 +206,49 @@ public sealed partial class ToolchainViewModel : ObservableObject
         catch (Exception ex)
         {
             AppendLog($"FFmpeg installation failed: {ex.Message}");
+        }
+        finally
+        {
+            InstallProgress = null;
+            IsBusy = false;
+            OnPropertyChanged(nameof(CanDownload));
+        }
+    }
+
+    /// <summary>
+    /// Download and install SHA-256-verified Deno in the user's private folder.
+    /// This is supported on Windows and Linux and never asks for administrator rights.
+    /// </summary>
+    [RelayCommand]
+    private async Task InstallDenoAsync()
+    {
+        if (IsBusy || !CanInstallDeno)
+        {
+            return;
+        }
+
+        IsBusy = true;
+        ClearLog();
+        InstallProgress = 0;
+        _installCts?.Dispose();
+        _installCts = new CancellationTokenSource();
+        try
+        {
+            AppendLog("Downloading and verifying the official Deno JavaScript runtime…");
+            var progress = new Progress<DownloadProgress>(p => InstallProgress = p.Percent);
+            var path = await _denoInstaller.InstallAsync(progress, _installCts.Token).ConfigureAwait(true);
+            AppendLog($"Deno installed to {path}");
+            await RefreshAsync().ConfigureAwait(true);
+            AppendLog(DenoAvailable ? $"Deno {DenoVersionText} is ready for YouTube."
+                : "Deno was installed but could not be started.");
+        }
+        catch (OperationCanceledException)
+        {
+            AppendLog("Deno installation cancelled.");
+        }
+        catch (Exception ex)
+        {
+            AppendLog($"Deno installation failed: {ex.Message}");
         }
         finally
         {
