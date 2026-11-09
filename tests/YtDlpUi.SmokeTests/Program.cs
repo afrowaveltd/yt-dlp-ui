@@ -181,6 +181,8 @@ if (OperatingSystem.IsLinux())
             UnixFileMode.UserExecute);
         Environment.SetEnvironmentVariable("DENO_INSTALL", prefix);
         Environment.SetEnvironmentVariable("PATH", "/usr/bin:/bin");
+        Require(DenoInstaller.DefaultInstallPath == Path.Combine(prefix, "bin", "deno"),
+            "Linux per-user Deno installation must honor DENO_INSTALL");
         Require(JavaScriptRuntimeLocator.FindDenoExecutable() == Path.GetFullPath(executable),
             "Linux GUI should find Deno in DENO_INSTALL even when PATH does not include it");
         File.SetUnixFileMode(executable, UnixFileMode.UserRead | UnixFileMode.UserWrite);
