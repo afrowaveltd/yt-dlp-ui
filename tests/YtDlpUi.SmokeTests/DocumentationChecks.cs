@@ -56,6 +56,7 @@ internal static class DocumentationChecks
         }
 
         VerifyLanguagePickerLayout(root);
+        VerifyDenoUiLayout(root);
 
         Console.WriteLine($"Documentation smoke checks passed: {topics.Length} bilingual topics and local links.");
     }
@@ -87,6 +88,30 @@ internal static class DocumentationChecks
         Require(languageGrid.Elements(avalonia + "ComboBox").Any(element =>
                 (string?)element.Attribute("Grid.Column") == "2"),
             "Language ComboBox must stay outside the globe and its spacer");
+    }
+
+    /// <summary>
+    /// Keep Deno visible alongside yt-dlp and FFmpeg in both the header and
+    /// tools page. This guards status bindings and the explicit install action.
+    /// </summary>
+    private static void VerifyDenoUiLayout(string root)
+    {
+        XNamespace avalonia = "https://github.com/avaloniaui";
+        var header = XDocument.Load(Path.Combine(root, "src", "YtDlpUi", "Views", "MainWindow.axaml"));
+        var toolPage = XDocument.Load(Path.Combine(root, "src", "YtDlpUi", "Views", "Pages", "ToolsPage.axaml"));
+
+        static bool HasBinding(XDocument doc, string property) =>
+            doc.Descendants().Attributes().Any(attribute =>
+                attribute.Value.Contains("Toolchain." + property, StringComparison.Ordinal));
+
+        Require(HasBinding(header, "DenoAvailable") && HasBinding(header, "DenoLocationText"),
+            "Deno must have a status indicator and tooltip in the desktop header");
+        Require(HasBinding(toolPage, "DenoAvailable") && HasBinding(toolPage, "DenoVersionText") &&
+                HasBinding(toolPage, "DenoLocationText") && HasBinding(toolPage, "InstallDenoCommand"),
+            "Tools must show Deno status, version, path and an installation command");
+        Require(toolPage.Descendants(avalonia + "TextBlock").Any(element =>
+                (string?)element.Attribute("Text") == "Deno"),
+            "Tools must contain a titled Deno section");
     }
 
     private static void ValidateLocalLinks(string markdown)
