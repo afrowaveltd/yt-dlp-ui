@@ -1,6 +1,6 @@
 # Development and verification
 
-[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.6/en.md)
+[Česky](cs.md) · [Index](../Documentation/en.md) · [Release checklist](../Release-0.1.7/en.md)
 
 ## Build requirements
 
@@ -53,7 +53,10 @@ The smoke suite also covers automatic JavaScript runtime discovery, manual overr
 - Creates a Windows x64 portable build and an Inno Setup `setup.exe`. The setup requests UAC; CI additionally checks its config and PowerShell installer syntax.
 - Uploads CI artifacts so they can be manually installed and tested.
 
-Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.6 patch notes](../Release-0.1.6/en.md).
+Success in CI confirms compilation and package generation, **not** that every Windows wizard download, every yt-dlp website or every RPM target environment was tested. For manual validation, follow the [0.1.7 patch notes](../Release-0.1.7/en.md).
+
+
+For 0.1.7, Windows PowerShell checksum regression tests cover the installer fixes; all three external tools were also manually installed on a second Windows PC. CI does not certify every target network or user environment.
 
 ## Localization conventions
 

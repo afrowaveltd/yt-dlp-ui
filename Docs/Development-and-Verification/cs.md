@@ -1,6 +1,6 @@
 # Vývoj a ověřování
 
-[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.6/cs.md)
+[English](en.md) · [Rozcestník](../Documentation/cs.md) · [Kontrolní seznam vydání](../Release-0.1.7/cs.md)
 
 ## Co potřebujeme
 
@@ -53,7 +53,10 @@ Smoke suite také kontroluje detekci JavaScript runtime Deno, přednost ručníh
 - Vytvoří portable Windows x64 a instalátor Inno Setup `setup.exe`. Setup vyžaduje UAC, CI navíc testuje nastavení instalátoru a syntaxi PowerShell.
 - Nahrají testovací artifacts k ručnímu ověření.
 
-Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.6](../Release-0.1.6/cs.md).
+Zelené CI znamená úspěšnou kompilaci a balíčkování, **nikoliv** test každého stažení v průvodci Windows, všech webů yt-dlp ani každé distribuce RPM. Pro reálné ověření je [kontrolní seznam oprav 0.1.6](../Release-0.1.7/cs.md).
+
+
+Verze 0.1.7 doplňuje regresní testy kontrolních součtů Windows PowerShellu. Instalace všech tří doplňků byla ručně potvrzena na druhém Windows PC; tím nejsou ověřeny všechny sítě či konfigurace.
 
 ## Pravidla lokalizace
 
