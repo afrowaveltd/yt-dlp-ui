@@ -2,7 +2,7 @@
 
 A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp)**, built with [Avalonia UI](https://avaloniaui.net/) and .NET 10. Paste a video or playlist URL, choose a preset, and manage downloads without memorizing command-line options. Advanced yt-dlp options remain accessible when you need them.
 
-**Release status:** **[v0.1.6 — maintenance pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
+**Release status:** **[v0.1.7 — dependency installer maintenance pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
 
 **Documentation:** English (this page) · [Česky](Docs/README/cs.md) · [Documentation index](Docs/Documentation/en.md) · [Český rozcestník](Docs/Documentation/cs.md)
 
@@ -15,7 +15,16 @@ A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt
 - **Localization:** language selector in the upper-right header beside the tool status indicators. English/Czech dictionaries, automatic discovery of new `Locales/*.json` files, instant switching and English fallback.
 - **Desktop packaging:** Windows x64 `setup.exe` and portable build; Linux `.deb`, `.rpm` and portable `.tar.gz`.
 
-Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.1.6.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.1.7.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+
+## Fixes in 0.1.7
+
+- **Windows Setup:** repaired yt-dlp publisher checksum parsing by saving the checksum file and decoding it as UTF-8 instead of casting a binary PowerShell HTTP response to a string.
+- **Deno:** both the Windows Setup and Tools-tab installers accept the official Windows `Get-FileHash` SHA-256 sidecar format.
+- **Integrity:** publisher SHA-256 verification remains mandatory; unrelated filenames, unsupported algorithms and ambiguous entries are rejected.
+- Regression tests cover real and invalid checksum formats. Windows/Linux CI passed for the fix; Windows Setup with all three tools selected was successfully tested on a second computer.
+
+[0.1.7 release notes](Docs/Release-0.1.7/en.md) · [České poznámky](Docs/Release-0.1.7/cs.md)
 
 ## Fix in 0.1.6
 
@@ -90,24 +99,24 @@ Screenshots illustrate the interface at the time they were captured; newer langu
 
 ### Windows 10/11 (x64)
 
-Download **the Windows setup EXE** from [v0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6) and run `yt-dlp-gui-setup-0.1.6-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
+Download **the Windows setup EXE** from [v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7) and run `yt-dlp-gui-setup-0.1.7-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
 
-A **`yt-dlp-gui_0.1.6_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
+A **`yt-dlp-gui_0.1.7_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
 
 ### Debian / Ubuntu, Fedora / openSUSE, other Linux
 
-Download the matching **DEB or RPM** from [v0.1.6](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6), then use your distribution's package manager:
+Download the matching **DEB or RPM** from [v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7), then use your distribution's package manager:
 
 ~~~bash
-sudo apt install ./yt-dlp-gui_0.1.6_amd64.deb    # Debian/Ubuntu x64
-sudo dnf install ./yt-dlp-gui-0.1.6-1.x86_64.rpm # Fedora-style RPM
+sudo apt install ./yt-dlp-gui_0.1.7_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.1.7-1.x86_64.rpm # Fedora-style RPM
 ~~~
 
 Package filenames depend on version and architecture. DEB/RPM **recommend** `yt-dlp` and `ffmpeg` but do not bundle them or run hidden download scripts. Package-manager behavior differs by distribution. For other Linux systems, unpack the portable `tar.gz` and run `./yt-dlp-gui/yt-dlp-gui`. An existing compatible .NET runtime is **not** required by the self-contained builds.
 
 For a per-user Linux installation from source, run `./scripts/install.sh`; for removal, `./scripts/install.sh --uninstall`.
 
-**v0.1.6 is a published, unsigned pre-release.** See [Installation](Docs/Installation/en.md) for exact build commands, dependencies and platform limitations.
+**v0.1.7 is a published, unsigned pre-release.** See [Installation](Docs/Installation/en.md) for exact build commands, dependencies and platform limitations.
 
 ## Build from source
 
