@@ -132,15 +132,27 @@ await session.Dispatch(() =>
         }
 
         // Switching the language must update the option labels in place.
+        // MKV is used on purpose: its English and Czech labels differ, so a missing
+        // translation would fail this check instead of silently falling back.
         var localizer = SimpleLocalizer.Instance;
         var originalLanguage = localizer.Language;
         try
         {
+            converter.Options.Target = ConversionTarget.Mkv;
+            Dispatcher.UIThread.RunJobs();
+            var english = targets.GetVisualDescendants().OfType<TextBlock>()
+                .Select(block => block.Text ?? string.Empty).ToArray();
+            if (!english.Any(text => text.Contains("keeps any codec", StringComparison.Ordinal)))
+            {
+                throw new InvalidOperationException(
+                    "English MKV label was not rendered: " + string.Join(" | ", english));
+            }
+
             localizer.SetLanguage("cs");
             Dispatcher.UIThread.RunJobs();
             var czech = targets.GetVisualDescendants().OfType<TextBlock>()
                 .Select(block => block.Text ?? string.Empty).ToArray();
-            if (!czech.Any(text => text.Contains("MP4 video", StringComparison.Ordinal)))
+            if (!czech.Any(text => text.Contains("zachová jakýkoli kodek", StringComparison.Ordinal)))
             {
                 throw new InvalidOperationException(
                     "Czech labels did not reach the format selector: " + string.Join(" | ", czech));
@@ -149,6 +161,7 @@ await session.Dispatch(() =>
         finally
         {
             localizer.SetLanguage(originalLanguage);
+            Dispatcher.UIThread.RunJobs();
         }
 
         Console.WriteLine("Avalonia headless converter page smoke test passed.");

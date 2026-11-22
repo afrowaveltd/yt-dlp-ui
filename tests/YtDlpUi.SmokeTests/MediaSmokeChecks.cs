@@ -26,7 +26,7 @@ internal static class MediaSmokeChecks
     {
         var mp4 = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mkv",
+            SourcePath = Media("clip.mkv"),
             Target = ConversionTarget.Mp4,
             Quality = ConversionQuality.Balanced,
         });
@@ -34,13 +34,16 @@ internal static class MediaSmokeChecks
         Require(IndexOfValue(mp4, "-c:a") == "aac", "MP4 must encode audio with AAC");
         Require(mp4.Contains("+faststart"), "MP4 should move the index to the front");
         Require(IndexOfValue(mp4, "-pix_fmt") == "yuv420p", "MP4 needs a widely supported pixel format");
-        Require(mp4[^1] == "/media/clip.mp4", "output path must be the final argument");
+        // Path.Combine uses the platform separator, so the expectation must be built the
+        // same way instead of hard-coding a POSIX path.
+        Require(mp4[^1] == Path.Combine("media", "clip.mp4"),
+            "output path must be the final argument, got " + mp4[^1]);
         Require(mp4.Contains("-progress") && mp4.Contains("pipe:1"), "progress must be machine readable");
         Require(mp4.Contains("-nostdin"), "FFmpeg must never wait for console input");
 
         var webm = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Webm,
         });
         Require(IndexOfValue(webm, "-c:v") == "libvpx-vp9", "WebM must use VP9");
@@ -49,7 +52,7 @@ internal static class MediaSmokeChecks
 
         var mp3 = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mp3,
         });
         Require(mp3.Contains("-vn"), "audio targets must drop the picture");
@@ -59,7 +62,7 @@ internal static class MediaSmokeChecks
 
         var muted = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mkv,
             RemoveAudio = true,
         });
@@ -68,7 +71,7 @@ internal static class MediaSmokeChecks
 
         var scaled = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mp4,
             MaxHeight = 720,
         });
@@ -78,7 +81,7 @@ internal static class MediaSmokeChecks
 
         var gif = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Gif,
         });
         Require(IndexOfValue(gif, "-vf")?.Contains("palettegen") == true, "GIF needs a generated palette");
@@ -87,7 +90,7 @@ internal static class MediaSmokeChecks
 
         var trimmed = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mp4,
             StartTime = "10",
             EndTime = "25",
@@ -100,7 +103,7 @@ internal static class MediaSmokeChecks
 
         var endOnly = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mp4,
             EndTime = "00:00:30",
         });
@@ -108,7 +111,7 @@ internal static class MediaSmokeChecks
 
         var notOverwriting = FfmpegArgumentBuilder.Build(new ConversionOptions
         {
-            SourcePath = "/media/clip.mp4",
+            SourcePath = Media("clip.mp4"),
             Target = ConversionTarget.Mp4,
             OverwriteExisting = false,
         });
@@ -133,6 +136,19 @@ internal static class MediaSmokeChecks
         };
         Require(FfmpegArgumentBuilder.BuildOutputPath(different).EndsWith("clip.mp4", StringComparison.Ordinal),
             "a different container keeps the plain name");
+
+        // Windows and Linux separate paths differently; the result must follow the platform.
+        var separated = new ConversionOptions
+        {
+            SourcePath = "media" + Path.DirectorySeparatorChar + "clip.mkv",
+            OutputDirectory = "out" + Path.DirectorySeparatorChar + "audio",
+            Target = ConversionTarget.Mp3,
+        };
+        var separatedOutput = FfmpegArgumentBuilder.BuildOutputPath(separated);
+        Require(Path.GetFileName(separatedOutput) == "clip.mp3",
+            "output file name must survive any directory separator, got " + separatedOutput);
+        Require(separatedOutput == Path.Combine("out", "audio", "clip.mp3"),
+            "output directory must use the platform separator, got " + separatedOutput);
 
         var directed = new ConversionOptions
         {
@@ -209,7 +225,7 @@ internal static class MediaSmokeChecks
         }
         """;
 
-        var profile = MediaProbe.ParseFfprobeJson(json, "/media/clip.mp4");
+        var profile = MediaProbe.ParseFfprobeJson(json, Media("clip.mp4"));
         Require(profile.HasVideo && profile.HasAudio, "video and audio streams are detected");
         Require(profile.VideoCodec == "h264" && profile.AudioCodec == "aac", "codecs are read");
         Require(profile.Width == 1920 && profile.Height == 1080, "resolution is read");
@@ -229,16 +245,16 @@ internal static class MediaSmokeChecks
               "disposition": { "attached_pic": 1 } },
             { "codec_type": "audio", "codec_name": "flac" }
           ],
-          "format": { "duration": "61", "format_name": "flac" }
+          "format": { "duration": "61", "format_name": "flac", "size": "9876543" }
         }
         """;
-        var audioProfile = MediaProbe.ParseFfprobeJson(audioOnly, "/media/song.flac");
+        var audioProfile = MediaProbe.ParseFfprobeJson(audioOnly, Media("song.flac"));
         Require(!audioProfile.HasVideo, "attached cover art is not treated as a video stream");
         Require(audioProfile.HasAudio, "the audio stream is still detected");
         Require(audioProfile.Suggest() == ConversionTarget.Mp3, "audio sources suggest an audio target");
         Require(profile.Suggest() == ConversionTarget.Mp4, "video sources suggest MP4");
 
-        var empty = MediaProbe.ParseFfprobeJson("{}", "/media/unknown.bin");
+        var empty = MediaProbe.ParseFfprobeJson("{}", Media("unknown.bin"));
         Require(!empty.IsUsable && empty.DurationSeconds is null, "an empty document is tolerated");
 
         Require(MediaProbe.ParseFrameRate("25/1") == 25, "plain frame rate");
@@ -339,6 +355,9 @@ internal static class MediaSmokeChecks
         Require(missingInEnglish.Count == 0, "keys absent from en.json: " + string.Join(" | ", missingInEnglish));
         Require(englishKeys.Count >= 100, "locale dictionaries should cover the whole interface");
     }
+
+    /// <summary>Build a sample media path with the current platform's separator.</summary>
+    private static string Media(string fileName) => Path.Combine("media", fileName);
 
     private static string? IndexOfValue(List<string> arguments, string flag)
     {
