@@ -1,4 +1,4 @@
-# Publish the v0.2.0 maintenance prerelease exactly once from a reviewed main commit.
+# Publish the v0.2.0 feature prerelease exactly once from a reviewed main commit.
 name: Publish v0.2.0 preview
 
 on:
@@ -137,7 +137,7 @@ jobs:
           fi
           gh release create v0.2.0 dist/* \
             --target "$GITHUB_SHA" \
-            --title "yt-dlp GUI 0.2.0 — Dependency installation checksum fixes" \
+            --title "yt-dlp GUI 0.2.0 — Player window and FFmpeg converter" \
             --notes-file RELEASE_NOTES_0.2.0.md \
             --draft \
             --prerelease
