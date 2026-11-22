@@ -2,20 +2,33 @@
 
 Přívětivé **multiplatformní grafické rozhraní pro [yt-dlp](https://github.com/yt-dlp/yt-dlp)** vytvořené v [Avalonia UI](https://avaloniaui.net/) a .NET 10. Stačí vložit odkaz na video nebo playlist, vybrat profil a spravovat stahování bez memorování přepínačů příkazové řádky. Pokročilé volby yt-dlp přitom zůstávají dostupné.
 
-**Stav vydání:** **[v0.1.7 – oprava instalátorů](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7)** je dostupné pro Windows x64 a Linux x64. Jde o komunitní pre-release; uvítáme zpětnou vazbu a hlášení chyb.
+**Stav vydání:** **[v0.2.0 – přehrávač a konvertor](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0)** je dostupné pro Windows x64 a Linux x64. Jde o komunitní pre-release; uvítáme zpětnou vazbu a hlášení chyb.
 
 **Dokumentace:** [English](en.md) · Česky (tato stránka) · [Rozcestník](../Documentation/cs.md) · [Documentation index](../Documentation/en.md)
 
 ## Co aplikace umí
 
 - **Jednoduché stahování:** načítání odkazů ze schránky, přetažení odkazu, analýza videí a playlistů, náhledy, předvolby kvality (až 4K), pouze zvuk, fronta a průběh.
-- **Devět karet:** Stáhnout, Formát, Playlist, Titulky a metadata, Síť, Soubory, Přihlášení, Pokročilé a Nástroje.
+- **Přehrávač:** prohlédni si vše ve složce pro stahování, zjisti technické údaje, posouvej se po náhledových snímcích a přehraj soubor v systémovém přehrávači.
+- **Konvertor FFmpeg:** změň kontejner, zmenši obraz, odeber zvuk nebo vytáhni zvukovou stopu. Zdrojový soubor se nikdy nepřepíše.
+- **Deset karet:** Stáhnout, Formát, Playlist, Titulky a metadata, Síť, Soubory, Konvertovat, Přihlášení, Pokročilé a Nástroje.
 - **Pokročilé funkce:** výběr formátu, převody, titulky, metadata, filtry, proxy, šablony názvů, cookies a přihlášení, náhled příkazu yt-dlp.
 - **Externí nástroje:** detekce a aktualizace yt-dlp, zjištění FFmpeg a vyhledání JS prostředí Deno; Windows setup nabízí SHA-256 ověřenou instalaci yt-dlp, FFmpeg i Deno.
 - **Jazyky:** výběr vpravo nahoře u stavu nástrojů. Anglický a český slovník, automatické načítání `Locales/*.json`, okamžitý přepínač a anglický fallback.
 - **Distribuce:** Windows x64 `setup.exe` a portable; Linux `.deb`, `.rpm` a přenosný `.tar.gz`.
 
-Část pokročilých karet, zpráv a dialogů dosud obsahuje české texty. **Lokalizace je i ve verzi 0.1.7 jen částečná.** Úspěšné sestavení balíčku ještě neznamená, že byly ručně otestovány všechny scénáře instalace a stahování.
+Část pokročilých karet, zpráv a dialogů dosud obsahuje české texty. **Lokalizace je i ve verzi 0.2.0 jen částečná.** Úspěšné sestavení balíčku ještě neznamená, že byly ručně otestovány všechny scénáře instalace a stahování.
+
+## Novinky ve verzi 0.2.0
+
+- **Okno přehrávače** (`▶` v hlavičce nebo **Přehrát** u hotové položky fronty). Vypisuje média ve složce pro stahování, ukazuje kontejner, kodeky, rozlišení, délku a velikost a vykresluje **náhledový snímek, kterým lze posouvat** pomocí posuvníku. Tlačítko **Přehrát v systémovém přehrávači** otevře soubor v přehrávači, který máš v systému nastavený – aplikace tak nenese žádnou nativní přehrávací knihovnu. **Konvertovat tento soubor** pošle výběr rovnou do konvertoru.
+- **Nová karta Konvertovat** nad FFmpeg. Vyber zdrojový soubor, cílový formát (MP4, MKV, WebM, MOV, AVI, GIF, MP3, M4A, Opus, FLAC, WAV), úroveň kvality, volitelnou maximální výšku, volitelný střih a cílovou složku.
+- **Zdrojový soubor je chráněný:** převod do stejného kontejneru vytvoří `<název> (converted).<přípona>` místo přepsání originálu.
+- **Živý průběh:** z machine-readable výstupu FFmpeg se počítá procento i násobek rychlosti, úlohu lze zrušit a nedokončený výstup se po zrušení uklidí.
+- **Plně lokalizované novinky:** každý nový prvek a zpráva mají anglický i český záznam a popisky voleb se při změně jazyka překládají za běhu.
+- **Nové testy:** offline smoke testy pro mapování argumentů FFmpeg, parsování průběhu, ffprobe, procházení médií a paritu slovníků, plus headless testy, které vykreslují skutečnou stránku konvertoru i okno přehrávače.
+
+[Poznámky 0.2.0](../Release-0.2.0/cs.md) · [English notes](../Release-0.2.0/en.md)
 
 ## Opravy ve verzi 0.1.7
 
@@ -101,22 +114,22 @@ Snímky představují stav aplikace při pořízení a nemusí obsahovat nejnov�
 
 Z [vydání v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7) stáhni **Windows instalační EXE** a spusť `yt-dlp-gui-setup-0.1.7-win-x64.exe`. Průvodce vytvoří zástupce v nabídce Start, umožní běžnou odinstalaci a nabídne tři **nezávislé, ve výchozím stavu zaškrtnuté** položky: nainstalovat yt-dlp, FFmpeg a Deno (doporučeno pro YouTube). Stahování vyžaduje internet a používá kontrolní součty SHA-256 od vydavatelů. Libovolnou volbu lze vypnout a nástroje doplnit později. Instalátor nyní **žádá administrátorské oprávnění přes UAC** a instaluje program do Program Files pro všechny uživatele. Volitelné yt-dlp, FFmpeg a Deno putují do společného ProgramData a GUI je rozpozná i bez admin práv. Starší instalaci pro jednoho uživatele doporučujeme odinstalovat, aby nevznikly duplicitní zástupci.
 
-V release najdeš i přenosný balíček **`yt-dlp-gui_0.1.7_win-x64_portable.zip`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
+V release najdeš i přenosný balíček **`yt-dlp-gui_0.2.0_win-x64_portable.zip`**. Windows ARM64 mají samostatný ruční publish postup, nikoli ověřený instalační program v CI.
 
 ### Debian / Ubuntu, Fedora / openSUSE, další Linux
 
-Stáhni odpovídající balíček DEB nebo RPM z [v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7) a použij správce balíčků distribuce:
+Stáhni odpovídající balíček DEB nebo RPM z [v0.2.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0) a použij správce balíčků distribuce:
 
 ~~~bash
-sudo apt install ./yt-dlp-gui_0.1.7_amd64.deb    # Debian/Ubuntu x64
-sudo dnf install ./yt-dlp-gui-0.1.7-1.x86_64.rpm # Fedora / RPM
+sudo apt install ./yt-dlp-gui_0.2.0_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.2.0-1.x86_64.rpm # Fedora / RPM
 ~~~
 
 Názvy balíčků se liší podle verze a architektury. DEB/RPM **doporučují** systémové balíčky `yt-dlp` a `ffmpeg`, ale nepřibalují je a nespouštějí skryté skripty pro stahování. Rozhoduje politika správce balíčků. Na jiných distribucích rozbal přenosný `tar.gz` a spusť `./yt-dlp-gui/yt-dlp-gui`. Sestavení obsahují vlastní .NET runtime.
 
 Pro uživatelskou instalaci z kódu je tu `./scripts/install.sh`, odinstalace `./scripts/install.sh --uninstall`.
 
-**v0.1.7 je veřejný, nepodepsaný pre-release.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
+**v0.2.0 je veřejný, nepodepsaný pre-release.** Podrobnosti najdeš v [Instalaci](../Installation/cs.md).
 
 ## Sestavení ze zdrojových kódů
 
@@ -131,7 +144,7 @@ dotnet run --project src/YtDlpUi/YtDlpUi.csproj
 dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
 ~~~
 
-Pro samotné stahování je nutný `yt-dlp`; pro spojování a mnoho převodů také `ffmpeg` / `ffprobe`. Na kartě **Nástroje** zjistíš jejich stav a nastavíš vlastní cesty.
+Pro samotné stahování je nutný `yt-dlp`; pro spojování, kartu Konvertovat a náhledové snímky přehrávače také `ffmpeg` a `ffprobe`. Na kartě **Nástroje** zjistíš jejich stav a nastavíš vlastní cesty.
 
 ## Jak přidat jazyk
 
@@ -160,12 +173,15 @@ Při opětovném otevření rozbalovací nabídky se soubory načtou. Názvy sou
 | První spuštění | [Průvodce](../Getting-Started/cs.md) | [Getting started](../Getting-Started/en.md) |
 | Instalace a balíčky | [Instalace](../Installation/cs.md) | [Installation](../Installation/en.md) |
 | Funkce a používání | [Funkce](../Features/cs.md) | [Features](../Features/en.md) |
+| Přehrávač | [Přehrávač](../Player/cs.md) | [Player](../Player/en.md) |
+| Konvertor FFmpeg | [Konvertor](../Converter/cs.md) | [Converter](../Converter/en.md) |
 | Lokalizace | [Jazyky](../Localization/cs.md) | [Localization](../Localization/en.md) |
 | Nastavení a úložiště | [Nastavení](../Configuration/cs.md) | [Configuration](../Configuration/en.md) |
 | Řešení problémů | [Nápověda](../Troubleshooting/cs.md) | [Troubleshooting](../Troubleshooting/en.md) |
 | Vývoj a ověřování | [Vývoj](../Development-and-Verification/cs.md) | [Development](../Development-and-Verification/en.md) |
 | Verzování a vydávání | [Verzování](../Versioning/cs.md) | [Versioning](../Versioning/en.md) |
 | Android (experimentální) | [Android](../Android/cs.md) | [Android](../Android/en.md) |
+| Vydání 0.2.0 | [Novinky](../Release-0.2.0/cs.md) | [Release notes](../Release-0.2.0/en.md) |
 | Opravy 0.1.6 | [Poznámky](../Release-0.1.6/cs.md) | [Release notes](../Release-0.1.6/en.md) |
 | Opravy 0.1.5 | [Poznámky](../Release-0.1.5/cs.md) | [Release notes](../Release-0.1.5/en.md) |
 | Opravy 0.1.4 | [Poznámky](../Release-0.1.4/cs.md) | [Release notes](../Release-0.1.4/en.md) |

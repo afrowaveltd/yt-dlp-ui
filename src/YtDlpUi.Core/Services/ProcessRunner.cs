@@ -84,6 +84,41 @@ public static class ProcessRunner
         return new ProcessResult(process.ExitCode, stdout, stderr);
     }
 
+    /// <summary>
+    /// Run a process and capture raw standard output bytes, for tools that emit binary data
+    /// such as a single video frame. Standard error is still captured as text.
+    /// </summary>
+    public static async Task<(int ExitCode, byte[] Output, string Error)> RunForBytesAsync(
+        string executable,
+        IReadOnlyList<string> arguments,
+        CancellationToken cancellationToken = default,
+        string? workingDirectory = null)
+    {
+        using var process = StartProcess(executable, arguments, workingDirectory);
+
+        var stderrTask = process.StandardError.ReadToEndAsync(cancellationToken);
+        var output = new MemoryStream();
+
+        var copyTask = process.StandardOutput.BaseStream.CopyToAsync(output, cancellationToken);
+
+        await using (cancellationToken.Register(() => TryKill(process)))
+        {
+            try
+            {
+                await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+            {
+                TryKill(process);
+                throw;
+            }
+        }
+
+        await copyTask.ConfigureAwait(false);
+        var error = await stderrTask.ConfigureAwait(false);
+        return (process.ExitCode, output.ToArray(), error);
+    }
+
     /// <summary>Terminate a process and its children, ignoring races.</summary>
     public static void TryKill(Process process)
     {

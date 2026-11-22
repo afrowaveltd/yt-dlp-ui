@@ -114,6 +114,27 @@ public sealed partial class DownloadItemViewModel : ObservableObject
     /// <summary>True when the item finished successfully.</summary>
     public bool IsFinished => State is DownloadState.Completed or DownloadState.Failed or DownloadState.Cancelled;
 
+    /// <summary>True when the finished file can be opened in the player.</summary>
+    public bool CanPlay
+    {
+        get
+        {
+            if (State != DownloadState.Completed || string.IsNullOrWhiteSpace(FilePath))
+            {
+                return false;
+            }
+
+            try
+            {
+                return File.Exists(FilePath);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+
     /// <summary>Style-class flag: finished successfully.</summary>
     public bool StateSuccess => State == DownloadState.Completed;
 
@@ -182,6 +203,7 @@ public sealed partial class DownloadItemViewModel : ObservableObject
         OnPropertyChanged(nameof(StateMuted));
         OnPropertyChanged(nameof(StateAccent));
         OnPropertyChanged(nameof(StateWarning));
+        OnPropertyChanged(nameof(CanPlay));
         StatusText = value switch
         {
             DownloadState.Queued => "Ve frontě",
@@ -194,6 +216,8 @@ public sealed partial class DownloadItemViewModel : ObservableObject
             _ => StatusText,
         };
     }
+
+    partial void OnFilePathChanged(string? value) => OnPropertyChanged(nameof(CanPlay));
 
     partial void OnTitleChanged(string? value)
     {

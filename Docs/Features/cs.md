@@ -2,7 +2,7 @@
 
 [English](en.md) · [Rozcestník](../Documentation/cs.md) · [První kroky](../Getting-Started/cs.md)
 
-Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Opravné preview 0.1.6** má devět karet:
+Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé volby yt-dlp. **Preview 0.2.0 s novými funkcemi** má deset karet:
 
 | Karta | Účel |
 |---|---|
@@ -12,9 +12,12 @@ Rozhraní usnadňuje první stažení, ale nechává přístupné pokročilé vo
 | **Titulky a metadata** | Jazyky a formáty titulků, vložení, obrázky, metadata, kapitoly, SponsorBlock |
 | **Síť** | Proxy, timeouty, opakování, IPv4/IPv6, rychlostní limity, hlavičky a externí stahovač |
 | **Soubory** | Šablony názvů, cílové/dočasné složky, přepisování, cache a volby názvů |
+| **Konvertovat** | Převod místního souboru pomocí FFmpeg: kontejner, kvalita, zmenšení, střih, odebrání či extrakce zvuku |
 | **Přihlášení** | Cookies ze souboru/prohlížeče, přihlašovací údaje, `.netrc` a certifikáty |
 | **Pokročilé** | Náhled vytvořeného příkazu, dodatečné argumenty, diagnostika a reset |
 | **Nástroje** | Vyhledání/instalace/aktualizace yt-dlp, detekce a instalace FFmpeg a Deno na podporovaných systémech Windows/Linux, nastavení aplikace |
+
+Samostatné **okno přehrávače** (tlačítko **▶** v hlavičce nebo **Přehrát** u hotové položky fronty) vypisuje stažená média, ukazuje jejich technické údaje a náhledové snímky. Viz [Přehrávač](../Player/cs.md) a [Konvertor](../Converter/cs.md).
 
 Některé speciální přepínače yt-dlp zůstávají v poli **vlastní argumenty** místo samostatného ovládacího prvku. GUI předává argumenty externímu yt-dlp; podporu webových služeb určuje jeho aktuální verze.
 
@@ -25,6 +28,7 @@ Některé speciální přepínače yt-dlp zůstávají v poli **vlastní argumen
 3. Vyber profil kvality nebo **pouze zvuk**.
 4. Zvol cílovou složku, klikni na **Stáhnout** či **Přidat do fronty**.
 5. Sleduj stav a průběh; při problému zkontroluj log.
+6. Volitelně přehraj stažené médium nebo ho převeď do jiného formátu.
 
 Sledování schránky a automatickou analýzu lze vypnout či zapnout v nastavení aplikace.
 

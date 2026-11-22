@@ -265,5 +265,6 @@ Require(new MediaEntry { Index = 4 }.ToString() == "4. (bez názvu)",
     "Playlist fallback should remain useful when a title/duration is unavailable");
 
 await HardeningSmokeChecks.VerifyAsync();
+MediaSmokeChecks.Verify();
 DocumentationChecks.Verify();
 Console.WriteLine("All localization and command-line smoke tests passed.");

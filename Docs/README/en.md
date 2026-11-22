@@ -2,20 +2,36 @@
 
 A friendly **cross-platform desktop interface for [yt-dlp](https://github.com/yt-dlp/yt-dlp)**, built with [Avalonia UI](https://avaloniaui.net/) and .NET 10. Paste a video or playlist URL, choose a preset, and manage downloads without memorizing command-line options. Advanced yt-dlp options remain accessible when you need them.
 
-**Release status:** **[v0.1.7 — dependency installer maintenance pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
+**Release status:** **[v0.2.0 — built-in player and FFmpeg converter pre-release](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0)** is available for Windows x64 and Linux x64. It is a community pre-release; feedback and bug reports are welcome.
 
 **Documentation:** English (this page) · [Česky](../README/cs.md) · [Documentation index](../Documentation/en.md) · [Český rozcestník](../Documentation/cs.md)
 
 ## What you get
 
 - **Simple downloads:** clipboard URL detection, drag-and-drop, video/playlist analysis, thumbnails, quality presets (up to 4K), audio-only choices, queue and progress.
-- **Nine tabs:** Download, Format, Playlist, Subtitles & metadata, Network, Files, Authentication, Advanced and Tools.
+- **Media player:** browse everything in your download folder, read its technical details, scrub through a preview frame and hand playback to your system video player.
+- **FFmpeg converter:** change the container, downscale the picture, strip the audio or extract the soundtrack. The source file is never overwritten.
+- **Ten tabs:** Download, Format, Playlist, Subtitles & metadata, Network, Files, Convert, Authentication, Advanced and Tools.
 - **Power-user options:** format selection, conversions, subtitles, metadata, filters, proxies, filename templates, authentication/cookies, and a copyable yt-dlp command preview.
 - **External tools:** yt-dlp detection/update, FFmpeg detection and automatic Deno JavaScript runtime discovery; Windows setup offers independently selected, SHA-256-verified yt-dlp, FFmpeg and Deno installations.
 - **Localization:** language selector in the upper-right header beside the tool status indicators. English/Czech dictionaries, automatic discovery of new `Locales/*.json` files, instant switching and English fallback.
 - **Desktop packaging:** Windows x64 `setup.exe` and portable build; Linux `.deb`, `.rpm` and portable `.tar.gz`.
 
-Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.1.7.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+Some advanced tabs, runtime messages and dialogs still contain Czech text. **Localization remains partial in 0.2.0.** A built or packaged artifact is not proof that all installation and download scenarios have been manually tested.
+
+## What's new in 0.2.0
+
+- **Player window** (`▶` in the header, or **Play** on a finished queue item). It lists media in your download folder, shows the container, codecs, resolution, duration and size, and renders a **preview frame you can scrub** with a position slider. Pressing **Play in system player** opens the file in whatever video player your desktop is configured to use, so the GUI stays free of bundled native media libraries. **Convert this file** sends the selection straight to the converter.
+- **New Convert tab** backed by FFmpeg. Pick a source file, choose a target (MP4, MKV, WebM, MOV, AVI, GIF, MP3, M4A, Opus, FLAC, WAV), a quality tier, an optional maximum height, optional trim points and an output folder.
+- **The original file is protected:** converting a file into its own container writes `<name> (converted).<ext>` instead of overwriting the source.
+- **Live progress:** FFmpeg's machine-readable progress block drives the percentage and an `N×` speed readout; conversions can be cancelled, and a cancelled run removes its partial output.
+- **Partial output is never left behind** when a conversion is stopped, and the produced file can be played or revealed straight from the page.
+- **Fully localized additions:** every new control and message has English and Czech dictionaries, and the option labels re-translate live when you switch language.
+- **New regression coverage:** offline smoke checks for the FFmpeg argument mapping, progress parsing, ffprobe parsing, media scanning and locale parity, plus headless Avalonia tests that render the real converter page and player window.
+
+### How the player handles playback
+
+The window itself renders still frames taken by FFmpeg; **it does not decode video into the app**. Real playback belongs to your system player, which is what the **Play in system player** button starts. This keeps the application small and avoids shipping or depending on native playback libraries that differ per desktop. If no player is associated with the file type, the window says so instead of failing silently.
 
 ## Fixes in 0.1.7
 
@@ -93,30 +109,30 @@ Read the [English](../Release-0.1.3/en.md) / [Czech](../Release-0.1.3/cs.md) pat
 | [![Files tab](../../screenshots/soubory_screen.png)](../../screenshots/soubory_screen.png) **Files** | [![Authentication tab](../../screenshots/prihlaseni_screen.png)](../../screenshots/prihlaseni_screen.png) **Authentication** |
 | [![Advanced tab](../../screenshots/pokrocile_screen.png)](../../screenshots/pokrocile_screen.png) **Advanced** | [![Tools tab](../../screenshots/nastroje_screen.png)](../../screenshots/nastroje_screen.png) **Tools** |
 
-Screenshots illustrate the interface at the time they were captured; newer language and installer controls may differ. Click an image for its full size.
+Screenshots illustrate the interface at the time they were captured; newer language and installer controls may differ, and the **Convert** tab added in 0.2.0 is not pictured yet. Click an image for its full size.
 
 ## Install or run
 
 ### Windows 10/11 (x64)
 
-Download **the Windows setup EXE** from [v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7) and run `yt-dlp-gui-setup-0.1.7-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
+Download **the Windows setup EXE** from [v0.2.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0) and run `yt-dlp-gui-setup-0.2.0-win-x64.exe`. The installer creates Start-menu shortcuts, supports normal uninstall, and offers three **independent, initially selected** options: install yt-dlp, install FFmpeg, and install Deno (recommended for YouTube). Downloads require an internet connection and use publisher-provided SHA-256 checksums. You may clear any checkbox or install the tools later. Setup now **requests administrator approval (UAC)** and installs for all users under Program Files. If selected, yt-dlp, FFmpeg and Deno are placed in shared ProgramData and found automatically by the normally non-elevated GUI. Uninstall older per-user setup copies to avoid duplicate shortcuts; personal settings are preserved.
 
-A **`yt-dlp-gui_0.1.7_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
+A **`yt-dlp-gui_0.2.0_win-x64_portable.zip`** portable build is also available in the release. Windows ARM64 has a separate manual publish command, but is **not** covered by the CI installer.
 
 ### Debian / Ubuntu, Fedora / openSUSE, other Linux
 
-Download the matching **DEB or RPM** from [v0.1.7](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.7), then use your distribution's package manager:
+Download the matching **DEB or RPM** from [v0.2.0](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0), then use your distribution's package manager:
 
 ~~~bash
-sudo apt install ./yt-dlp-gui_0.1.7_amd64.deb    # Debian/Ubuntu x64
-sudo dnf install ./yt-dlp-gui-0.1.7-1.x86_64.rpm # Fedora-style RPM
+sudo apt install ./yt-dlp-gui_0.2.0_amd64.deb    # Debian/Ubuntu x64
+sudo dnf install ./yt-dlp-gui-0.2.0-1.x86_64.rpm # Fedora-style RPM
 ~~~
 
 Package filenames depend on version and architecture. DEB/RPM **recommend** `yt-dlp` and `ffmpeg` but do not bundle them or run hidden download scripts. Package-manager behavior differs by distribution. For other Linux systems, unpack the portable `tar.gz` and run `./yt-dlp-gui/yt-dlp-gui`. An existing compatible .NET runtime is **not** required by the self-contained builds.
 
 For a per-user Linux installation from source, run `./scripts/install.sh`; for removal, `./scripts/install.sh --uninstall`.
 
-**v0.1.7 is a published, unsigned pre-release.** See [Installation](../Installation/en.md) for exact build commands, dependencies and platform limitations.
+**v0.2.0 is a published, unsigned pre-release.** See [Installation](../Installation/en.md) for exact build commands, dependencies and platform limitations.
 
 ## Build from source
 
@@ -131,7 +147,7 @@ dotnet run --project src/YtDlpUi/YtDlpUi.csproj
 dotnet run --project tests/YtDlpUi.SmokeTests/YtDlpUi.SmokeTests.csproj -c Release
 ~~~
 
-`yt-dlp` is required to download; `ffmpeg` / `ffprobe` are needed for merging and many conversion workflows. Use the **Tools** tab to check their status or choose custom paths.
+`yt-dlp` is required to download; `ffmpeg` and `ffprobe` are needed for merging, the Convert tab and the player's preview frames. Use the **Tools** tab to check their status or choose custom paths.
 
 ## Localization in one minute
 
@@ -160,12 +176,15 @@ Reopen the language selector to rescan files. Filenames are culture codes (e.g. 
 | Getting started | [Guide](../Getting-Started/en.md) | [Průvodce](../Getting-Started/cs.md) |
 | Installation and packages | [Install](../Installation/en.md) | [Instalace](../Installation/cs.md) |
 | Features and workflow | [Features](../Features/en.md) | [Funkce](../Features/cs.md) |
+| Player | [Player](../Player/en.md) | [Přehrávač](../Player/cs.md) |
+| FFmpeg converter | [Converter](../Converter/en.md) | [Konvertor](../Converter/cs.md) |
 | Localization | [Locales](../Localization/en.md) | [Jazyky](../Localization/cs.md) |
 | Configuration and storage | [Settings](../Configuration/en.md) | [Nastavení](../Configuration/cs.md) |
 | Troubleshooting | [Help](../Troubleshooting/en.md) | [Řešení problémů](../Troubleshooting/cs.md) |
 | Development and verification | [Development](../Development-and-Verification/en.md) | [Vývoj](../Development-and-Verification/cs.md) |
 | Versioning and release policy | [Versioning](../Versioning/en.md) | [Verzování](../Versioning/cs.md) |
 | Android prototype (experimental) | [Android](../Android/en.md) | [Android](../Android/cs.md) |
+| Release 0.2.0 | [Release notes](../Release-0.2.0/en.md) | [Novinky](../Release-0.2.0/cs.md) |
 | Patch 0.1.6 | [Release notes](../Release-0.1.6/en.md) | [Opravy](../Release-0.1.6/cs.md) |
 | Patch 0.1.5 | [Release notes](../Release-0.1.5/en.md) | [Opravy](../Release-0.1.5/cs.md) |
 | Patch 0.1.4 | [Release notes](../Release-0.1.4/en.md) | [Opravy](../Release-0.1.4/cs.md) |
@@ -178,4 +197,4 @@ The **GUI source code** is licensed under [MIT](../../LICENSE). [yt-dlp](https:/
 
 Remembered download options deliberately omit supported password and 2FA fields. Treat downloaded files, cookies and logs according to your own privacy needs. Download only media you are authorized to access and respect site terms.
 
-**[v0.1.6 is published](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.6)** as a maintenance pre-release. See [release status and outstanding tests](../Release-0.1.6/en.md).
+**[v0.2.0 is published](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.2.0)** as a feature pre-release. See [release status and outstanding tests](../Release-0.2.0/en.md).

@@ -46,6 +46,21 @@ public static class ShellUtil
         return StartDetached(url!.Trim());
     }
 
+    /// <summary>
+    /// Open a local file with the desktop's default handler, which for media is the
+    /// user's preferred video or audio player.
+    /// </summary>
+    public static bool OpenFile(string? path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return false;
+        }
+
+        var expanded = ToolLocator.ExpandHome(path!.Trim());
+        return File.Exists(expanded) && StartDetached(expanded);
+    }
+
     private static bool StartDetached(string target)
     {
         try

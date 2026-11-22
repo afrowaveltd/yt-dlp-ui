@@ -2,7 +2,7 @@
 
 [Česky](cs.md) · [Index](../Documentation/en.md) · [Getting started](../Getting-Started/en.md)
 
-The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.1.6 maintenance preview** contains nine tabs:
+The interface is designed to be friendly for a first download while keeping advanced yt-dlp options available. The **0.2.0 feature preview** contains ten tabs:
 
 | Tab | Purpose |
 |---|---|
@@ -12,9 +12,12 @@ The interface is designed to be friendly for a first download while keeping adva
 | **Subtitles & metadata** | Subtitle languages/formats, embedding, thumbnails, metadata, chapters, SponsorBlock |
 | **Network** | Proxy, timeouts, retries, IPv4/IPv6, download limits, headers and external downloader |
 | **Files** | Filename/output templates, destination/temp folders, overwrites, cache and filename options |
+| **Convert** | Convert a local file with FFmpeg: container, quality, downscaling, trimming, audio removal or extraction |
 | **Authentication** | Browser/file cookies, credentials, `.netrc` and certificate-related yt-dlp switches |
 | **Advanced** | Generated command preview, extra arguments, diagnostics and option reset |
 | **Tools** | Locate/install/update yt-dlp, detect/install FFmpeg, detect/install Deno on supported Windows/Linux systems, application settings |
+
+A separate **player window** (opened with **▶** in the header or **Play** on a finished queue item) lists downloaded media, shows its technical details and preview frames. See [Player](../Player/en.md) and [Converter](../Converter/en.md).
 
 Some specialized yt-dlp flags remain in the **custom arguments** area rather than having a dedicated control. A GUI option maps to arguments passed to the installed external yt-dlp version; available website support is controlled by yt-dlp.
 
@@ -25,6 +28,7 @@ Some specialized yt-dlp flags remain in the **custom arguments** area rather tha
 3. Choose a quality preset or **audio-only** preset.
 4. Select the output folder; click **Download** or **Add to queue**.
 5. Follow queue status and progress; use the log or open the output folder.
+6. Optionally play what you downloaded, or convert it to another format.
 
 A clipboard watcher and automatic analysis can be enabled or disabled in application settings.
 

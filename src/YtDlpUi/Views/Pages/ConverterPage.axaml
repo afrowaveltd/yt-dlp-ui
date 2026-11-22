@@ -1,0 +1,182 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:loc="using:YtDlpUi.Localization"
+             xmlns:vm="using:YtDlpUi.ViewModels"
+             x:Class="YtDlpUi.Views.Pages.ConverterPage"
+             x:DataType="vm:MainWindowViewModel">
+
+  <ScrollViewer>
+    <StackPanel Margin="16,14,16,20" Spacing="14" DataContext="{Binding Converter}">
+
+      <!-- FFmpeg missing -->
+      <Border Classes="card"
+              Background="{DynamicResource WarningSoftBrush}"
+              BorderBrush="{DynamicResource WarningBrush}"
+              IsVisible="{Binding !FfmpegAvailable}">
+        <StackPanel Spacing="3">
+          <TextBlock Text="{loc:Tr Key='FFmpeg is not installed'}" FontWeight="SemiBold" />
+          <TextBlock Classes="hint"
+                     Text="{loc:Tr Key='Converting and previewing media needs FFmpeg. Install it on the Tools tab, then come back.'}" />
+        </StackPanel>
+      </Border>
+
+      <!-- Intro -->
+      <Border Classes="card" Background="{DynamicResource AccentSoftBrush}"
+              BorderBrush="{DynamicResource AccentBrush}">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{loc:Tr Key='Convert media with FFmpeg'}" Classes="h2" />
+          <TextBlock Classes="secondary"
+                     Text="{loc:Tr Key='Change the container, shrink the picture or extract the soundtrack of a file you already downloaded. The original file is never replaced.'}" />
+        </StackPanel>
+      </Border>
+
+      <!-- 1 · Source -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="{loc:Tr Key='1 · Source file'}" />
+            <TextBlock Classes="hint"
+                       Text="{loc:Tr Key='Pick the video or audio file to convert. Files from your download folder are offered first.'}" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <TextBox Grid.Column="0" Text="{Binding Options.SourcePath, Mode=TwoWay}"
+                     Watermark="{loc:Tr Key='Path to a video or audio file'}" />
+            <Button Grid.Column="1" Content="{loc:Tr Key='Browse…'}" Click="OnBrowseSourceClick" />
+          </Grid>
+
+          <Border Classes="cardAlt" Padding="10" IsVisible="{Binding HasSource}">
+            <StackPanel Spacing="3">
+              <TextBlock Text="{Binding SourceProfile.FileName}" FontWeight="Medium" />
+              <TextBlock Text="{Binding SourceProfile.Summary}" Classes="hint" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Border>
+
+      <!-- 2 · Target -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="{loc:Tr Key='2 · Target format'}" />
+            <TextBlock Classes="hint"
+                       Text="{loc:Tr Key='Choose what the file should become. Audio targets keep only the soundtrack.'}" />
+          </StackPanel>
+
+          <WrapPanel Orientation="Horizontal">
+            <StackPanel Width="300" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="{loc:Tr Key='Format'}" />
+              <ComboBox ItemsSource="{Binding Targets}" SelectedItem="{Binding SelectedTargetOption, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate DataType="vm:TargetOption">
+                    <TextBlock Text="{Binding Label.Value}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+
+            <StackPanel Width="200" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="{loc:Tr Key='Quality'}" />
+              <ComboBox ItemsSource="{Binding Qualities}" SelectedItem="{Binding SelectedQualityOption, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate DataType="vm:QualityOption">
+                    <TextBlock Text="{Binding Label.Value}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+
+            <StackPanel Width="220" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="{loc:Tr Key='Maximum height'}" />
+              <ComboBox ItemsSource="{Binding HeightChoices}" SelectedItem="{Binding SelectedHeightOption, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate DataType="vm:HeightOption">
+                    <TextBlock Text="{Binding Label.Value}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+              <TextBlock Classes="hint" Text="{loc:Tr Key='Smaller sizes never upscale the picture.'}" />
+            </StackPanel>
+
+            <StackPanel Width="170" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="{loc:Tr Key='Trim from'}" />
+              <TextBox Text="{Binding Options.StartTime, Mode=TwoWay}" Watermark="0:00" />
+            </StackPanel>
+
+            <StackPanel Width="170" Margin="0,0,12,12" Spacing="4">
+              <TextBlock Classes="label" Text="{loc:Tr Key='Trim to'}" />
+              <TextBox Text="{Binding Options.EndTime, Mode=TwoWay}" Watermark="1:30" />
+            </StackPanel>
+          </WrapPanel>
+
+          <TextBlock Classes="hint"
+                     Text="{loc:Tr Key='Time accepts seconds (90), minutes (1:30) or hours (00:01:30). Leave both fields empty to convert the whole file.'}" />
+
+          <CheckBox Content="{loc:Tr Key='Remove audio (picture only)'}"
+                    IsChecked="{Binding Options.RemoveAudio}" />
+        </StackPanel>
+      </Border>
+
+      <!-- 3 · Output -->
+      <Border Classes="card">
+        <StackPanel Spacing="10">
+          <StackPanel Spacing="2">
+            <TextBlock Classes="h2" Text="{loc:Tr Key='3 · Output'}" />
+            <TextBlock Classes="hint"
+                       Text="{loc:Tr Key='Leave the folder empty to write the converted file next to the source.'}" />
+          </StackPanel>
+
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <TextBox Grid.Column="0" Text="{Binding Options.OutputDirectory, Mode=TwoWay}"
+                     Watermark="{loc:Tr Key='Empty = same folder as the source'}" />
+            <Button Grid.Column="1" Content="{loc:Tr Key='Browse…'}" Click="OnBrowseOutputClick" />
+          </Grid>
+
+          <StackPanel Spacing="3">
+            <TextBlock Classes="label" Text="{loc:Tr Key='The converted file will be saved as'}" />
+            <TextBlock Text="{Binding OutputPathPreview}" Classes="mono" TextWrapping="Wrap" />
+          </StackPanel>
+
+          <CheckBox Content="{loc:Tr Key='Overwrite an existing file'}"
+                    IsChecked="{Binding Options.OverwriteExisting}" />
+        </StackPanel>
+      </Border>
+
+      <!-- Actions -->
+      <Border Classes="card" Background="{DynamicResource CardAltBrush}">
+        <StackPanel Spacing="10">
+          <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+              <Button Classes="primary" Content="{loc:Tr Key='Convert'}"
+                      Command="{Binding ConvertCommand}" Padding="24,10" />
+              <Button Classes="danger" Content="{loc:Tr Key='Stop'}"
+                      Command="{Binding CancelConvertCommand}"
+                      IsVisible="{Binding IsRunning}" />
+              <Button Classes="ghost" Content="{loc:Tr Key='Open folder'}"
+                      Command="{Binding OpenOutputFolderCommand}" />
+              <Button Classes="ghost" Content="{loc:Tr Key='Play result'}"
+                      Command="{Binding PlayResultCommand}"
+                      IsVisible="{Binding ResultPath, Converter={StaticResource StringNotEmpty}}" />
+            </StackPanel>
+            <TextBlock Grid.Column="1" Text="{Binding StatusText}" Classes="hint"
+                       VerticalAlignment="Center" MaxWidth="340" TextAlignment="Right"
+                       TextTrimming="CharacterEllipsis" MaxLines="2" />
+          </Grid>
+
+          <ProgressBar Minimum="0" Maximum="100"
+                       Value="{Binding Progress, FallbackValue=0, TargetNullValue=0}"
+                       IsIndeterminate="{Binding Progress, Converter={StaticResource IsNull}, FallbackValue=True}" />
+
+          <Border Classes="cardAlt" Padding="10"
+                  Background="{DynamicResource ErrorSoftBrush}"
+                  BorderBrush="{DynamicResource ErrorBrush}"
+                  IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmpty}}">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="{DynamicResource ErrorBrush}"
+                       TextWrapping="Wrap" MaxLines="4" />
+          </Border>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

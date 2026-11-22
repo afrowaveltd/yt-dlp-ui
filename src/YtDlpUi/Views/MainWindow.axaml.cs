@@ -33,6 +33,43 @@ public partial class MainWindow : Window
         AddHandler(DragDrop.DropEvent, OnDrop);
     }
 
+    /// <summary>
+    /// Single player window reused for every request; opening it again only changes the
+    /// selected file, so the user never ends up with a pile of duplicate windows.
+    /// </summary>
+    private void OnPlayerRequested(object? sender, string? filePath)
+    {
+        if (_viewModel is null)
+        {
+            return;
+        }
+
+        var existing = Application.Current?.ApplicationLifetime is
+            Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime lifetime
+            ? lifetime.Windows.OfType<PlayerWindow>().FirstOrDefault()
+            : null;
+
+        if (existing is not null)
+        {
+            existing.SelectFile(filePath);
+            existing.Activate();
+            return;
+        }
+
+        var player = new PlayerWindow
+        {
+            DataContext = new PlayerViewModel(
+                new PlayerHost(
+                    () => _viewModel.Options.OutputDirectory,
+                    () => _viewModel.Settings.FfmpegPath,
+                    (message, kind) => _viewModel.AddLog(message, kind),
+                    path => _viewModel.OpenConverterFor(path)),
+                filePath),
+        };
+
+        player.Show(this);
+    }
+
     private void TryLoadIcon()
     {
         try
@@ -53,6 +90,7 @@ public partial class MainWindow : Window
         if (_viewModel is not null)
         {
             _viewModel.Log.CollectionChanged -= OnLogChanged;
+            _viewModel.PlayerRequested -= OnPlayerRequested;
         }
 
         _viewModel = DataContext as MainWindowViewModel;
@@ -70,6 +108,8 @@ public partial class MainWindow : Window
             {
                 Height = _viewModel.Settings.WindowHeight;
             }
+
+            _viewModel.PlayerRequested += OnPlayerRequested;
         }
     }
 

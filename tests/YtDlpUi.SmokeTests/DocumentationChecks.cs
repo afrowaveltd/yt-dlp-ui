@@ -58,6 +58,8 @@ internal static class DocumentationChecks
         VerifyLanguagePickerLayout(root);
         VerifyDenoUiLayout(root);
         VerifyPlaylistPreviewTemplate(root);
+        VerifyTabIndexes(root);
+        VerifyMediaTabs(root);
 
         Console.WriteLine($"Documentation smoke checks passed: {topics.Length} bilingual topics and local links.");
     }
@@ -139,6 +141,79 @@ internal static class DocumentationChecks
         Require(bindings.Any(binding => binding.Contains("Binding Display", StringComparison.Ordinal)) &&
                 bindings.Any(binding => binding.Contains("Binding Duration", StringComparison.Ordinal)),
             "Playlist preview must display MediaEntry.Display and formatted Duration");
+    }
+
+    /// <summary>
+    /// The view model reaches tabs by index. This guard keeps
+    /// <c>ConverterTabIndex</c> and <c>ToolsTabIndex</c> aligned with the TabControl order,
+    /// so "Open Tools" can never jump to the wrong page after a tab is inserted.
+    /// </summary>
+    private static void VerifyTabIndexes(string root)
+    {
+        XNamespace avalonia = "https://github.com/avaloniaui";
+        var view = XDocument.Load(Path.Combine(root, "src", "YtDlpUi", "Views", "MainWindow.axaml"));
+        var tabs = view.Descendants(avalonia + "TabControl")
+            .Single()
+            .Elements(avalonia + "TabItem")
+            .ToArray();
+
+        var viewModel = File.ReadAllText(Path.Combine(root, "src", "YtDlpUi", "ViewModels", "MainWindowViewModel.cs"));
+
+        static int IndexOf(string source, string constant)
+        {
+            var match = Regex.Match(source, constant + @"\s*=\s*(\d+)\s*;");
+            Require(match.Success, "Missing tab index constant " + constant);
+            return int.Parse(match.Groups[1].Value, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        var converterIndex = IndexOf(viewModel, "ConverterTabIndex");
+        var toolsIndex = IndexOf(viewModel, "ToolsTabIndex");
+
+        Require(converterIndex >= 0 && converterIndex < tabs.Length,
+            "ConverterTabIndex is outside the tab strip");
+        Require(toolsIndex >= 0 && toolsIndex < tabs.Length,
+            "ToolsTabIndex is outside the tab strip");
+
+        static string PageName(XElement tab) =>
+            tab.Elements().FirstOrDefault()?.Name.LocalName ?? string.Empty;
+
+        Require(PageName(tabs[converterIndex]) == "ConverterPage",
+            $"Tab {converterIndex} must be the converter page, found {PageName(tabs[converterIndex])}");
+        Require(PageName(tabs[toolsIndex]) == "ToolsPage",
+            $"Tab {toolsIndex} must be the tools page, found {PageName(tabs[toolsIndex])}");
+        Require(tabs.Length == 10, "The option strip should have ten tabs, found " + tabs.Length);
+        Require(tabs.Select(PageName).Distinct().Count() == tabs.Length,
+            "Every tab must host a distinct page");
+    }
+
+    /// <summary>
+    /// The 0.2.0 player and converter additions must stay wired into the window:
+    /// a player button, a converter tab and a play action on finished queue items.
+    /// </summary>
+    private static void VerifyMediaTabs(string root)
+    {
+        XNamespace avalonia = "https://github.com/avaloniaui";
+        var window = XDocument.Load(Path.Combine(root, "src", "YtDlpUi", "Views", "MainWindow.axaml"));
+
+        static bool HasCommand(XDocument document, string command) =>
+            document.Descendants().Attributes().Any(attribute =>
+                attribute.Value.Contains(command, StringComparison.Ordinal));
+
+        Require(HasCommand(window, "OpenPlayerCommand"),
+            "The header must offer a button that opens the player window");
+        Require(HasCommand(window, "PlayQueueItemCommand"),
+            "Finished queue items must offer a play action");
+        Require(window.Descendants(avalonia + "TabItem").Any(tab =>
+                tab.Elements().Any(element => element.Name.LocalName == "ConverterPage")),
+            "The converter page must be reachable from the tab strip");
+
+        var player = Path.Combine(root, "src", "YtDlpUi", "Views", "PlayerWindow.axaml");
+        Require(File.Exists(player), "PlayerWindow.axaml must exist");
+        var playerDocument = XDocument.Load(player);
+        Require(HasCommand(playerDocument, "PlayCommand"),
+            "The player window must expose playback");
+        Require(playerDocument.Descendants(avalonia + "Slider").Any(),
+            "The player window must offer a position slider");
     }
 
     private static void ValidateLocalLinks(string markdown)

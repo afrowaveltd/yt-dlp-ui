@@ -102,6 +102,11 @@
             </ComboBox>
           </Grid>
 
+          <Button Classes="ghost" Command="{Binding OpenPlayerCommand}"
+                  ToolTip.Tip="{loc:Tr Key='Media player'}">
+            <TextBlock Text="▶" FontSize="14" />
+          </Button>
+
           <Button Classes="ghost" Command="{Binding ToggleThemeCommand}"
                   ToolTip.Tip="{Binding ThemeTooltip}">
             <TextBlock Text="{Binding ThemeGlyph}" FontSize="15" />
@@ -138,6 +143,10 @@
 
           <TabItem Header="{loc:Tr Key='Files'}">
             <pages:FilesPage />
+          </TabItem>
+
+          <TabItem Header="{loc:Tr Key='Convert'}">
+            <pages:ConverterPage />
           </TabItem>
 
           <TabItem Header="{loc:Tr Key='Login'}">
@@ -217,6 +226,10 @@
                                    Foreground="{DynamicResource ErrorBrush}" MaxLines="2" />
                       </StackPanel>
                       <StackPanel Orientation="Horizontal" Spacing="6" Margin="0,4,0,0">
+                        <Button Classes="ghost tiny" Content="{loc:Tr Key='Play'}"
+                                Command="{Binding $parent[Window].DataContext.PlayQueueItemCommand}"
+                                CommandParameter="{Binding}"
+                                IsVisible="{Binding CanPlay}" />
                         <Button Classes="ghost tiny" Content="{loc:Tr Key='Folder'}"
                                 Command="{Binding $parent[Window].DataContext.OpenItemFolderCommand}"
                                 CommandParameter="{Binding}"

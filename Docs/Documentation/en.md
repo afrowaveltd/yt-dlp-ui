@@ -2,29 +2,32 @@
 
 **Language:** English · [Česky](cs.md) · [Repository README](../../README.md)
 
-This index covers the published **0.1.6 community maintenance pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
+This index covers the published **0.2.0 community feature pre-release** and separates implemented functionality, build verification and manual validation still needed. Each topic lives at `Docs/<Topic>/en.md` with a Czech sibling `cs.md`.
 
 ## User guides
 
 1. [Getting started](../Getting-Started/en.md) — first launch, download a video, basic controls.
 2. [Installation and distribution](../Installation/en.md) — Windows setup/portable, DEB, RPM, portable Linux, dependency choices.
-3. [Features](../Features/en.md) — all nine tabs, queue, formats, command preview and keyboard shortcuts.
-4. [Localization](../Localization/en.md) — dictionaryless JSON and hot-added language files.
-5. [Configuration and storage](../Configuration/en.md) — settings, directories and privacy.
+3. [Features](../Features/en.md) — all ten tabs, player, converter, queue, formats, command preview and keyboard shortcuts.
+4. [Player](../Player/en.md) — browse downloaded media, read its details and hand playback to the system player.
+5. [FFmpeg converter](../Converter/en.md) — changing containers, downscaling, trimming and extracting audio.
+6. [Localization](../Localization/en.md) — dictionaryless JSON and hot-added language files.
+7. [Configuration and storage](../Configuration/en.md) — settings, directories and privacy.
 
 ## Maintenance and development
 
-6. [Troubleshooting](../Troubleshooting/en.md) — missing tools, installers, network, Linux graphics and log inspection.
-7. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
-8. [Versioning and release policy](../Versioning/en.md) — PATCH fixes, MINOR previews, stable v1+, Git tags and release rules.
-9. [Android prototype](../Android/en.md) — separate touch interface, shared core, direct HTTPS downloads; not part of v0.1.0.
-10. [Release 0.1.6 fix](../Release-0.1.6/en.md) — reliable playlist preview rendering and actual UI smoke tests.
-11. [Release 0.1.5 fix](../Release-0.1.5/en.md) — playlist titles and durations in the analysis preview.
-12. [Release 0.1.4 fixes](../Release-0.1.4/en.md) — Deno status indicators, Tools installer and Linux discovery.
-13. [Release 0.1.3 fixes](../Release-0.1.3/en.md) — YouTube JavaScript runtime and optional Deno setup.
-14. [Release 0.1.2 fixes](../Release-0.1.2/en.md) — Windows UAC setup and shared tool fixes.
-15. [Release 0.1.1 fixes](../Release-0.1.1/en.md) — historical desktop patch and tests.
-16. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
+8. [Troubleshooting](../Troubleshooting/en.md) — missing tools, installers, network, Linux graphics and log inspection.
+9. [Development and verification](../Development-and-Verification/en.md) — .NET 10, project structure, smoke checks and CI artifacts.
+10. [Versioning and release policy](../Versioning/en.md) — PATCH fixes, MINOR previews, stable v1+, Git tags and release rules.
+11. [Android prototype](../Android/en.md) — separate touch interface, shared core, direct HTTPS downloads; not part of the desktop releases.
+12. [Release 0.2.0](../Release-0.2.0/en.md) — player window, FFmpeg converter tab and their verification.
+13. [Release 0.1.6 fix](../Release-0.1.6/en.md) — reliable playlist preview rendering and actual UI smoke tests.
+14. [Release 0.1.5 fix](../Release-0.1.5/en.md) — playlist titles and durations in the analysis preview.
+15. [Release 0.1.4 fixes](../Release-0.1.4/en.md) — Deno status indicators, Tools installer and Linux discovery.
+16. [Release 0.1.3 fixes](../Release-0.1.3/en.md) — YouTube JavaScript runtime and optional Deno setup.
+17. [Release 0.1.2 fixes](../Release-0.1.2/en.md) — Windows UAC setup and shared tool fixes.
+18. [Release 0.1.1 fixes](../Release-0.1.1/en.md) — historical desktop patch and tests.
+19. [Release 0.1.0 status](../Release-0.1.0/en.md) — **[published preview](https://github.com/afrowaveltd/yt-dlp-ui/releases/tag/v0.1.0)**, known gaps and community-test checklist.
 
 ## Localized README
 

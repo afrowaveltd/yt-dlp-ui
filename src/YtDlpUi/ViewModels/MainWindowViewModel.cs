@@ -15,6 +15,12 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 {
     private const int MaxLogLines = 3000;
 
+    /// <summary>Position of the FFmpeg converter tab in the option TabControl.</summary>
+    public const int ConverterTabIndex = 6;
+
+    /// <summary>Position of the tools tab; kept next to the page order in MainWindow.axaml.</summary>
+    public const int ToolsTabIndex = 9;
+
     private readonly SettingsStore _settingsStore;
     private readonly MetadataService _metadataService = new();
     private readonly HttpClient _httpClient = new();
@@ -55,6 +61,12 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
         Toolchain = new ToolchainViewModel(Settings);
         Toolchain.CommandChanged += (_, _) => OnToolchainChanged();
+        Converter = new ConverterViewModel(
+            new ConverterHost(
+                () => Settings.FfmpegPath,
+                () => Toolchain.FfmpegAvailable,
+                (message, kind) => AddLog(message, kind)),
+            Options.OutputDirectory);
         Settings.PropertyChanged += OnSettingsChanged;
         Options.PropertyChanged += OnOptionsChanged;
 
@@ -64,6 +76,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         _autosaveTimer.Tick += (_, _) =>
         {
             _autosaveTimer.Stop();
+        Converter.Dispose();
             SaveSettings();
         };
 
@@ -95,6 +108,15 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     /// <summary>yt-dlp / ffmpeg detection and installation.</summary>
     public ToolchainViewModel Toolchain { get; }
+
+    /// <summary>FFmpeg conversion page state.</summary>
+    public ConverterViewModel Converter { get; }
+
+    /// <summary>
+    /// Raised when the player window should open. The argument is the file to select,
+    /// or null to open with the newest download.
+    /// </summary>
+    public event EventHandler<string?>? PlayerRequested;
 
     private LanguageOption? _selectedLanguage;
 
@@ -1320,7 +1342,38 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
     /// <summary>Jump to the tools tab so the user can install yt-dlp.</summary>
     [RelayCommand]
-    private void ShowToolsTab() => SelectedTabIndex = 8;
+    private void ShowToolsTab() => SelectedTabIndex = ToolsTabIndex;
+
+    /// <summary>Open the player window on the newest downloaded file.</summary>
+    [RelayCommand]
+    private void OpenPlayer() => PlayerRequested?.Invoke(this, null);
+
+    /// <summary>Open the player window focused on one finished queue item.</summary>
+    [RelayCommand]
+    private void PlayQueueItem(DownloadItemViewModel? item)
+    {
+        if (item?.FilePath is null)
+        {
+            return;
+        }
+
+        if (!File.Exists(item.FilePath))
+        {
+            AddLog(string.Format(
+                SimpleLocalizer.Instance.Translate("The file is no longer on disk: {0}"),
+                item.FilePath), LogKind.Warning);
+            return;
+        }
+
+        PlayerRequested?.Invoke(this, item.FilePath);
+    }
+
+    /// <summary>Send a file to the converter tab and switch to it.</summary>
+    public void OpenConverterFor(string? path)
+    {
+        Converter.SetSource(path);
+        SelectedTabIndex = ConverterTabIndex;
+    }
 
     /// <summary>Dismiss the welcome card.</summary>
     [RelayCommand]
@@ -1338,6 +1391,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
         }
 
         _autosaveTimer.Stop();
+        Converter.Dispose();
         _autosaveTimer.Start();
     }
 
@@ -1371,6 +1425,7 @@ public sealed partial class MainWindowViewModel : ObservableObject, IDisposable
 
         _disposed = true;
         _autosaveTimer.Stop();
+        Converter.Dispose();
 
         try
         {

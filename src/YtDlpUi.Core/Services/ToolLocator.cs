@@ -33,6 +33,16 @@ public sealed class YtDlpCommand
     public string Preview(IEnumerable<string> arguments) => CommandLine.Format(FileName, With(arguments));
 }
 
+/// <summary>FFmpeg executables used by the converter and the media browser.</summary>
+public sealed record FfmpegTools(string? FfmpegPath, string? FfprobePath)
+{
+    /// <summary>True when conversion can run.</summary>
+    public bool CanConvert => !string.IsNullOrWhiteSpace(FfmpegPath);
+
+    /// <summary>True when media metadata can be read.</summary>
+    public bool CanProbe => !string.IsNullOrWhiteSpace(FfprobePath);
+}
+
 /// <summary>Result of probing for an external tool.</summary>
 public sealed record ToolStatus(string Name, bool Found, string? Path, string? Version, string? Message)
 {
@@ -84,6 +94,55 @@ public static class ToolLocator
         }
 
         return ToolStatus.Missing("ffmpeg", "ffmpeg nebyl v systému nalezen.");
+    }
+
+    /// <summary>
+    /// Resolve both FFmpeg and its ffprobe companion. The converter needs both:
+    /// ffprobe reads the source metadata, FFmpeg performs the conversion.
+    /// </summary>
+    public static async Task<FfmpegTools> ResolveFfmpegToolsAsync(
+        string? overridePath,
+        CancellationToken cancellationToken = default)
+    {
+        var ffmpeg = await LocateFfmpegAsync(overridePath, cancellationToken).ConfigureAwait(false);
+        if (!ffmpeg.Found || string.IsNullOrWhiteSpace(ffmpeg.Path))
+        {
+            return new FfmpegTools(null, null);
+        }
+
+        return new FfmpegTools(ffmpeg.Path, FindFfprobeCompanion(ffmpeg.Path));
+    }
+
+    /// <summary>
+    /// Find ffprobe next to FFmpeg first (that is how distributions and the Windows
+    /// builds ship it), then fall back to a PATH lookup.
+    /// </summary>
+    public static string? FindFfprobeCompanion(string? ffmpegPath)
+    {
+        if (!string.IsNullOrWhiteSpace(ffmpegPath))
+        {
+            try
+            {
+                var directory = Path.GetDirectoryName(Path.GetFullPath(ffmpegPath));
+                if (!string.IsNullOrWhiteSpace(directory))
+                {
+                    var sibling = Path.Combine(
+                        directory,
+                        OperatingSystem.IsWindows() ? "ffprobe.exe" : "ffprobe");
+
+                    if (File.Exists(sibling) && IsExecutable(sibling))
+                    {
+                        return sibling;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // Fall through to the PATH lookup.
+            }
+        }
+
+        return FindOnPath("ffprobe");
     }
 
     /// <summary>Resolve a command that is already known to work.</summary>
